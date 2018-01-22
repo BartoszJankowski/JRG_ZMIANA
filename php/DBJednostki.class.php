@@ -48,6 +48,14 @@ class DBJednostki extends DbConn {
 
 	public function createJrg($idJrg, $miasto, $ulica, $nr, $adminEmail){
 
+
+		$adminEmail = filter_var($adminEmail, FILTER_VALIDATE_EMAIL);
+
+		if($adminEmail == false){
+			$this->error = "Wprowadzono błedny adres email.";
+			return false;
+		}
+
 		try{
 			$stmt = $this->conn->prepare("INSERT INTO ".$this->tbl_jednostki." (id_jrg, city, street, number, admin)
     		 VALUES (:id_jrg, :city, :street, :number, :admin)");

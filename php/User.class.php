@@ -21,6 +21,8 @@ class User extends DbConn {
 	            name CHAR(255),
 	            surname CHAR(255),
 	            password CHAR(255) NOT NULL,
+	            session CHAR(255),
+	            datatime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	            previlages ENUM('SUPERADMIN','ADMIN','CHEF','USER') NOT NULL
 	            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
@@ -45,12 +47,51 @@ class User extends DbConn {
 			$stmt->bindParam(':email', $email);
 			$stmt->bindParam(':password', password_hash ($this->pass,PASSWORD_DEFAULT));
 			$stmt->execute();
+			$Emails = new Emails();
+			$Emails->sendConfirmationEmail($email, $this->pass);
 			return true;
 		} catch (PDOException $e){
 
 			echo $this->error = "Error: " . $e->getMessage();
 			return false;
 		}
+	}
+
+	public function login($email, $password){
+
+		$mail = filter_var($email, FILTER_VALIDATE_EMAIL);
+
+
+		if($mail == false){
+			$this->error = "Wprowadzono błedny adres email (".$email.").";
+			return false;
+		}
+
+		if(strlen($password) < 8){
+			$this->error = "Wprowadzone hasło jest za krótkie.";
+			return false;
+		}
+
+		try {
+			$stmt =  $this->conn->prepare("SELECT password FROM ".$this->tbl_users." WHERE email = :email");
+			$stmt->bindParam(':email', $email);
+			$stmt->execute();
+			$result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+			if($result && isset($result['password'])){
+				if(password_verify($password, $result['password'])){
+					$this->setSession($email);
+					return true;
+				} else {
+					$this->error = "Podano błedny login lub hasło.";
+				}
+			} else {
+				$this->error = "Podano błedny login lub hasło.";
+			}
+		} catch (PDOException $e){
+			echo $this->error = "Error: " . $e->getMessage();
+		}
+		return false;
 	}
 
 	private function genPassword(){
@@ -61,4 +102,44 @@ class User extends DbConn {
 		}
 		return $randstring;
 	}
+
+	private function setSession($email){
+		try{
+			$random = sha1($this->genPassword().microtime());
+			$stmt =  $this->conn->prepare("UPDATE ".$this->tbl_users." SET session = :sesId WHERE email = :email");
+			$stmt->bindParam(':sesId', $random);
+			$stmt->bindParam(':email', $email);
+			$stmt->execute();
+
+			$_SESSION['login'] = $email;
+			$_SESSION['id'] = $random;
+		} catch (PDOException $e){
+			$this->error = "Error: " . $e->getMessage();
+		}
+
+	}
+
+	public function checkSession(){
+		if(isset($_SESSION['login'],$_SESSION['id']) && strlen($_SESSION['id'])>0 && strlen($_SESSION['login'])>0){
+			try {
+				$stmt =  $this->conn->prepare("SELECT session FROM ".$this->tbl_users." WHERE email = :email");
+				$stmt->bindParam(':email', $_SESSION['login']);
+				$stmt->execute();
+				$result = $stmt->fetch(PDO::FETCH_ASSOC);
+				if($result && isset($result['session']) && $result['session'] === $_SESSION['id']){
+					return true;
+				}
+				$this->error = "Błedna sesja lub brak sesji.";
+			} catch (PDOException $e){
+				$this->error = "Error: " . $e->getMessage();
+			}
+		} else {
+			$this->error = "Błedna sesja.";
+		}
+		return false;
+	}
+
+
+
+
 }

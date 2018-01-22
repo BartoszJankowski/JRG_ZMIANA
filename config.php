@@ -11,6 +11,8 @@ include 'globalcon.php';
 //Pull database configuration from this file
 include 'php/dbconf.php';
 
+include 'php/PHPMailer/PHPMailerAutoload.php';
+
 //Set this for global site use
 $site_name = 'energoland.bjit.pl';
 
@@ -50,47 +52,5 @@ $invalid_mod = '$adminemail is not a valid email address';
 //Makes readable version of timeout (in minutes). Do not change.
 $timeout_minutes = round(($login_timeout / 60), 1);
 
-function sendMail($adresRecipient = 'badbart10@wp.pl',$name, $content, $tabFiles = array() ){
-	$mail = new PHPMailer(true);
-	$fromEmail = FROM_EMAIL;// 'admin@zmiana.bjit.pl';
-	$fromName = FROM_NAME;// 'Admin';
-	$smptServ = SMPT_SERV;//'mail.bjit.pl';
-	$smptuser = SMPT_USER;//'admin@zmiana.bjit.pl';
-	$smptPW = SMPT_PW;//'komputer';
-	// Passing `true` enables exceptions
-	try {
-		//Server settings
-		$mail->SMTPDebug = 2;                                 // Enable verbose debug output
-		$mail->isMail();                                      // Set mailer to use SMTP
-		$mail->Host = $smptServ;  // Specify main and backup SMTP servers // h1.hitme.pl
-		$mail->SMTPAuth = true;                               // Enable SMTP authentication
-		$mail->Username = $smptuser;                 // SMTP username
-		$mail->Password = $smptPW;                           // SMTP password
-		$mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
-		$mail->Port = 587;                                    // TCP port to connect to
 
-		//Recipients
-		$mail->setFrom($fromEmail, $fromName);
-		$mail->addReplyTo($fromEmail, $fromName);
-		$mail->addAddress($adresRecipient, 'Bartosz Jankowski');
-
-		//Attachments
-		foreach ($tabFiles as $fil){
-			$mail->addAttachment($fil);
-		} // Optional name
-
-		//Content
-		$mail->isHTML(true);                                  // Set email format to HTML
-		$mail->CharSet = 'UTF-8';
-		$mail->Subject  = 'Wiadomość od zmiana.bjit.pl';
-		$mail->Body     = '<div><h3>Wiadomość od klienta:</h3><p>'.$name.'</p></div><div><h4>Treść wiadomości:</h4><p>'.$content.'</p></div>';
-		$mail->AltBody = $content;
-
-		$mail->send();
-		echo 'Message has been sent to '.$adresRecipient;
-	} catch (Exception $e) {
-		echo 'Message could not be sent.';
-		echo 'Mailer Error: ' . $mail->ErrorInfo;
-	}
-}
 
