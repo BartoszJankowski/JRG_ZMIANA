@@ -8,11 +8,19 @@
 
 class User extends DbConn {
 
+	private $dane = array();
+
+	/**
+	 * Przy utworzeniu obiektu sprawdza czy obecna tabela istnieje
+	 */
 	public function __construct() {
 		parent::__construct();
 		$this->createTable();
 	}
 
+	/**
+	 * Tworzy tabelę USERS w bazie danych
+	 */
 	public function createTable(){
 		try {
 			$sql = "CREATE TABLE ".$this->tbl_users." (
@@ -20,6 +28,7 @@ class User extends DbConn {
 	            email CHAR(255) UNIQUE NOT NULL,
 	            name CHAR(255),
 	            surname CHAR(255),
+	            jrg_id INT(6),
 	            password CHAR(255) NOT NULL,
 	            session CHAR(255),
 	            datatime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -38,6 +47,11 @@ class User extends DbConn {
 		}
 	}
 
+	/**
+	 * Tworzy nowa jednotkę JRG
+	 * - uprzednio sprawdza czy taka juz nie została utworzona (para kluczy nr jrg + miasto)
+	 * tworzy administratora JRG jesli jeszcze taki nie istnieje
+	 */
 	public function createJrgAdmin($email){
 		try{
 			$this->pass = $this->genPassword();
@@ -94,6 +108,10 @@ class User extends DbConn {
 		return false;
 	}
 
+	/**
+	 * Generuje randomowy ciąg 10 znaków
+	 * @return string
+	 */
 	private function genPassword(){
 		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		$randstring = '';
@@ -103,6 +121,11 @@ class User extends DbConn {
 		return $randstring;
 	}
 
+	/**
+	 * Tworzy zmienne sesyjne
+	 * oraz ID sesji które zapisuje w bazie danych uzytkownika
+	 * @void
+	 */
 	private function setSession($email, $hash){
 		try{
 			//$random = sha1($this->genPassword().microtime());
@@ -118,14 +141,20 @@ class User extends DbConn {
 		}
 	}
 
+	/**
+	 * Sprawdza zmienne sesyjne w bazie danych
+	 * oraz sprawdza czy nie są puste
+	 * @return bool
+	 */
 	public function checkSession(){
 		if(isset($_SESSION['login'],$_SESSION['id']) && strlen($_SESSION['id'])>0 && strlen($_SESSION['login'])>0){
 			try {
-				$stmt =  $this->conn->prepare("SELECT session FROM ".$this->tbl_users." WHERE email = :email");
+				$stmt =  $this->conn->prepare("SELECT session,name,surname, jrg_id FROM ".$this->tbl_users." WHERE email = :email");
 				$stmt->bindParam(':email', $_SESSION['login']);
 				$stmt->execute();
 				$result = $stmt->fetch(PDO::FETCH_ASSOC);
 				if($result && isset($result['session']) && $result['session'] === $_SESSION['id']){
+					$this->dane = $result;
 					return true;
 				}
 				$this->error = "Błedna sesja lub brak sesji.";
@@ -138,6 +167,10 @@ class User extends DbConn {
 		return false;
 	}
 
+	/**
+	 * Niszczy sesję
+	 * oraz próbuje usunąc zmienną sesyjną w bazie danych uzytkownika
+	 */
 	public function destroySession(){
 		if(isset($_SESSION['login'],$_SESSION['id']) && strlen($_SESSION['id'])>0 && strlen($_SESSION['login'])>0){
 			try {
@@ -153,6 +186,12 @@ class User extends DbConn {
 		session_destroy();
 	}
 
+	/**
+	 * Zmienia stare hasło uzytkownika na nowe
+	 * Przy zmianie hasła uzytkownika sprawdza stare hasło, porównuje dwa nowe czy są zgodne i nadpisuje stare hasło
+	 * powiadamia uzytkownika emialem o zmianie hasła
+	 * @return bool
+	 */
 	public function changePass($oldPass, $newpass, $newpas2){
 
 		if(strlen($oldPass) <8 || strlen($newpass)<8){
@@ -187,7 +226,147 @@ class User extends DbConn {
 		}
 	}
 
+	/**
+	 * Resetuje hasło uzytkownika
+	 * tworzy nowe randomowe hasło
+	 * wysyła nowe hasło uzytkownikowi emailem
+	 * @return bool
+	 */
+	public function resetPass($email){
+		$mail = filter_var($email, FILTER_VALIDATE_EMAIL);
 
+		if($mail == false){
+			$this->error = "Wprowadzono błedny adres email (".$email.").";
+			return false;
+		}
+		$newPassword = $this->genPassword();
 
+		try {
+			$stmt =  $this->conn->prepare("SELECT id FROM ".$this->tbl_users." WHERE email = :email");
+			$stmt->bindParam(':email', $email);
+			$stmt->execute();
+			$result = $stmt->fetch(PDO::FETCH_ASSOC);
+			if($result && isset($result['id'])){
+				$stmt =  $this->conn->prepare("UPDATE ".$this->tbl_users." SET password = :pass WHERE email = :email");
+				$stmt->bindParam(':pass', password_hash($newPassword,PASSWORD_DEFAULT ));
+				$stmt->bindParam(':email', $email);
+				$stmt->execute();
+				$Emails = new Emails();
+				$Emails->sendResetPassword($email, $newPassword);
+				return true;
+			} else {
+				$this->error = "Brak użytkownika w bazie danych." ;
+				return false;
+			}
+		} catch (PDOException $e){
+			echo $this->error = "Error: " . $e->getMessage();
+		}
+		return false;
+	}
+
+	/**
+	 *  Rejestracja nowego użytkownika
+	 * @param $email
+	 * @param $pass
+	 * @param $pass_conf
+	 * @param null $nr_jrg
+	 * @param null $imie
+	 * @param null $nazwisko
+	 *
+	 * @return bool
+	 */
+	public function registerNewUser($email, $pass, $pass_conf, $nr_jrg = null, $imie = null, $nazwisko = null ){
+		$mail = filter_var($email, FILTER_VALIDATE_EMAIL);
+
+		if($mail == false){
+			$this->error = "Wprowadzono błedny adres email (".$email.").";
+			return false;
+		}
+
+		if(strlen($pass)<8){
+			$this->error = "Wprowadzone hasło jest zbyt krótkie.";
+			return false;
+		}
+
+		if($pass !== $pass_conf){
+			$this->error = "Wprowadzone hasła są różne.";
+			return false;
+		}
+
+		//check jrg
+		$dbJednostki = new DBJednostki();
+		if(strlen($nr_jrg)>0 && !array_key_exists($nr_jrg,$dbJednostki->getJrgList())){
+			$this->error = "Wybrana jednostka nie istnieje.";
+			return false;
+		}
+
+		try {
+			$stmt = $this->conn->prepare("INSERT INTO ".$this->tbl_users." (email, password, previlages, jrg_id, name, surname)
+    		 VALUES (:email, :password, 'USER', :jrg_id, :name, :surname )");
+
+			$stmt->bindParam(':email', $email);
+			$stmt->bindParam(':password', password_hash ($pass,PASSWORD_DEFAULT));
+			$stmt->bindParam(':jrg_id', $nr_jrg);
+			$stmt->bindParam(':name', $imie);
+			$stmt->bindParam(':surname', $nazwisko);
+			$stmt->execute();
+
+			$Emails = new Emails();
+			$Emails->sendConfirmationEmail($email, $pass);
+			return true;
+		} catch (PDOException $e){
+			$this->error = "DB error:".$e->getMessage();
+			return false;
+		}
+
+	}
+
+	public function changeUserData($imie, $nazwisko){
+		try {
+				$stmt =  $this->conn->prepare("UPDATE ".$this->tbl_users." SET name = :name, surname = :surname WHERE email = :email");
+				$stmt->bindParam(':name', $imie );
+				$stmt->bindParam(':surname', $nazwisko );
+				$stmt->bindParam(':email', $_SESSION['login'] );
+				$stmt->execute();
+				$this->dane['name'] = $imie;
+				$this->dane['surname'] = $nazwisko;
+				return true;
+		} catch (PDOException $e){
+			$this->error = "Błąd bazy danych: " . $e->getMessage();
+			return false;
+		}
+	}
+
+	// USER PROPERTIES GETTERS ///  //////////// /////////// ////////////
+
+	/**
+	 * @return string|null
+	 */
+	public function getImie(){
+		if(strlen($this->dane['name'])>0){
+			return $this->dane['name'];
+		}
+		return null;
+	}
+
+	/**
+	 * @return string|null
+	 */
+	public function getNazwisko(){
+		if(strlen($this->dane['surname'])>0){
+			return $this->dane['surname'];
+		}
+		return null;
+	}
+
+	/**
+	 * @return int|null
+	 */
+	public function getJrgId(){
+		if(strlen($this->dane['jrg_id'])>0){
+			return $this->dane['jrg_id'];
+		}
+		return null;
+	}
 
 }

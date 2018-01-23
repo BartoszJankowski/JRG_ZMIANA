@@ -143,4 +143,32 @@ class Emails {
 			echo 'Mailer Error: ' . $this->mail->ErrorInfo;
 		}
 	}
+
+	public function sendResetPassword($adres,$password ){
+		$fromEmail = "admin@zmiana.bjit.pl";
+		$fromName = "Zmiana JRG";
+
+		try{
+			$this->configureEmail($adres);
+		}catch (Exception $e){
+			echo 'Mailer Error: ' . $e->getMessage();
+			return;
+		}
+
+		try {
+			//Recipients
+			$this->mail->setFrom($fromEmail, $fromName);
+			$this->mail->addReplyTo($fromEmail, $fromName);
+			$this->mail->addAddress($adres);
+
+			//Content
+			$this->mail->Subject  = 'Reset hasła';
+			$this->mail->Body     = '<div><h3>Reset hasła</h3><p>W odpowiedzi na Twoje zgłoszenie zresetowaliśmy hasło do twojego konta</p></div><div><h4>Nowe hasło: '.$password.'</h4><p>Aby się zalogowac wprowadź login i hasło na stronie <a href="http://zmiana.bjit.pl/login.php">logowania</a></p></div>';
+			$this->mail->AltBody = "Reset hasła \r\n W odpowiedzi na Twoje zgłoszenie zresetowaliśmy hasło do twojego konta: \r\n Nowe hasło: ".$password." \r\n Aby się zalogowac wprowadź dane na stronie \r\n >> http://zmiana.bjit.pl/login.php \r\n Pozdrawiamy zespół zmiana.bjit.pl ";
+
+			$this->mail->send();
+		} catch (Exception $e) {
+			echo 'Mailer Error: ' . $this->mail->ErrorInfo;
+		}
+	}
 }

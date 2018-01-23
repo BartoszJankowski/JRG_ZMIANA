@@ -63,7 +63,7 @@ if(isset($_POST['log_in'])){
 		<input class="w3-input w3-margin-top" type="submit" name="log_in" value="Zaloguj"/>
 		<div class="w3-container">
 			<a class="w3-left" href="register.php" target="_self">Rejestracja</a>
-			<a class="w3-right" href="?" target="_self">Zapomniałeś hasła?</a>
+			<a class="w3-right" href="reset.php" target="_self">Zapomniałeś hasła?</a>
 		</div>
 	</form>
 </div>

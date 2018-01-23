@@ -29,7 +29,15 @@ if(isset($_POST['changePass'])) {
         echo $user->error;
     }
 }
+if(isset($_POST['changeuserData'])){
+	if($user->changeUserData(test_input($_POST['name']),test_input($_POST['surname'])) ){
+		echo 'Poprawnie zmieniono dane.';
+	} else {
+		echo $user->error;
+	}
+}
 
+//TODO: reset hasła
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
@@ -54,9 +62,7 @@ if(isset($_POST['changePass'])) {
 
 <body>
 <header>
-    <div>
-        Witaj, <?php echo $_SESSION['login'] ?>
-    </div>
+
     <div class="w3-bar w3-border w3-light-grey">
         <a href="<?php echo $base_url; ?>" class="w3-bar-item w3-button w3-green"><i class="fa fa-fw fa-home w3-xlarge"></i><div class="w3-small">Strona główna</div></a>
         <a href="#" class="w3-bar-item w3-button"><i class="fa fa-fw fa-calendar w3-xlarge"></i><div class="w3-small">Grafik</div></a>
@@ -66,12 +72,30 @@ if(isset($_POST['changePass'])) {
 
 </header>
 <main>
+    <div>
+        Witaj, <?php echo $user->getImie()!=null ? $user->getImie().' '.$user->getNazwisko() : $_SESSION['login'] ?>
+    </div>
     <div id="settings">
+        <form action="" id="changeUserData" method="post" class="w3-quarter w3-margin w3-padding  w3-border">
+            <h3>Zmiana danych podstawowych</h3>
+
+            <div>
+                <label>Imię:</label>
+                <input class="w3-input" type="text" name="name" value="<?php echo $user->getImie() ?>"  />
+            </div>
+
+            <div>
+                <label>Nazwisko:</label>
+                <input class="w3-input" type="text" id="newpass" name="surname"  value="<?php echo $user->getNazwisko() ?>" />
+            </div>
+
+            <input class="w3-input w3-margin-top" type="submit" name="changeuserData" value="Zapisz" />
+        </form>
         <form action="" id="changePass" method="post" class="w3-quarter w3-margin w3-padding  w3-border">
             <h3>Zmiana hasła</h3>
             <div>
                 <label>Stare hasło:</label>
-                <input class="w3-input" type="password" name="oldpass" required />
+                <input class="w3-input w3-margin-top" type="password" name="oldpass" required />
             </div>
 
             <div>
@@ -83,7 +107,8 @@ if(isset($_POST['changePass'])) {
                 <input class="w3-input" type="password" name="newpass2" required />
             </div>
 
-            <input class="w3-input" type="submit" name="changePass" value="Zmień" />
+            <input class="w3-input  w3-margin-top" type="submit" name="changePass" value="Zmień" />
+
         </form>
     </div>
 </main>
@@ -92,8 +117,8 @@ if(isset($_POST['changePass'])) {
 
 <script>
     /*
-    jquery validator dla formularza #changePass
-     */
+	jquery validator dla formularza #changePass
+	 */
     $("#changePass").validate({
         rules: {
             oldpass: {

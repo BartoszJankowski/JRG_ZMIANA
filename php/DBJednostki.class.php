@@ -26,12 +26,12 @@ class DBJednostki extends DbConn {
 		try {
 			$sql = "CREATE TABLE ".$this->tbl_jednostki." (
 	            id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-	            id_jrg CHAR(10) NOT NULL,
+	            nr_jrg CHAR(10) NOT NULL,
 	            city VARCHAR(255) NOT NULL,
 	            street CHAR(255) NOT NULL,
 	            number CHAR(10) NOT NULL,
 	            admin CHAR(255) NOT NULL,
-	            CONSTRAINT JRG UNIQUE(id_jrg,city)
+	            CONSTRAINT JRG UNIQUE(nr_jrg,city)
 	            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
 			$this->conn->exec($sql);
@@ -57,9 +57,9 @@ class DBJednostki extends DbConn {
 		}
 
 		try{
-			$stmt = $this->conn->prepare("INSERT INTO ".$this->tbl_jednostki." (id_jrg, city, street, number, admin)
-    		 VALUES (:id_jrg, :city, :street, :number, :admin)");
-			$stmt->bindParam(':id_jrg', $idJrg);
+			$stmt = $this->conn->prepare("INSERT INTO ".$this->tbl_jednostki." (nr_jrg, city, street, number, admin)
+    		 VALUES (:nr_jrg, :city, :street, :number, :admin)");
+			$stmt->bindParam(':nr_jrg', $idJrg);
 			$stmt->bindParam(':city', $miasto);
 			$stmt->bindParam(':street', $ulica);
 			$stmt->bindParam(':number', $nr);
@@ -73,5 +73,25 @@ class DBJednostki extends DbConn {
 		}
 	}
 
+	/**
+	 * Lista jednostek
+	 * lista[nr_jrg - miato]
+	 * @return array
+	 */
+	public function getJrgList(){
+		$res = array();
+
+		$stmt =  $this->conn->prepare("SELECT id,nr_jrg,city FROM ".$this->tbl_jednostki);
+		$stmt->bindParam(':email', $email);
+		$stmt->execute();
+		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+		if($result){
+			for($i = 0; $i< count($result); $i++){
+				$res[$result[$i]['id']] = $result[$i]['nr_jrg']."-".$result[$i]['city'];
+			}
+		}
+		return $res;
+	}
 
 }
