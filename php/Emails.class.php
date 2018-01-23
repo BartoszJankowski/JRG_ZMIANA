@@ -103,12 +103,40 @@ class Emails {
 			//Recipients
 			$this->mail->setFrom($fromEmail, $fromName);
 			$this->mail->addReplyTo($fromEmail, $fromName);
-			$this->mail->addAddress($adres, 'Bartosz Jankowski');
+			$this->mail->addAddress($adres);
 
 			//Content
 			$this->mail->Subject  = 'Dane dostępowe';
 			$this->mail->Body     = '<div><h3>Dziekujemy za rejestrację</h3><p>Poniżej znajdują się Twoje dane dostępowe:</p></div><div><h4>Login: '.$adres.'</h4><h4>Hasło: '.$password.'</h4><p>Aby się zalogowac wprowadź dane na stronie <a href="http://zmiana.bjit.pl/login.php">logowania</a></p></div>';
 			$this->mail->AltBody = "Dziekujemy za rejestrację \r\n Poniżej znajdują się Twoje dane dostępowe: \r\n Login: ".$adres." \r\n\ Hasło: ".$password." \r\n Aby się zalogowac wprowadź dane na stronie \r\n >> http://zmiana.bjit.pl/login.php \r\n Pozdrawiamy zespół zmiana.bjit.pl ";
+
+			$this->mail->send();
+		} catch (Exception $e) {
+			echo 'Mailer Error: ' . $this->mail->ErrorInfo;
+		}
+	}
+
+	public function sendPasswordChangeInformation($adres){
+		$fromEmail = "admin@zmiana.bjit.pl";
+		$fromName = "Zmiana JRG";
+
+		try{
+			$this->configureEmail($adres);
+		}catch (Exception $e){
+			echo 'Mailer Error: ' . $e->getMessage();
+			return;
+		}
+
+		try {
+			//Recipients
+			$this->mail->setFrom($fromEmail, $fromName);
+			$this->mail->addReplyTo($fromEmail, $fromName);
+			$this->mail->addAddress($adres);
+
+			//Content
+			$this->mail->Subject  = 'Zmiana hasła';
+			$this->mail->Body     = '<div><h3>Zmiana hasła do konto</h3><p>Twoje hasło do konta '.$adres.' zostało zmienione.</p></div><div><h4>Uwaga!</h4><p>Jeśli to nie Ty zmieniałeś hasło zawsze możesz je zresetowac na stronie  <a href="http://zmiana.bjit.pl/reset.php">tutaj</a></p></div>';
+			$this->mail->AltBody = "Zmiana hasła do konto \r\n Twoje hasło do konta '.$adres.' zostało zmienione. \r\n UWAGA ! \r\n Jeśli to nie Ty zmieniałeś hasło zawsze możesz je zresetowac na stronie \r\n >> http://zmiana.bjit.pl/reset.php \r\n Pozdrawiamy zespół zmiana.bjit.pl ";
 
 			$this->mail->send();
 		} catch (Exception $e) {

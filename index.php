@@ -36,10 +36,17 @@ if(isset($_POST['addJrg'])){
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style type="text/css">
 
+
     </style>
 </head>
 
 <body>
+<header>
+    <div class="w3-bar w3-border w3-light-grey">
+        <a href="<?php echo $base_url; ?>" class="w3-bar-item w3-button w3-green"><i class="fa fa-fw fa-home w3-xlarge"></i><div class="w3-small">Strona główna</div></a>
+        <a  href="<?php echo $base_url; ?>/login.php" class="w3-bar-item w3-button"><i class="fa fa-fw fa-sign-in w3-xlarge"></i><div class="w3-small">Zaloguj się</div></a>
+    </div>
+</header>
     <div class="w3-container w3-third w3-border w3-margin w3-padding-16">
         <!--
             Formularz aby dodac jednostkę: nr jrg, miasto i email wymagane.

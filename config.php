@@ -13,6 +13,8 @@ include 'php/dbconf.php';
 
 include 'php/PHPMailer/PHPMailerAutoload.php';
 
+include 'php/functions.php';
+
 //Set this for global site use
 $site_name = 'energoland.bjit.pl';
 

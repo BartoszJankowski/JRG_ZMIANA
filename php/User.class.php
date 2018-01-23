@@ -80,7 +80,7 @@ class User extends DbConn {
 
 			if($result && isset($result['password'])){
 				if(password_verify($password, $result['password'])){
-					$this->setSession($email);
+					$this->setSession($email, sha1($this->genPassword().microtime()) );
 					return true;
 				} else {
 					$this->error = "Podano błedny login lub hasło.";
@@ -103,20 +103,19 @@ class User extends DbConn {
 		return $randstring;
 	}
 
-	private function setSession($email){
+	private function setSession($email, $hash){
 		try{
-			$random = sha1($this->genPassword().microtime());
+			//$random = sha1($this->genPassword().microtime());
 			$stmt =  $this->conn->prepare("UPDATE ".$this->tbl_users." SET session = :sesId WHERE email = :email");
-			$stmt->bindParam(':sesId', $random);
+			$stmt->bindParam(':sesId', $hash);
 			$stmt->bindParam(':email', $email);
 			$stmt->execute();
 
 			$_SESSION['login'] = $email;
-			$_SESSION['id'] = $random;
+			$_SESSION['id'] = $hash;
 		} catch (PDOException $e){
 			$this->error = "Error: " . $e->getMessage();
 		}
-
 	}
 
 	public function checkSession(){
@@ -137,6 +136,55 @@ class User extends DbConn {
 			$this->error = "Błedna sesja.";
 		}
 		return false;
+	}
+
+	public function destroySession(){
+		if(isset($_SESSION['login'],$_SESSION['id']) && strlen($_SESSION['id'])>0 && strlen($_SESSION['login'])>0){
+			try {
+				$stmt =  $this->conn->prepare("SELECT session FROM ".$this->tbl_users." WHERE email = :email");
+				$stmt->bindParam(':email', $_SESSION['login']);
+				$stmt->execute();
+				$result = $stmt->fetch(PDO::FETCH_ASSOC);
+				if($result && isset($result['session']) && $result['session'] === $_SESSION['id']){
+					$this->setSession($_SESSION['login'], null);
+				}
+			} catch (\PDOException $ignored){}
+		}
+		session_destroy();
+	}
+
+	public function changePass($oldPass, $newpass, $newpas2){
+
+		if(strlen($oldPass) <8 || strlen($newpass)<8){
+			$this->error = "Wprowadzone hasło jest zbyt krótkie. Min. 8 znaków.";
+			return false;
+		}
+		if($newpass!== $newpas2){
+			$this->error = "Błędnie potwierdzone hasło. Wprowadx dane ponownie.";
+			return false;
+		}
+
+		try {
+			$stmt =  $this->conn->prepare("SELECT password FROM ".$this->tbl_users." WHERE email = :email");
+			$stmt->bindParam(':email', $_SESSION['login']);
+			$stmt->execute();
+			$result = $stmt->fetch(PDO::FETCH_ASSOC);
+			if($result && password_verify($oldPass, $result['password'])){
+				$stmt =  $this->conn->prepare("UPDATE ".$this->tbl_users." SET password = :pass WHERE email = :email");
+				$stmt->bindParam(':pass', password_hash ($newpass,PASSWORD_DEFAULT) );
+				$stmt->bindParam(':email', $_SESSION['login'] );
+				$stmt->execute();
+				$emails = new Emails();
+				$emails->sendPasswordChangeInformation($_SESSION['login']);
+				return true;
+			} else {
+				$this->error = "Podano błędne stare hasło.";
+				return false;
+			}
+		} catch (PDOException $e){
+			$this->error = "Błąd bazy danych: " . $e->getMessage();
+			return false;
+		}
 	}
 
 

@@ -16,12 +16,12 @@ if($user->checkSession()){
 }
 
 if(isset($_POST['log_in'])){
- if(!$user->login($_POST['login'],$_POST['password'])){
-	 echo $user->error;
- } else {
-	 header('Location: '.$base_url.'/main.php');
-	 exit;
- }
+     if(!$user->login($_POST['login'],$_POST['password'])){
+         echo $user->error;
+     } else {
+         header('Location: '.$base_url.'/main.php');
+         exit;
+     }
 }
 
 //TODO: rejestracja
