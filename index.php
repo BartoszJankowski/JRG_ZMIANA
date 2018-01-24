@@ -8,16 +8,18 @@
 session_start();
 require 'config.php';
 
+$dbUsers = new DBUsers();
+$user = new User();
+$dbUsers->checkSession($user);
 
 $infoAdd = null;
 
 if(isset($_POST['addJrg'])){
 	$db = new DBJednostki();
-	$users = new User();
 	$db->createTable();
 	if($db->createJrg($_POST['jrg'], $_POST['city'],$_POST['street'],$_POST['nr'], $_POST['email'])){
 		$infoAdd = '<h3>Poprawnie dodano jednostkę</h3>';
-		if($users->createJrgAdmin($_POST['email'])){
+		if($dbUsers->createJrgAdmin($_POST['email'])){
 			$infoAdd .= '<p>Na podany adres email zostały wysłane dane dostępowe do konta.</p>';
         };
     } else {
@@ -44,7 +46,13 @@ if(isset($_POST['addJrg'])){
 <header>
     <div class="w3-bar w3-border w3-light-grey">
         <a href="<?php echo $base_url; ?>" class="w3-bar-item w3-button w3-green"><i class="fa fa-fw fa-home w3-xlarge"></i><div class="w3-small">Strona główna</div></a>
-        <a  href="<?php echo $base_url; ?>/login.php" class="w3-bar-item w3-button"><i class="fa fa-fw fa-sign-in w3-xlarge"></i><div class="w3-small">Zaloguj się</div></a>
+        <?php if($user->logged):?>
+            <a  href="<?php echo $base_url; ?>/main.php" class="w3-bar-item w3-button"><i class="fa fa-fw fa-user w3-xlarge"></i><div class="w3-small">Konto</div></a>
+            <a  href="<?php echo $base_url; ?>/main.php?logout=1" class="w3-bar-item w3-button"><i class="fa fa-fw fa-sign-out w3-xlarge"></i><div class="w3-small">Wyloguj się</div></a>
+        <?php else : ?>
+            <a  href="<?php echo $base_url; ?>/login.php" class="w3-bar-item w3-button"><i class="fa fa-fw fa-sign-in w3-xlarge"></i><div class="w3-small">Zaloguj się</div></a>
+
+        <?php endif; ?>
     </div>
 </header>
     <div class="w3-container w3-third w3-border w3-margin w3-padding-16">

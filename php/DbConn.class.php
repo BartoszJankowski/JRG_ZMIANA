@@ -8,6 +8,9 @@ class DbConn
     public $conn;
     public $error = '';
 
+	public $tbl_jednostki;
+	public $tbl_users;
+
     public function __construct()
     {
     	require 'dbconf.php';

@@ -9,8 +9,8 @@
 require 'config.php';
 
 if(isset($_POST['register'])){
-	$user = new User();
-	if($user->registerNewUser(
+	$dbusers = new DBUsers();
+	if($dbusers->registerNewUser(
 		test_input($_POST['login']),
 		test_input($_POST['password']),
 		test_input($_POST['confirm_password']),
@@ -21,7 +21,7 @@ if(isset($_POST['register'])){
 		header('Location: '.$base_url.'/register.php?succes');
 		exit;
 	} else {
-		echo $user->error;
+		echo $dbusers->error;
 	}
 }
 

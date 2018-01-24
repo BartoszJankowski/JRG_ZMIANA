@@ -8,24 +8,23 @@
 
 session_start();
 require 'config.php';
+$dbUsers = new DBUsers();
 $user = new User();
 
-if($user->checkSession()){
+if($dbUsers->checkSession($user)){
 	header('Location: '.$base_url.'/main.php');
 	exit;
 }
 
 if(isset($_POST['log_in'])){
-     if(!$user->login($_POST['login'],$_POST['password'])){
-         echo $user->error;
+     if(!$dbUsers->login($_POST['login'],$_POST['password'])){
+         echo $dbUsers->error;
      } else {
          header('Location: '.$base_url.'/main.php');
          exit;
      }
 }
 
-//TODO: rejestracja
-//TODO: reset hasła
 
 
 ?>

@@ -13,12 +13,12 @@ if(isset($_GET['succes'])){
 }
 
 if(isset($_POST['reset'])){
-	$user = new User();
-	if( $user->resetPass(test_input($_POST['email'])) ){
+	$dbUsers = new DBUsers();
+	if( $dbUsers->resetPass(test_input($_POST['email'])) ){
 		header('Location: '.$base_url.'/reset.php?succes=1');
 		exit;
 	} else {
-		$infoAdd = "<h3>".$user->error."</h3>";
+		$infoAdd = "<h3>" . $dbUsers->error . "</h3>";
 	}
 }
 ?>

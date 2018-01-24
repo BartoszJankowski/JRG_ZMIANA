@@ -10,17 +10,8 @@
 
 class DBJednostki extends DbConn {
 
-	public $tbl_jednostki;
 
-	/**
-	 * DBJednostki constructor.
-	 *
-	 * @param $tbl_jednostki
-	 */
-
-	public function __construct() {
-		parent::__construct();
-	}
+	private $selectedJrg;
 
 	public function createTable(){
 		try {
@@ -82,7 +73,6 @@ class DBJednostki extends DbConn {
 		$res = array();
 
 		$stmt =  $this->conn->prepare("SELECT id,nr_jrg,city FROM ".$this->tbl_jednostki);
-		$stmt->bindParam(':email', $email);
 		$stmt->execute();
 		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -92,6 +82,53 @@ class DBJednostki extends DbConn {
 			}
 		}
 		return $res;
+	}
+
+	public function getJrgListForAdmin(User $user){
+		$res = array();
+
+		$stmt =  $this->conn->prepare("SELECT id,nr_jrg,city,street,number FROM ".$this->tbl_jednostki." WHERE admin = :email");
+		$stmt->bindParam(':email', $user->getEmail());
+		$stmt->execute();
+		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+		if($result){
+			$res = $result;
+		}
+
+		return $res;
+	}
+
+	/**
+	 * Wybiera JRG i zapisuje w obiekcie
+	 * @param $id
+	 *
+	 * @return bool
+	 */
+	public function selectJrg($id){
+
+		$res = array();
+		$stmt =  $this->conn->prepare("SELECT * FROM ".$this->tbl_jednostki." WHERE id = :id");
+		$stmt->bindParam(':id', $id);
+		$stmt->execute();
+		$result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+		if($result){
+			$this->selectedJrg = $result;
+			return true;
+		}
+		return false;
+	}
+
+	public function printJrgBtn(array $jrg){
+		echo '<form class="w3-container w3-col l2 " action="" method="post" ><button type="submit" name="manage_jrg" value="'.$jrg['id'].'" class="w3-container w3-border w3-btn w3-margin '.($this->selectedJrg["id"] == $jrg["id"] ? "w3-green":"") .'" style="width: 100%"><h4 class="w3-border-bottom">'.$jrg["nr_jrg"].'-'.$jrg["city"].'</h4><h5>'.$jrg["street"].' '.$jrg["number"].'</h5></button></form>';
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getSelectedId(){
+		return $this->selectedJrg["id"];
 	}
 
 }

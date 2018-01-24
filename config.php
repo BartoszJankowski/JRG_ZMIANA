@@ -23,7 +23,7 @@ $max_attempts = 5;
 //Timeout (in seconds) after max attempts are reached
 $login_timeout = 300;
 
-//ONLY set this if you want a moderator to verify users and not the users themselves, otherwise leave blank or comment out
+//ONLY set this if you want a moderator to verify users and not the dbUsers themselves, otherwise leave blank or comment out
 $admin_email = 'admin@zmiana.bjit.pl';//'jankowski.ba@gmail.com';
 
 //EMAIL SETTINGS
