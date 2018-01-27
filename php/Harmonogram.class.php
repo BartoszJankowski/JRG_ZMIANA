@@ -49,6 +49,8 @@ class Harmonogram {
 			$obj = new ArrayObject( $sluzby );
 			$it = $obj->getIterator();
 			$lp = 0;
+			//TODO: iterowac po calym roku
+			// //TODO: albo zrobic caly harmo dla strazaka z wpisanymi godzinami i na to wpisywac kolory i sluzby etc
 			foreach($this->miesiace[$month] as $nrDnia => $dzien){
 
 				$godziny = $this->getHours($dzien['zmiana'],$strazak->getZmiana());
@@ -105,6 +107,14 @@ class Harmonogram {
 		foreach($changes as $day){
 			$this->miesiace[$month][$day] = $value;
 		}
+	}
 
+	public function putGrafChanges(int $month, array $changesDaysTab){
+		foreach ($changesDaysTab as $day => $change){
+			if(empty($change) && empty($this->miesiace[$month][$day])){
+				continue;
+			}
+			$this->miesiace[$month][$day] = $change;
+		}
 	}
 }

@@ -7,6 +7,9 @@
  * Time: 19:28
  */
 
+
+$t = str_replace(array('/','.php'),'',$_SERVER['PHP_SELF']);
+$$t = ' w3-green ';
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
@@ -53,6 +56,27 @@
             bottom: 0;
             left:0;
         }
+        table.table-grafik th {
+            text-align: center;
+        }
+        table.table-grafik td,table.table-grafik th {
+            border-left: 1px solid rgba(220,220,220,0.8);
+        }
+        table.table-grafik td.scale {
+            width:100px;
+            text-align: center;
+        }
+        .my-own-select {
+            padding:2px 8px;
+            border:none;
+            background: transparent;
+            background-image: none;
+            -webkit-appearance: none;
+            text-align: center;
+        }
+        .my-own-select option {
+            text-align: center;
+        }
 
 
     </style>
@@ -67,20 +91,20 @@
 	<div class="w3-bar w3-border w3-light-grey">
 		<a href="<?php echo $base_url; ?>" class="w3-bar-item w3-button"><i class="fa fa-fw fa-home w3-xlarge"></i><div class="w3-small">Strona główna</div></a>
 		<?php if($user->isAdmin()): ?>
-			<a  href="jrgmanage.php" class="w3-bar-item w3-button"><i class="fa fa-fw fa-users w3-xlarge"></i><div class="w3-small">Zarządzaj JRG</div></a>
+			<a  href="jrgmanage.php" class="w3-bar-item w3-button <?php echo $jrgmanage;?> "><i class="fa fa-fw fa-users w3-xlarge"></i><div class="w3-small">Zarządzaj JRG</div></a>
 		<?php
 		endif;
 
 		if($user->isChef() ):
 			?>
-			<a  href="shiftmanage.php" class="w3-bar-item w3-button"><i class="fa fa-fw fa-users w3-xlarge"></i><div class="w3-small">Zarządzaj zmianą</div></a>
-			<a href="" class="w3-bar-item w3-button"><i class="fa fa-fw fa-calendar w3-xlarge"></i><div class="w3-small">Grafik</div></a>
-            <a href="harmonogram.php" class="w3-bar-item w3-button"><i class="fa fa-fw fa-history w3-xlarge"></i><div class="w3-small">Harmonogram</div></a>
-            <a href="" class="w3-bar-item w3-button"><i class="fa fa-fw fa-list-alt w3-xlarge"></i><div class="w3-small">Rozkaz</div></a>
+			<a  href="shiftmanage.php" class="w3-bar-item w3-button <?php echo $shiftmanage;?> "><i class="fa fa-fw fa-users w3-xlarge"></i><div class="w3-small">Zarządzaj zmianą</div></a>
+			<a href="grafiksluzb.php" class="w3-bar-item w3-button  <?php echo $grafiksluzb;?> "><i class="fa fa-fw fa-calendar w3-xlarge"></i><div class="w3-small">Grafik</div></a>
+            <a href="harmonogramsluzb.php" class="w3-bar-item w3-button  <?php echo $harmonogramsluzb;?> "><i class="fa fa-fw fa-history w3-xlarge"></i><div class="w3-small">Harmonogram</div></a>
+            <a href="" class="w3-bar-item w3-button  <?php echo "";?> "><i class="fa fa-fw fa-list-alt w3-xlarge"></i><div class="w3-small">Rozkaz</div></a>
 		<?php
 		endif;
 		?>
-		<a  href="main.php?account_settings" class="w3-bar-item w3-button"><i class="fa fa-fw fa-cog w3-xlarge"></i><div class="w3-small">Ustawienia</div></a>
-		<a href="main.php?logout=1" class="w3-bar-item w3-button"><i class="fa fa-fw fa-sign-out w3-xlarge"></i><div class="w3-small">Wyloguj</div></a>
+		<a  href="main.php?account_settings" class="w3-bar-item w3-button  <?php echo $main;?> "><i class="fa fa-fw fa-cog w3-xlarge"></i><div class="w3-small">Ustawienia</div></a>
+		<a href="logout.php?logout=1" class="w3-bar-item w3-button  <?php echo $logout;?> "><i class="fa fa-fw fa-sign-out w3-xlarge"></i><div class="w3-small">Wyloguj</div></a>
 	</div>
 </header>

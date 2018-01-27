@@ -13,11 +13,6 @@ $dbJednostki = new DBJednostki();
 $dbStrazacy = new DBStrazacy();
 $user = new User();
 
-if(isset($_GET['logout'])){
-	$dbUsers->destroySession($user);
-	header('Location: '.$base_url.'/index.php');
-	exit;
-}
 
 
 if(!$dbUsers->checkSession($user)){

@@ -12,3 +12,4 @@ $tbl_jednostki = $tbl_prefix."jednostki";
 $tbl_users = $tbl_prefix."users";
 $tbl_strazacy = $tbl_prefix."firemans";
 $tbl_harmonogramy = $tbl_prefix."timetables";
+$tbl_grafiki = $tbl_prefix."schedules";

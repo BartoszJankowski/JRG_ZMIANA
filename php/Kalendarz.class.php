@@ -90,9 +90,12 @@ class Kalendarz {
 	}
 
 	public function getDayForYear($rok){
-		$this->generateDays();
+	//	$this->generateDays();
 		return array_key_exists($rok,$this->tabGenDays) ? $this->tabGenDays[$rok] : false;
 	}
+
+
+
 
 	private function generateDays(){
 		$tempDate = new DateTime($this->toString(),new DateTimeZone("Europe/Warsaw"));

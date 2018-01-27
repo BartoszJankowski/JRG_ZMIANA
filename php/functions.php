@@ -138,9 +138,22 @@ function get_harmo_values(){
 		'Ch'=>array('col'=>'w3-khaki','n'=>'Chorobowe'),
 		'Ud'=>array('col'=>'w3-yellow','n'=>'Urlop dodatkowy'),
 		'Uw'=>array('col'=>'w3-green','n'=>'Urlop wypoczynkowy'),
-		'O'=>array('col'=>'w3-pale-red','n'=>'Urlop okolicznościowy'),
+		'O'=>array('col'=>'w3-pale-red','n'=>'Urlop okolicznościowy')
 	);
 }
+function get_grafik_values(){
+	return array(
+		'Ws'=>array('col'=>'','n'=>'Wolna służba'),
+		'D'=>array('col'=>'','n'=>'Delegacja'),
+		'Ch'=>array('col'=>'','n'=>'Chorobowe'),
+		'Ud'=>array('col'=>'','n'=>'Urlop dodatkowy'),
+		'Uw'=>array('col'=>'','n'=>'Urlop wypoczynkowy'),
+		'O'=>array('col'=>'','n'=>'Urlop okolicznościowy'),
+		'PA'=>array('col'=>'','n'=>'Punkt alarmowy'),
+		'PD'=>array('col'=>'','n'=>'Podoficer')
+	);
+}
+
 function get_harmo_val(string $v){
 	return get_harmo_values()[$v];
 }

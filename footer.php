@@ -16,10 +16,14 @@ $proceedTime = round(microtime(true) - $timeStart,2);
 			echo 'Wygenerowano w '.$proceedTime.'s';
 			?>
 		</div>
+        <button class="w3-button w3-gray w3-right" id="print" title="Drukuj"><i class="fa fa-print w3-large" aria-hidden="true"></i></button>
 	</div>
 </footer>
 </body>
 
 <script>
+    $("#print").click(function () {
+        window.print();
+    });
 </script>
 </html>
