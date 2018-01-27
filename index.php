@@ -6,7 +6,7 @@
  * Time: 11:22
  */
 session_start();
-require 'config.php';
+require 'php/config.php';
 
 $dbUsers = new DBUsers();
 $user = new User();
@@ -93,5 +93,6 @@ if(isset($_POST['addJrg'])){
         </form>
     </div>
 
-</body>
-</html>
+<?php
+
+require 'footer.php';

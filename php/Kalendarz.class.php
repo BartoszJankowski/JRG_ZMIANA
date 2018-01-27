@@ -33,7 +33,7 @@ class Kalendarz {
 		if($currentDay == 0){
 			$currentDay = date("j",time());
 		}
-		$this->currentDataTime = new DateTime($currentYear.'-'.$currentMonth.'-'.$currentDay);
+		$this->currentDataTime = new DateTime($currentYear.'-'.$currentMonth.'-'.$currentDay, new DateTimeZone("Europe/Warsaw"));
 		$this->generateDays();
 	}
 
@@ -75,6 +75,9 @@ class Kalendarz {
 	public function getDayOfWeek(){
 		return $this->dayLabels[$this->currentDataTime->format('w')];
 	}
+	public function getCurrentMonthNum(){
+		return $this->currentDataTime->format('n');
+	}
 	public function getYear(){
 		return $this->currentDataTime->format('Y');
 	}
@@ -86,8 +89,13 @@ class Kalendarz {
 		return $this->currentDataTime->format('z');
 	}
 
+	public function getDayForYear($rok){
+		$this->generateDays();
+		return array_key_exists($rok,$this->tabGenDays) ? $this->tabGenDays[$rok] : false;
+	}
+
 	private function generateDays(){
-		$tempDate = new DateTime($this->toString());
+		$tempDate = new DateTime($this->toString(),new DateTimeZone("Europe/Warsaw"));
 		$zmiana = 1;
 		$this->currentDataTime->setDate(STY_2016_ZM1[0],STY_2016_ZM1[1],STY_2016_ZM1[2]);
 		$this->tabGenDays = array();
@@ -100,7 +108,7 @@ class Kalendarz {
 				$dni = array();
 
 				while ($year == $this->getYear()){
-					$dni[$this->numDayOfYear()] = array("zmiana"=>$zmiana,"dzien_tyg"=>$this->getDayOfWeek());
+					$dni[$this->numDayOfYear()] = array("msc"=>$this->getCurrentMonthNum(),"zmiana"=>$zmiana,"dzien_tyg"=>$this->getDayOfWeek());
 
 					$zmiana+1 >= 4 ? $zmiana = 1: $zmiana++;
 					$this->addDays(1);

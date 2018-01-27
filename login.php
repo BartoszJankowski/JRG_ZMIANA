@@ -7,7 +7,7 @@
  */
 
 session_start();
-require 'config.php';
+require 'php/config.php';
 $dbUsers = new DBUsers();
 $user = new User();
 
@@ -66,6 +66,7 @@ if(isset($_POST['log_in'])){
 		</div>
 	</form>
 </div>
+<?php
 
-</body>
-</html>
+require 'footer.php';
+

@@ -10,3 +10,5 @@ $db_name = "zmjrgwro_db"; // Database name
 $tbl_prefix = ""; //***PLANNED FEATURE, LEAVE VALUE BLANK FOR NOW*** Prefix for all database tables
 $tbl_jednostki = $tbl_prefix."jednostki";
 $tbl_users = $tbl_prefix."users";
+$tbl_strazacy = $tbl_prefix."firemans";
+$tbl_harmonogramy = $tbl_prefix."timetables";

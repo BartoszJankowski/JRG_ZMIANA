@@ -1,4 +1,7 @@
 <?php
+$timeStart = microtime(true);
+
+
 //ini_set('display_errors', 3);
 error_reporting(E_ERROR | E_WARNING | E_PARSE );
 
@@ -7,13 +10,21 @@ spl_autoload_register(function ($class_name) {
 	include 'php/'.$class_name . '.class.php';
 });
 
-include 'globalcon.php';
 //Pull database configuration from this file
 include 'php/dbconf.php';
 
 include 'php/PHPMailer/PHPMailerAutoload.php';
 
 include 'php/functions.php';
+
+//SYSTEM SETTINGS
+$base_url = 'http://' . $_SERVER['SERVER_NAME'];
+
+//DO NOT CHANGE
+$ip_address = $_SERVER['REMOTE_ADDR'];
+
+
+
 
 //Set this for global site use
 $site_name = 'energoland.bjit.pl';

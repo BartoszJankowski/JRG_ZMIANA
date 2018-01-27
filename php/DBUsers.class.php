@@ -148,7 +148,7 @@ class DBUsers extends DbConn {
 	public function checkSession(User $user){
 		if($user->sessionSet){
 			try {
-				$stmt =  $this->conn->prepare("SELECT email,session,name,surname,jrg_id,previlages FROM ".$this->tbl_users." WHERE email = :email");
+				$stmt =  $this->conn->prepare("SELECT id,email,session,name,surname,jrg_id,previlages FROM ".$this->tbl_users." WHERE email = :email");
 				$stmt->bindParam(':email', $user->login);
 				$stmt->execute();
 				$result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -344,11 +344,12 @@ class DBUsers extends DbConn {
 	 *
 	 * @return array(User)
 	 */
-	public function getUsersList($idJrg){
+	public function getUsersList(User $userAdmin, $idJrg){
 		$arr = array();
 		try{
-			$stmt =  $this->conn->prepare("SELECT * FROM ".$this->tbl_users." WHERE jrg_id = :id");
+			$stmt =  $this->conn->prepare("SELECT * FROM ".$this->tbl_users." WHERE jrg_id = :id OR jrg_id IS NULL");
 			$stmt->bindParam(':id', $idJrg);
+			//$stmt->bindParam(':admin_id', $userAdmin->getId());
 			$stmt->execute();
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 			if($stmt->rowCount()>0){
@@ -363,8 +364,72 @@ class DBUsers extends DbConn {
 		return $arr;
 	}
 
+	public function getFreeUserList(User $userAdmin,$idJrg){
+		$users = $this->getUsersList($userAdmin, $idJrg);
+		$result =  array();
+		if(count($users)>0) {
+			$dbStrazacy   = new DBStrazacy();
+			$strazacyList = $dbStrazacy->getJRGListStrazacy( $idJrg );
+			foreach ( $users as $user ) {
+				$delete = false;
+				foreach ( $strazacyList as $zmiana ) {
+					foreach ( $zmiana as $Strazak ) {
+						if($Strazak->getUserid() === $user->getId()){
+							$delete = true;
+							break 2;
+						}
+					}
+				}
+				if(!$delete){
+					$result[] = $user;
+				}
+			}
+		}
+		return $result;
+	}
 
+	public function getUserById($id_user){
+		try{
+			$stmt =  $this->conn->prepare("SELECT * FROM ".$this->tbl_users." WHERE id = :id");
+			$stmt->bindParam(':id', $id_user);
+			$stmt->execute();
+			$result = $stmt->fetch(PDO::FETCH_ASSOC);
+			if($result){
+				return new User($result);
+			}
+		} catch (PDOException $e){
+			//TODO: log error
+			$this->error = $e->getMessage();
+		}
+		return null;
+	}
 
+	/**
+	 * @param $idJrg
+	 * @param $userId
+	 *
+	 * @return bool
+	 */
+	public function setUserJrgId($idJrg, $userId){
+		$user = $this->getUserById($userId);
+		if(!empty($user)){
+			if(empty($user->getJrgId())){
+				try{
+					$stmt =  $this->conn->prepare("UPDATE ".$this->tbl_users." SET jrg_id = :idjrg WHERE id = :id");
+					$stmt->bindParam(':idjrg', $idJrg);
+					$stmt->bindParam(':id', $userId);
+					$stmt->execute();
+					return $user;
+				} catch (PDOException $e){
+					//TODO: log error
+					$this->error = $e->getMessage();
+				}
+			} elseif($user->getJrgId() === $idJrg) {
+				return $user;
+			}
+		}
+		return null;
+	}
 
 
 

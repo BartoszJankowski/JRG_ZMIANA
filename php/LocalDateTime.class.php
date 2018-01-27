@@ -9,7 +9,7 @@
 class LocalDateTime extends DateTime {
 
 	public function __construct( $time = 'now', DateTimeZone $timezone = null ) {
-		parent::__construct( 'now', new DateTimeZone("Europe/Warsaw") );
+		parent::__construct( $time, new DateTimeZone("Europe/Warsaw") );
 	}
 
 	public function getDataTime(){
@@ -18,4 +18,16 @@ class LocalDateTime extends DateTime {
 	public function unixTime(){
 		return time();
 	}
+
+	/**
+	 * @return int
+	 */
+	public function getYear(){
+		return intval($this->format('Y'));
+	}
+
+	public function getMonth(){
+		return intval($this->format('n'));
+	}
+
 }

@@ -10,6 +10,8 @@ class DbConn
 
 	public $tbl_jednostki;
 	public $tbl_users;
+	public $tbl_strazacy;
+	public $tbl_harmonogramy;
 
     public function __construct()
     {
@@ -21,6 +23,8 @@ class DbConn
         $this->tbl_prefix = $tbl_prefix; // Prefix for all database tables
 	    $this->tbl_jednostki = $tbl_jednostki;
 	    $this->tbl_users = $tbl_users;
+	    $this->tbl_strazacy = $tbl_strazacy;
+	    $this->tbl_harmonogramy = $tbl_harmonogramy;
         try {
 			// Connect to server and select database.
 			$this->conn = new PDO('mysql:host=' . $host . ';dbname=' . $db_name . ';charset=utf8', $username, $password);

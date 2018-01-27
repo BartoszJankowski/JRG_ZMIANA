@@ -6,7 +6,7 @@
  * Time: 12:52
  */
 
-require 'config.php';
+require 'php/config.php';
 
 if(isset($_GET['succes'])){
 	$infoAdd = "<h3>Twoje hasło zostało zresetowane. Sprawdź skrzynkę email.</h3>";
@@ -59,5 +59,7 @@ if(isset($_POST['reset'])){
 	</form>
 </div>
 
-</body>
-</html>
+<?php
+
+require 'footer.php';
+

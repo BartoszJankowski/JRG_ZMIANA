@@ -13,6 +13,12 @@ class User {
 	public $login;
 	public $sesId;
 
+	/**
+	 * Strazak class
+	 */
+	public $strazak;
+
+
 
 	private $id, $email, $name, $surname, $jrg_id, $session, $dateTime, $previlages;
 
@@ -54,6 +60,14 @@ class User {
 			$this->session    = $tab['session'];
 			$this->dateTime   = $tab['datatime'];
 			$this->previlages = $tab['previlages'];
+			$dbStr = new DBStrazacy();
+			$strazak = $dbStr->getStrazakByUserId($this->id);
+			if($strazak){
+				$this->strazak = $strazak;
+				if(!$this->isAdmin() && $strazak->isChef()){
+					$this->previlages = "CHEF";
+				}
+			}
 	}
 
 
@@ -124,11 +138,24 @@ class User {
 	 * @return bool
 	 */
 	public function isChef(){
-		return  $this->previlages === 'CHEF';
+		return(!empty($this->strazak) && $this->strazak->isChef());
+	}
+
+	public function getNameEmailIfNull(){
+		return strlen($this->name) >0 ? $this->name.' '.$this->getSurname() : $this->email;
 	}
 
 	public function printUserHtml(){
+		$name = strlen($this->getName())>0 ? $this->getName().' '.$this->getSurname() : $this->getEmail();
 
+		echo '<div class="w3-third w3-border w3-margin"><span class="w3-text-gray">Strażak: </span>'.$name.'<br><span class="w3-text-gray">status: </span>'.$this->getPrevilages().'</div>';
+	}
+
+	/**
+	 * @return Strazak
+	 */
+	public function getStrazak() {
+		return $this->strazak;
 	}
 
 

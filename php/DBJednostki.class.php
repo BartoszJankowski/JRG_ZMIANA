@@ -121,7 +121,7 @@ class DBJednostki extends DbConn {
 	}
 
 	public function printJrgBtn(array $jrg){
-		echo '<form class="w3-container w3-col l2 " action="" method="post" ><button type="submit" name="manage_jrg" value="'.$jrg['id'].'" class="w3-container w3-border w3-btn w3-margin '.($this->selectedJrg["id"] == $jrg["id"] ? "w3-green":"") .'" style="width: 100%"><h4 class="w3-border-bottom">'.$jrg["nr_jrg"].'-'.$jrg["city"].'</h4><h5>'.$jrg["street"].' '.$jrg["number"].'</h5></button></form>';
+		echo '<form class="w3-container w3-col l2 " action="" method="get" ><button type="submit" name="manage_jrg" value="'.$jrg['id'].'" class="w3-container w3-border w3-btn w3-margin '.($this->selectedJrg["id"] == $jrg["id"] ? "w3-green":"") .'" style="width: 100%"><h4 class="w3-border-bottom">'.$jrg["nr_jrg"].'-'.$jrg["city"].'</h4><h5>'.$jrg["street"].' '.$jrg["number"].'</h5></button></form>';
 	}
 
 	/**

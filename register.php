@@ -6,7 +6,7 @@
  * Time: 13:29
  */
 
-require 'config.php';
+require 'php/config.php';
 
 if(isset($_POST['register'])){
 	$dbusers = new DBUsers();
@@ -101,7 +101,7 @@ $res = $jednostki->getJrgList();
 	</form>
 </div>
 
-</body>
+
 
 <script>
 	/**
@@ -126,5 +126,8 @@ $res = $jednostki->getJrgList();
         }
     });
 </script>
-</html>
+<?php
+
+require 'footer.php';
+
 
