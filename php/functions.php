@@ -157,3 +157,7 @@ function get_grafik_values(){
 function get_harmo_val(string $v){
 	return get_harmo_values()[$v];
 }
+
+function get_dni_tyg_iterator() : ArrayIterator{
+	return (new ArrayObject(array("Pn","Wt","Śr","Cz","Pt","Sb","Nd")))->getIterator();
+}

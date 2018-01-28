@@ -13,7 +13,7 @@ class Kalendarz {
 
 	//properties
 	private $currentDataTime;
-	private $dayLabels = array("Nd","Pon","Wt","Śr","Czw","Pt","Sob");
+	private $dayLabels = array("Nd","Pn","Wt","Śr","Cz","Pt","Sb");
 
 	private $tabGenDays = array();
 	/**
@@ -92,6 +92,18 @@ class Kalendarz {
 	public function getDayForYear($rok){
 	//	$this->generateDays();
 		return array_key_exists($rok,$this->tabGenDays) ? $this->tabGenDays[$rok] : false;
+	}
+
+	public function getDayForMonth(int $month){
+		$tab = array();
+		$nr = 0 ;
+		foreach($this->tabGenDays[$this->getYear()] as $dzien){
+				if($dzien['msc'] == $month){
+					$tab[$nr] = array('z'=>$dzien['zmiana'],'t'=>$dzien['dzien_tyg'],'nr'=>$nr+1);
+					$nr++;
+				}
+		}
+		return $tab;
 	}
 
 

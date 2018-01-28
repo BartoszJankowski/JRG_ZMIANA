@@ -13,7 +13,9 @@ $dbJednostki = new DBJednostki();
 $dbStrazacy = new DBStrazacy();
 $user = new User();
 
-
+if(isset($_POST)){
+    $_POST = test_input($_POST);
+}
 
 if(!$dbUsers->checkSession($user)){
 	header('Location: '.$base_url.'/login.php');
@@ -36,9 +38,23 @@ if(isset($_POST['changeuserData'])){
 	}
 }
 
+if(isset($_POST['deleteAccount'])){
+    if(count($dbJednostki->getJrgListForAdmin($user))<=0){
+	    if($dbUsers->deleteAccount($user, $_POST['password'])){
+		    header('Location: '.$base_url);
+		    exit;
+        } else {
+		    $resDelete = $dbUsers->error;
+        }
+    } else {
+        $resDelete =  'Nie można usunąc konta administratora jednostki. Należy przekazac administrację innemu użytkownikowi.';
+    }
+
+}
+
 
 $title = "Panel główny";
-    require 'header.php';
+require 'header.php';
 ?>
 <main>
     <div>
@@ -61,6 +77,18 @@ $title = "Panel główny";
             </div>
 
             <input class="w3-input w3-margin-top" type="submit" name="changeuserData" value="Zapisz" />
+        </form>
+        <form action="" id="deleteAccount" method="post" class="w3-quarter w3-margin w3-padding  w3-border">
+            <h3>Usuń konto</h3>
+            <p class="w3-text-red"><?php echo $resDelete; ?></p>
+            <p>Uwaga! Usunięcie konta jest permanentne i nieodwracalne, czy oby napewno chcesz to zrobić? </p>
+            <div>
+                <label>Aby usunąc wprowadź hasło: </label>
+                <input class="w3-input" type="password" name="password" value="" required  />
+            </div>
+
+
+            <input class="w3-input w3-margin-top" type="submit" name="deleteAccount" value="Usuń konto" />
         </form>
         <form action="" id="changePass" method="post" class="w3-quarter w3-margin w3-padding  w3-border">
             <h3>Zmiana hasła</h3>

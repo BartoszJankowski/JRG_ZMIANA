@@ -56,7 +56,13 @@ class DBHarmonogramy extends DbConn {
 		return $tab;
 	}
 
-	public function getHarmo(Strazak $strazak, $rok){
+	/**
+	 * @param Strazak $strazak
+	 * @param $rok
+	 *
+	 * @return Harmonogram
+	 */
+	public function getHarmo(Strazak $strazak, $rok) {
 		try {
 			$stmt = $this->conn->prepare("SELECT harmo FROM ".$this->tbl_harmonogramy." WHERE strazak_id = :str_id AND rok = :rok");
 			$stmt->bindParam(':str_id',$strazak->getStrazakId());
@@ -64,11 +70,14 @@ class DBHarmonogramy extends DbConn {
 			$stmt->execute();
 			$result = $stmt->fetch(PDO::FETCH_ASSOC);
 			if($result){
-				//return new Harmonogram($rok, $result);
+				return unserialize($result['harmo']);
 			}
 		} catch (PDOException $e){
 			$this->error = "DB error:".$e->getMessage();
 		}
+		$harmo =  new Harmonogram($rok);
+		$harmo->genHarmoForStrazak($strazak);
+		return $harmo;
 	}
 
 	public function saveHarmos($jrgId, $rok, array $harmos  ){

@@ -432,6 +432,40 @@ class DBUsers extends DbConn {
 	}
 
 
+	public function deleteAccount(User $user, string $pasword) : bool{
+		$dbStr = new DBStrazacy();
+
+		if($dbStr->removeStrazaksUser($user->getId())){
+			try{
+				$stmt =  $this->conn->prepare("SELECT password FROM ".$this->tbl_users." WHERE id = :id");
+				$stmt->bindParam(':id', $user->getId());
+				$stmt->execute();
+				$result = $stmt->fetch(PDO::FETCH_ASSOC);
+				if($result){
+					if(!password_verify($pasword, $result['password'])){
+						$this->error = 'Błędne hasło';
+						return false;
+					}
+				} else {
+					$this->error = 'Błąd pozyskiwania danych';
+					return false;
+				}
+				$stmt =  $this->conn->prepare("DELETE FROM ".$this->tbl_users." WHERE id = :id");
+				$stmt->bindParam(':id', $user->getId() );
+				$stmt->execute();
+				$this->destroySession($user);
+				return true;
+			} catch (PDOException $e){
+				$this->error = 'Error#1: '.$e->getMessage();
+				return false;
+			}
+		} else {
+			$this->error = 'Error#2: '.$dbStr->error;
+			return false;
+		}
+	}
+
+
 
 
 }

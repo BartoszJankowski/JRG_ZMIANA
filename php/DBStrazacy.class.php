@@ -153,6 +153,18 @@ class DBStrazacy extends DbConn {
 		}
 	}
 
+	public function removeStrazaksUser($userId) : bool{
+		try {
+			$stmt = $this->conn->prepare("UPDATE  ".$this->tbl_strazacy." SET user_id = NULL WHERE user_id = :user_id");
+			$stmt->bindParam(':user_id',$userId);
+			$stmt->execute();
+			return true;
+		} catch (PDOException $e){
+			$this->error = "DB error:".$e->getMessage();
+		}
+		return false;
+	}
+
 	public function getJRGListStrazacy($jrg_id){
 		//TODO: check if admin of this jrg
 		$tab=array(1=>array(),2=>array(),3=>array());
@@ -242,6 +254,7 @@ class DBStrazacy extends DbConn {
 
 	public function deleteFireman(User $user, $firemanId){
 
+		//TODO: usunac harmonogramy strazaka
 		$strazak = $this->getStrazak($firemanId);
 		if($strazak){
 			$allowedToDelete = false;
