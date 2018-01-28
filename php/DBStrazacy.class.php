@@ -8,6 +8,8 @@
 
 class DBStrazacy extends DbConn {
 
+	private $strazacyZaladowani = array();
+
 	/**
 	 * Przy utworzeniu obiektu sprawdza czy obecna tabela istnieje
 	 */
@@ -186,11 +188,12 @@ class DBStrazacy extends DbConn {
 				foreach ($result as $dane){
 					$tab[] = (new Strazak())->create($dane);
 				}
-
+				$this->strazacyZaladowani = $tab;
 			}
 		} catch (PDOException $e){
 			$this->error = "DB error:".$e->getMessage();
 		}
+
 		return $tab;
 	}
 
@@ -201,6 +204,13 @@ class DBStrazacy extends DbConn {
 	 * @return bool|Strazak
 	 */
 	public function getStrazak($idStrazaka){
+		if(!empty($this->strazacyZaladowani)){
+			foreach ($this->strazacyZaladowani as $strazak){
+				if($idStrazaka == $strazak->getStrazakId()){
+					return $strazak;
+				}
+			}
+		}
 		try{
 			$stmt = $this->conn->prepare("SELECT * FROM ".$this->tbl_strazacy." WHERE id = :id");
 			$stmt->bindParam(':id',$idStrazaka);

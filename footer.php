@@ -6,10 +6,10 @@
  * Time: 15:35
  */
 
-$proceedTime = round(microtime(true) - $timeStart,2);
+$proceedTime = round(microtime(true) - $timeStart,3);
 
 ?>
-<footer class=" w3-light-grey w3-padding-small w3-small bottom" style="width: 100%;">
+<footer class="w3-light-grey w3-padding-small w3-small w3-margin-top" style="width: 100%;">
 	<div class="w3-row">
 		<div class="w3-col l3">
 			<?php

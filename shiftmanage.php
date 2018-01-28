@@ -58,7 +58,7 @@ require 'header.php';
 	    if(isset($_GET['editFireman'])) :
             $edytowanyStrazak = $dbStrazacy->getStrazak($_GET['editFireman']);
 	?>
-            <div>
+            <div class="w3-row">
                 <h2>Edycja danych strazaka</h2>
                 <div class="w3-container w3-quarter" >
 
@@ -187,7 +187,7 @@ require 'header.php';
                 </div>
             </div>
         <?php else: ?>
-            <div>
+            <div class="w3-row">
                 <h2>Dodaj nowego strażaka: </h2>
                 <div class="w3-container w3-quarter" >
                     <form action="" method="post" id="addFireman" class="w3-margin">

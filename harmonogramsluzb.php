@@ -36,16 +36,10 @@ if(isset($_GET)){
         } else {
 		    $localDateTime->sub(new DateInterval('P'.abs($_GET['mscAction']).'M'));
 	    }
-		header('Location: '.$base_url.'/harmonogram.php?month='.$localDateTime->getMonth().'&year='.$localDateTime->getYear());
+		header('Location: '.$base_url.$_SERVER['PHP_SELF'].'?month='.$localDateTime->getMonth().'&year='.$localDateTime->getYear());
 		exit;
     }
 }
-
-
-
-
-
-
 
 $month= $localDateTime->getMonth() ;
 $year = $localDateTime->getYear() ;
@@ -65,6 +59,7 @@ if(isset($_POST['harmoVal'])){
 				$daneDoZapisu[$nr] = array('harmonogram'=>$harmonogramy[$nr],'exists'=>true);
 			} else {
 				$harmonogram = new Harmonogram($_POST['year']);
+				$harmonogram->genHarmoForStrazak($dbStrazacy->getStrazak($nr));
 				$harmonogram->putChanges($_POST['month'],$harmoChanges, $_POST['harmoVal']);
 				$daneDoZapisu[$nr] = array('harmonogram'=>$harmonogram,'exists'=>false); ;
 			}
@@ -74,12 +69,15 @@ if(isset($_POST['harmoVal'])){
 	header('Location: '.$_SERVER['HTTP_REFERER']);
 	exit;
 } else {
-	foreach ( $strazacy as $strazak){
+	foreach ( $strazacy as $strazak ){
 		if(array_key_exists($strazak->getStrazakId(), $harmonogramy)){
 			$strazak->setHarmonogram( $harmonogramy[$strazak->getStrazakId()] );
-		}
+		} else {
+		    $harm = new Harmonogram($year);
+		    $harm->genHarmoForStrazak($strazak);
+			$strazak->setHarmonogram( $harm );
+        }
 	}
-
 }
 
 $title = "Harmonogram służb";
@@ -90,7 +88,7 @@ require 'header.php';
 <main class="w3-container" xmlns="http://www.w3.org/1999/html">
     <form action="" method="get">
         <input type="hidden" name="month" value="<?php echo $month?>"> <input type="hidden" name="year" value="<?php echo $year ?>">
-        <h1 class="w3-center"><button name="mscAction" value="-1" type="submit" class="w3-button"><i class="fa fa-fw fa-chevron-left"></i></button><?php echo get_moth_name($month).' '.$year; ?><button name="mscAction" value="1" type="submit" class="w3-button"><i class="fa fa-fw fa-chevron-right"></i></button></h1>
+        <h1 class="w3-center"><button name="mscAction" value="-1" type="submit" class="w3-button w3-xlarge"><i class="fa fa-fw fa-chevron-left"></i></button><span style="width: 25%;display: inline-block"><?php echo get_moth_name($month).' '.$year; ?></span><button name="mscAction" value="1" type="submit" class="w3-button w3-xlarge"><i class="fa fa-fw fa-chevron-right"></i></button></h1>
     </form>
 
     <div class="w3-conteiner w3-row w3-row-padding w3-margin">
@@ -103,13 +101,14 @@ require 'header.php';
 	<form action="" method="post">
 		<table class="w3-table-all w3-hoverable w3-small">
 		<?php
+		$timeS = microtime(true);
 		echo '<input type="hidden" name="year" value="'.$year.'"/>';
 		echo '<input type="hidden" name="month" value="'.$month.'"/>';
 		$harmo->printHarmoHeader($month);
 		 foreach ($strazacy as $str){
-			 $harmo->printHarmoStrazakRow($str,$month);
+		     $str->getHarmonogram()->printHarmoRow($str, $month);
 		 }
-
+		echo 'print harms = '.round(microtime(true)-$timeS,3).'s';
 		?>
 		</table>
         <div class="w3-row">

@@ -38,12 +38,12 @@ class Grafik {
 	}
 
 	public function printMiesiac( array $strazacy ){
-		echo '<form action="" method="post"><table  class="w3-table-all w3-hoverable w3-small table-grafik" >';
+		echo '<form action="" method="post" class="w3-center"><table  class="w3-table-all w3-hoverable w3-xsmall table-grafik" >';
 		echo $this->printHeader();
 		foreach ($strazacy as $strazak){
 			echo $this->strazakLine($strazak);
 		}
-		echo '</table><input class="w3-input w3-margin-top" type="submit" name="saveGraf" value="Zapisz grafik" /></form>';
+		echo '</table><div class="w3-margin-top"><button class="w3-button w3-border w3-light-grey " type="submit" name="saveGraf"  ><i class="fa fa-fw fa-save"></i> Zapisz grafik</button></div></form>';
 	}
 
 	private function printHeader():string {

@@ -34,7 +34,7 @@ if(isset($_GET)){
 		} else {
 			$localDateTime->sub(new DateInterval('P'.abs($_GET['mscAction']).'M'));
 		}
-		header('Location: '.$base_url.'/grafik.php?month='.$localDateTime->getMonth().'&year='.$localDateTime->getYear());
+		header('Location: '.$base_url.$_SERVER['PHP_SELF'].'?month='.$localDateTime->getMonth().'&year='.$localDateTime->getYear());
 		exit;
 	}
 }
@@ -74,7 +74,7 @@ require 'header.php';
 ?>
 
 	<main class="w3-container" xmlns="http://www.w3.org/1999/html">
-		<form action="" method="get">
+		<form action="" method="get" >
 			<input type="hidden" name="month" value="<?php echo $localDateTime->getMonth(); ?>"> <input type="hidden" name="year" value="<?php echo $localDateTime->getYear(); ?>">
 			<h1 class="w3-center"><button name="mscAction" value="-1" type="submit" class="w3-button w3-xlarge"><i class="fa fa-fw fa-chevron-left"></i></button><span style="width: 25%;display: inline-block"><?php echo get_moth_name($localDateTime->getMonth()).' '.$localDateTime->getYear(); ?></span><button name="mscAction" value="1" type="submit" class="w3-button w3-xlarge"><i class="fa fa-fw fa-chevron-right"></i></button></h1>
 		</form>
@@ -84,6 +84,7 @@ require 'header.php';
 		?>
 
 		<div class="w3-conteiner w3-row w3-row-padding w3-margin">
+            <h3>Legenda: </h3>
 			<?php
 			foreach (get_grafik_values() as $v=>$tab){
 				echo '<div class="w3-col l2 w3-small "><span class="w3-border w3-padding-small" style="width: 45px;height: 30px;display: inline-block" >'.$v.'</span> - '.$tab['n'].'</div>';

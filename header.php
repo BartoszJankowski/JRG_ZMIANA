@@ -56,14 +56,22 @@ $$t = ' w3-green ';
             bottom: 0;
             left:0;
         }
+        .w3-xsmall {
+            font-size: 10px !important;
+        }
+        table.table-grafik {
+            width:auto !important;
+            display: inline-block;
+        }
         table.table-grafik th {
             text-align: center;
         }
         table.table-grafik td,table.table-grafik th {
             border-left: 1px solid rgba(220,220,220,0.8);
+            padding:4px !important;
         }
         table.table-grafik td.scale {
-            width:100px;
+            width:60px;
             text-align: center;
         }
         .my-own-select {
