@@ -9,6 +9,7 @@
 session_start();
 require 'php/config.php';
 $dbUsers     = new DBUsers();
+$dbJrgSettings = new DBJrgSettings();
 $dbJednostki = new DBJednostki();
 $dbStrazacy = new DBStrazacy();
 $user = new User();
@@ -18,9 +19,25 @@ if(!$dbUsers->checkSession($user)){
 	exit;
 }
 
+if(isset($_POST)){
+	$_POST = test_input($_POST);
+}
+if(isset($_GET)){
+	$_GET = test_input($_GET);
+}
+
 if(  isset($_GET['manage_jrg']) && $user->isAdmin() ) {
 	$dbJednostki->selectJrg( $_GET['manage_jrg'] );
+	$dbJrgSettings->load($dbJednostki->getSelectedId());
+	if(isset($_POST['addUpr'])){
+	    $dbJrgSettings->addUpr($_POST);
+    }
+    if(isset($_POST['uprDelete'])){
+	    $dbJrgSettings->deleteUpr($_POST['deleteUpr']);
+    }
 }
+
+
 
 if( isset($_POST['addStrazak']) && ($user->isAdmin() || $user->isChef()) ){
 	$dbStrazacy->dodajStrazaka((new Strazak())->create(test_input($_POST)));
@@ -130,10 +147,12 @@ require 'header.php';
 						</div>
 						<div>
 							<label class="w3-text-gray">Zaznacz uprawnienia pracownika: </label><br>
-							<label><input type="checkbox" name="uprawnienia[]" value="Kierowca" />Kierowca</label><br>
-							<label><input type="checkbox" name="uprawnienia[]" value="Operator sprz. spec." />Operator sprzetu specjalnego</label><br>
-							<label><input type="checkbox" name="uprawnienia[]" value="d-ca zastepu" />D-ca zastepu</label><br>
-						</div>
+							<?php
+							foreach ( $dbJrgSettings->getUprawnienia() as $uprawnienie ) {
+								echo '<label><input type="checkbox" name="uprawnienia[]" value="'.$uprawnienie->getId().'" /><i class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'" ></i> '.$uprawnienie->getName().'</label><br>';
+							}
+
+							?></div>
 						<input type="submit" class="w3-input w3-margin-top" name="addStrazak" value="Dodaj" />
 					</form>
 				<? endif;?>
@@ -162,7 +181,41 @@ require 'header.php';
 				}
 				?>
 			</div>
-		</div>
+            <?php
+             if($dbJednostki->getSelectedId()>0) : ?>
+             <div class="w3-container w3-half">
+                 <div class="w3-container w3-half">
+                     <h4>Lista uprawnień </h4>
+                     <form action="" method="post">
+                     <ul>
+                     <?php
+                        foreach ($dbJrgSettings->getUprawnienia() as $uprawnienie){
+                            $uprawnienie->printLiElement();
+                        }
+                     ?>
+                     </ul>
+                         <input type="submit" name="uprDelete" value="Usuń">
+                     </form>
+                 </div>
+                 <div class="w3-container w3-half">
+                     <h4>Dodaj nowe uprawnienie:</h4>
+                     <form action="" method="post">
+                         <label>Nazwa
+                             <input class="w3-input" type="text" name="name"></label><br>
+                         <label>Ikona
+                             <input class="w3-input" type="text" name="icon"></label><br>
+                         <label>Kolor
+                             <input  type="color" name="color"></label><br>
+                         <button class="w3-input w3-margin-top" type="submit" name="addUpr"> Dodaj</button><br>
+                     </form>
+                 </div>
+             </div>
+
+
+
+            <? endif;
+                 ?>
+        </div>
 		<!-- KONIEC PANELU ADMINA -->
 	<?php endif; ?>
 </main>

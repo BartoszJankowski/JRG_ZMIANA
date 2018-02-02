@@ -11,19 +11,21 @@ require 'php/config.php';
 $dbUsers     = new DBUsers();
 $dbJednostki = new DBJednostki();
 $dbStrazacy = new DBStrazacy();
+$dbSettings = new DBJrgSettings();
 $user = new User();
-
-if(isset($_POST)){
-    $_POST = test_input($_POST);
-}
-if(isset($_GET)){
-	$_GET = test_input($_GET);
-}
-
 
 if(!$dbUsers->checkSession($user)){
 	header('Location: '.$base_url.'/login.php');
 	exit;
+}
+
+$dbSettings->load($user->getStrazak()->getJrgId());
+
+if(isset($_POST)){
+	$_POST = test_input($_POST);
+}
+if(isset($_GET)){
+	$_GET = test_input($_GET);
 }
 
 if(  isset($_GET['manage_jrg']) && $user->isAdmin() ) {
@@ -35,6 +37,7 @@ if( isset($_POST['addStrazak']) && ($user->isAdmin() || $user->isChef()) ){
 }
 
 if(isset($_POST['editFireman'])){
+  //  print_r($_POST);
 	$dbStrazacy->edytujStrazaka($user, (new Strazak())->create($_POST));
 }
 
@@ -161,9 +164,17 @@ require 'header.php';
                         </div>
                         <div>
                             <label class="w3-text-gray">Zaznacz uprawnienia pracownika: </label><br>
-                            <label><input type="checkbox" name="uprawnienia[]" value="Kierowca" />Kierowca</label><br>
-                            <label><input type="checkbox" name="uprawnienia[]" value="Operator sprz. spec." />Operator sprzetu specjalnego</label><br>
-                            <label><input type="checkbox" name="uprawnienia[]" value="d-ca zastepu" />D-ca zastepu</label><br>
+	                        <?php
+	                        foreach ( $dbSettings->getUprawnienia() as $uprawnienie ) {
+
+	                            if(array_search($uprawnienie->getId(),$edytowanyStrazak->getUprawnienia())!==false)
+		                            echo '<label><input type="checkbox" name="uprawnienia[]" value="'.$uprawnienie->getId().'" checked  /><i class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'" ></i> '.$uprawnienie->getName().'</label><br>';
+	                            else
+	                                echo '<label><input type="checkbox" name="uprawnienia[]" value="'.$uprawnienie->getId().'"/><i class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'" ></i> '.$uprawnienie->getName().'</label><br>';
+
+	                        }
+
+	                        ?>
                         </div>
                         <input type="submit" class="w3-input w3-margin-top" name="editFireman" value="Zapisz zmiany" />
                     </form>
@@ -263,9 +274,12 @@ require 'header.php';
                         </div>
                         <div>
                             <label class="w3-text-gray">Zaznacz uprawnienia pracownika: </label><br>
-                            <label><input type="checkbox" name="uprawnienia[]" value="Kierowca" />Kierowca</label><br>
-                            <label><input type="checkbox" name="uprawnienia[]" value="Operator sprz. spec." />Operator sprzetu specjalnego</label><br>
-                            <label><input type="checkbox" name="uprawnienia[]" value="d-ca zastepu" />D-ca zastepu</label><br>
+                            <?php
+                            foreach ( $dbSettings->getUprawnienia() as $uprawnienie ) {
+                                echo '<label><input type="checkbox" name="uprawnienia[]" value="'.$uprawnienie->getId().'" /><i class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'" ></i> '.$uprawnienie->getName().'</label><br>';
+                            }
+
+                            ?>
                         </div>
                         <input type="submit" class="w3-input w3-margin-top" name="addStrazak" value="Dodaj" />
                     </form>

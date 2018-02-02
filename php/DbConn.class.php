@@ -13,6 +13,7 @@ class DbConn
 	public $tbl_strazacy;
 	public $tbl_harmonogramy;
 	public $tbl_grafiki;
+	public $tbl_rozkazy;
 
     public function __construct()
     {
@@ -27,6 +28,7 @@ class DbConn
 	    $this->tbl_strazacy = $tbl_strazacy;
 	    $this->tbl_harmonogramy = $tbl_harmonogramy;
 	    $this->tbl_grafiki = $tbl_grafiki;
+	    $this->tbl_rozkazy = $tbl_rozkazy;
         try {
 			// Connect to server and select database.
 			$this->conn = new PDO('mysql:host=' . $host . ';dbname=' . $db_name . ';charset=utf8', $username, $password);

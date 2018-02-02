@@ -12,7 +12,8 @@ class Strazak {
 	 * Dane bazy danych
 	 * @var
 	 */
-	private $id,$jrg_id, $zmiana, $nazwa_funkcji, $previlages, $user_id, $nr_porz, $imie, $nazwisko, $typHarmo, $stopien, $kolor, $uprawnienia;
+	private $id,$jrg_id, $zmiana, $nazwa_funkcji, $previlages, $user_id, $nr_porz, $imie, $nazwisko, $typHarmo, $stopien, $kolor;
+	private $uprawnienia = array();
 
 	/**
 	 * harmonogram Strażaka
@@ -30,7 +31,18 @@ class Strazak {
 
 		foreach ($this as $key => $value) {
 			if(isset($dane[$key])){
-				$this->$key = $dane[$key];
+
+				if($key==='uprawnienia'){
+					if(empty($dane[$key])){
+						$this->$key = array();
+					}else if(is_string($dane[$key])){
+						$this->$key = unserialize($dane[$key]);
+					} else if(is_array($dane[$key])){
+						$this->$key = $dane[$key];
+					}
+				} else {
+					$this->$key = $dane[$key];
+				}
 			}
 		}
 		return $this;
@@ -111,7 +123,7 @@ class Strazak {
 	}
 
 	/**
-	 * @return mixed
+	 * @return int[]
 	 */
 	public function getUprawnienia() {
 		return $this->uprawnienia;

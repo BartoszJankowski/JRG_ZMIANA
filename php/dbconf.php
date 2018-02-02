@@ -13,3 +13,4 @@ $tbl_users = $tbl_prefix."users";
 $tbl_strazacy = $tbl_prefix."firemans";
 $tbl_harmonogramy = $tbl_prefix."timetables";
 $tbl_grafiki = $tbl_prefix."schedules";
+$tbl_rozkazy = $tbl_prefix."orderds";

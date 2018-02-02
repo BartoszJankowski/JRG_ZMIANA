@@ -25,7 +25,6 @@ if(isset($_POST)){
 }
 if(isset($_GET)){
 	$_GET = test_input($_GET);
-	$_GET = test_input($_GET);
 	if(isset($_GET['month'],$_GET['year']))
 		$localDateTime = new LocalDateTime($_GET['year'].'-'.$_GET['month'].'-1');
 	if(isset($_GET['mscAction'])){

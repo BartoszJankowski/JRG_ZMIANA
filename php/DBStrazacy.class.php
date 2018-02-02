@@ -90,7 +90,7 @@ class DBStrazacy extends DbConn {
 				$stmt->bindParam(':nazwisko', $strazak->getNazwisko());
 			}
 			$stmt->bindParam(':kolor', $strazak->getKolor());
-			$stmt->bindParam(':uprawnienia', $strazak->getUprawnienia());
+			$stmt->bindParam(':uprawnienia', serialize($strazak->getUprawnienia()));
 			$stmt->execute();
 			echo 'Poprawnie dodano strazaka';
 			//TODO: send inf email
@@ -142,7 +142,7 @@ class DBStrazacy extends DbConn {
 				$stmt->bindParam(':nazwisko', $strazak->getNazwisko());
 			}
 			$stmt->bindParam(':kolor', $strazak->getKolor());
-			$stmt->bindParam(':uprawnienia', $strazak->getUprawnienia());
+			$stmt->bindParam(':uprawnienia', serialize($strazak->getUprawnienia()));
 			$stmt->bindParam(':id', $strazak->getStrazakId() );
 			$stmt->execute();
 			echo "Poprawnie edytowano strażaka o id:".$strazak->getStrazakId();

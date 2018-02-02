@@ -132,7 +132,8 @@ $$t = ' w3-green ';
 			<a  href="shiftmanage.php" class="w3-bar-item w3-button <?php echo $shiftmanage;?> "><i class="fa fa-fw fa-users w3-xlarge"></i><div class="w3-small">Zarządzaj zmianą</div></a>
 			<a href="grafiksluzb.php" class="w3-bar-item w3-button  <?php echo $grafiksluzb;?> "><i class="fa fa-fw fa-calendar w3-xlarge"></i><div class="w3-small">Grafik</div></a>
             <a href="harmonogramsluzb.php" class="w3-bar-item w3-button  <?php echo $harmonogramsluzb;?> "><i class="fa fa-fw fa-history w3-xlarge"></i><div class="w3-small">Harmonogram</div></a>
-            <a href="" class="w3-bar-item w3-button  <?php echo "";?> "><i class="fa fa-fw fa-list-alt w3-xlarge"></i><div class="w3-small">Rozkaz</div></a>
+            <a href="edycjarozkazu.php" class="w3-bar-item w3-button  <?php echo $edycjarozkazu;?> "><i class="fa fa-fw fa-list-alt w3-xlarge"></i><div class="w3-small">Rozkaz</div></a>
+            <a href="homeduties.php" class="w3-bar-item w3-button  <?php echo $homeduties;?> "><i class="fa fa-fw fa-bed w3-xlarge"></i><div class="w3-small">Dyzury domowe</div></a>
 		<?php
 		endif;
 		?>
