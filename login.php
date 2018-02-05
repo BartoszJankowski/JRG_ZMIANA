@@ -17,7 +17,8 @@ if($dbUsers->checkSession($user)){
 }
 
 if(isset($_POST['log_in'])){
-     if(!$dbUsers->login($_POST['login'],$_POST['password'])){
+     if(!$dbUsers->login($_POST['login'],$_POST['password']))
+     {
          echo $dbUsers->error;
      } else {
          header('Location: '.$base_url.'/main.php');
@@ -43,6 +44,31 @@ if(isset($_POST['log_in'])){
 </head>
 
 <body>
+<header>
+    <nav>
+        <div class="w3-bar w3-border w3-light-grey">
+            <a href="<?php echo $base_url; ?>" class="w3-bar-item w3-button w3-green">
+                <i class="fa fa-fw fa-home w3-xlarge"></i>
+                    <div class="w3-small">Strona główna</div></a>
+                    
+            <?php if($user->logged):?>
+
+                    <a  href="<?php echo $base_url; ?>/main.php" class="w3-bar-item w3-button">
+                        <i class="fa fa-fw fa-user w3-xlarge"></i>
+                            <div class="w3-small">Konto</div></a>
+                                <a  href="<?php echo $base_url; ?>/main.php?logout=1" class="w3-bar-item w3-button">
+                                    <i class="fa fa-fw fa-sign-out w3-xlarge"></i>
+                                        <div class="w3-small">Wyloguj się</div></a>
+            <?php else : ?>
+                                             <a  href="<?php echo $base_url; ?>/login.php" class="w3-bar-item w3-button">
+                                                <i class="fa fa-fw fa-sign-in w3-xlarge"></i>
+                                                    <div class="w3-small">Zaloguj się</div></a>
+
+            <?php endif; ?>
+        </div>
+    </nav>
+        <h1>Twój harmonogram, rokaz i kalendarz w jednym miejscu</h1>
+</header>
 <div class="w3-container w3-third w3-border w3-margin w3-padding-16">
 	<!--
 		Formularz do logowania uzytkownika.

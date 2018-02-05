@@ -1,0 +1,83 @@
+
+
+@mixin fontFace($font-name, $file-name, $weight: normal, $style: normal) {
+  @font-face {
+    font-family: quote($font-name);
+    src: url($file-name + '.eot');
+    src: url($file-name + '.eot?#iefix')  format('embedded-opentype'),
+         url($file-name + '.woff') format('woff'),
+         url($file-name + '.ttf')  format('truetype'),
+         url($file-name + '.svg##{$font-name}')  format('svg');
+    font-weight: $weight;
+    font-style: $style;
+  }
+ }
+
+@mixin screen($size) {
+  $desktopHiRes: "(min-width: 1500px)";
+  $desktopMidRes: "(min-width: 1024px) and (max-width: 1499px)";
+  // $tablet-landscape: "(min-width: 768px) and (max-width: 979px)";
+  $tablet: "(min-width: 768px) and (max-width: 1023px)";
+  $smartphone-landscape: "(min-width: 480px) and (max-width: 767px)";
+  $smartphone: "(min-width: 321px) and (max-width: 480px)";
+  $mobile: "(max-width: 320px)";
+  
+  @if $size == desktopHiRes {
+    @media only screen and #{$desktopHiRes} {
+      @content;
+    }
+  }
+    @if $size == desktopMidRes {
+    @media only screen and #{$desktopMidRes} {
+      @content;
+    }
+  }
+  @else if $size == tablet-landscape {
+    @media only screen and #{$tablet-landscape} {
+      @content;
+    }
+  }
+  @else if $size == tablet {
+    @media only screen and #{$tablet} {
+      @content;
+    }
+  }
+  @else if $size == smartphone-landscape {
+    @media only screen and #{$smartphone-landscape} {
+      @content;
+    }
+  }
+  @else if $size == smartphone {
+    @media only screen and #{$smartphone} {
+      @content;
+    }
+  }
+  @else if $size == mobile {
+    @media only screen and #{$mobile} {
+      @content;
+    }
+  }
+  @else {
+    @media only screen and (#{$size}) {
+      @content;
+    }
+  }
+}
+
+// $phone : "(max-width: 480px)";
+// $tablet-portrait: "(max-width: 767px)";
+// $tablet-landscape: "(min-width: 768px) and (max-width: 979px)";
+// $large-desktop: "(min-width: 1200px)";
+// $non-retina: "screen and (-webkit-max-device-pixel-ratio: 1)";
+// $retina: "(min--moz-device-pixel-ratio: 1.5), 
+//                     (-o-min-device-pixel-ratio: 3/2), 
+//                     (-webkit-min-device-pixel-ratio: 1.5), 
+//                     (min-device-pixel-ratio: 1.5), 
+//                     (min-resolution: 144dpi), 
+//                     (min-resolution: 1.5dppx)";
+
+// @mixin screen($media) {
+//     @media only screen and #{$media} {
+//         @content;
+//     }
+// }
