@@ -110,4 +110,5 @@ class DBHarmonogramy extends DbConn {
 			echo $this->error;
 		}
 	}
+
 }

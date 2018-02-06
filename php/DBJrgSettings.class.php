@@ -7,7 +7,7 @@
  */
 
 class DBJrgSettings extends DbConn {
-
+//TODO: przy usuwaniu uprawnienia przejrzez wszystkich pracowników z tego jrg i tez im wyjebac uprawnienia, elo
 	private $tbl_settings;
 	private $jrg_id;
 
@@ -81,6 +81,18 @@ class DBJrgSettings extends DbConn {
 	 */
 	public function getUprawnienia(){
 		return $this->uprawnieniaList;
+	}
+
+	/**
+	 * @return Uprawnienie
+	 */
+	public function getUprawnienie(int $id){
+		foreach ($this->uprawnieniaList as $upr){
+			if($upr->getId() == $id){
+				return $upr;
+			}
+		}
+		return null;
 	}
 
 	public function addUpr($post) : bool{
@@ -161,9 +173,6 @@ class Uprawnienie {
 		echo '<li> <input type="checkbox" class="w3-check" name="deleteUpr[]" value="'.$this->id.'" /> <i class="fa fa-fw '.$this->icon.'" style="color:'.$this->color.'"></i> '.$this->name.'</li>';
 	}
 
-	public function printOptionElement(){
-
-	}
 
 	/**
 	 * @return mixed

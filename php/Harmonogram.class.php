@@ -7,6 +7,7 @@
  */
 
 class Harmonogram {
+	//TODO: Iwonka po dodaniu nie miała harmonogramu :O
 
 	private $rok;
 

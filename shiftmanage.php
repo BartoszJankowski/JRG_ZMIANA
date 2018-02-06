@@ -185,7 +185,7 @@ require 'header.php';
 				    $strazacy = $dbStrazacy->getZmianaListStrazacy($strazak->getJrgId(),$strazak->getZmiana());
 				    echo '<div class="w3-container"><h4>zmiana '.$strazak->getZmiana().' <span class="w3-small">('.count($strazacy).' strażaków)</span></h4><ul class="w3-ul">';
 				    foreach ($strazacy as $str){
-					    $str->printHtml($uzytkownicy);
+					    $str->printHtml($uzytkownicy, $dbSettings );
 				    }
 				    echo '</ul></div>';
 				    ?>
@@ -290,7 +290,7 @@ require 'header.php';
                     $strazacy = $dbStrazacy->getZmianaListStrazacy($strazak->getJrgId(),$strazak->getZmiana());
                     echo '<div class="w3-container"><h4>zmiana '.$strazak->getZmiana().' <span class="w3-small">('.count($strazacy).' strażaków)</span></h4><ul class="w3-ul">';
                     foreach ($strazacy as $str){
-                        $str->printHtml($uzytkownicy);
+                        $str->printHtml($uzytkownicy, $dbSettings);
                     }
                     echo '</ul></div>';
                     ?>
