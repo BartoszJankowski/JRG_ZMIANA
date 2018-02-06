@@ -21,7 +21,9 @@ $proceedTime = round(microtime(true) - $timeStart,3);
 	</footer>
 	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.js"></script>
-	<script type="text/javascript" src="js/script.js"></script>
+	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+	<script type="text/javascript" src="js/scripts.js"></script>
+	
 		
 
 </body>

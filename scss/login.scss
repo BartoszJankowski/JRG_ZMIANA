@@ -8,8 +8,6 @@ body{
 }
 
 h1{
-	position: relative;
-	z-index: 90;
 	text-align: center;
 	padding: 5px;
 	background: #dc3545;
@@ -23,6 +21,10 @@ h1{
 		@include screen('smartphone'){
 			font-size: 1.5rem !important;
 		}
+}
+
+h2{
+	margin-bottom: 50px;
 }
 
 nav{
@@ -79,11 +81,6 @@ main{
 	margin-bottom: 0 !important;
 }
 }
-
-.nav__ico{
-	font-size: 1.6rem;
-}
-
 .logout__icon,
 .login__icon{
 	margin-left: auto;
@@ -100,51 +97,6 @@ main{
 		margin-left: 0;
 	}
 }
-
-.register__box{
-	position: absolute;
-	display: none;
-	padding: 15px;
-	width: 250px;
-	height: 120px;
-	background: #f4Eff4;
-	right: 0;
-	color: #000000;
-	font-size: 1.1rem;
-	z-index: 99;
-	margin-top: 13px;
-	-webkit-box-shadow: -10px 10px 23px -10px rgba(0,0,0,0.75);
-	-moz-box-shadow: -10px 10px 23px -10px rgba(0,0,0,0.75);
-	box-shadow: -10px 10px 23px -10px rgba(0,0,0,0.75);
-		@include screen('mobile'){
-			display: none; 
-		}
-		@include screen('smartphone'){
-			display: none; 
-		}
-		@include screen('smartphone-landscape'){
-			display: none; 
-		}
-		@include screen('tablet'){
-			display: none; 
-		}
-}
-
-.btn__register{
-	margin-top: 25px;
-	margin-left: 5%;
-}
-
-.register__icon__mobile{
-	display: none;
-	 @include screen('mobile'){
-	 	display: block;
-	 }
-	 @include screen('smartphone'){
-	 	display: block;
-	 }
-}
-
 
 .nav-link::after {
     content: '';
@@ -182,29 +134,17 @@ main{
 	margin-top: 15px;
 	margin-bottom: 15px;
 }
-
-.intro{
-	text-align: center;
-	font-size: 2.3rem;
-	font-weight: 600;
-	padding: 30px;
-		@include screen('mobile'){
-			font-size: 1.2rem !important;
-		}
-		@include screen('smartphone'){
-			font-size: 1.5rem !important;
-		}
+.login{
+	margin-top: 15vh;
+	margin-bottom: 25vh;
+	margin-left: auto;
+	margin-right: auto;
+	 .btn__login__submit{
+		margin-top: 20px;
+		margin-bottom: 20px;
+}
 }
 
-.intro__section{
-	display: flex;
-	flex-wrap: wrap;
-	margin-top: 50px;
-}
-
-.info{
-	font-size: 1rem;
-}
 
 .description{
 	background-image: url(../img/psp_logo_35.png);
@@ -220,14 +160,6 @@ main{
 }
 }
 
-
-.btn__addJrg{
-	margin-top: 25px;
-	padding: .5rem 4rem !important;
-}
-.text-secondary{
-	font-weight: 300;
-}
 
 footer{
 	width: 100%;

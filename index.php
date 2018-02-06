@@ -34,11 +34,11 @@ if(isset($_POST['addJrg'])){
     <title>Zmiana-main</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+            <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
                 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
                     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
                         <link rel="stylesheet" type="text/css" href="css/main.css" />
-                        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-                            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">  
+                            <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" /> 
                                 <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&amp;subset=latin-ext" rel="stylesheet">
 </head>
 
@@ -53,32 +53,44 @@ if(isset($_POST['addJrg'])){
                     <div class="navbar-nav mr-auto">
                           <div class="nav-item p-2 active">
                             <a class="nav-link " href="<?php echo $base_url; ?>">
-                                <i class="fa fa-fw fa-home w3-xlarge nav__ico"></i>
+                                <i class="fas fa-home nav__ico"></i>
                                     <p class="font-weight-light">Strona główna</p></a>
                           </div>
                           <?php if($user->logged):?>
 
                         <div class="nav-item p-2">
                             <a class="nav-link" href="<?php echo $base_url; ?>/main.php">
-                                <i class="fa fa-fw fa-user w3-xlarge nav__ico"></i>
+                                <i class="fas fa-user nav__ico"></i>
                                     <p class="font-weight-light">Konto</p></a>
                           </div>
-                        <div class="nav-item p-2 log-out">
+                        <div class="nav-item p-2 logout__icon">
                             <a class="nav-link" href="<?php echo $base_url; ?>/main.php?logout=1">
-                                <i class="fa fa-fw fa-sign-out w3-xlarge nav__ico"></i>
+                                <i class="fas fa-sign-out-alt nav__ico"></i>
                                     <p class="font-weight-light">Wyloguj się</p></a>
                           </div>
                            <?php else : ?>
-                        <div class="nav-item p-2 log-in">
-                            <a class="nav-link" href="<?php echo $base_url; ?>/login.php">
-                                <i class="fa fa-fw fa-sign-in w3-xlarge nav__ico"></i>
-                                    <p class="font-weight-light">Zaloguj się</p></a>
+                        <div class="nav-item p-2 login__icon">
+                                <a class="nav-link" href="<?php echo $base_url; ?>/login.php">
+                                    <i class="fas fa-sign-in-alt  nav__ico"></i>
+                                        <p class="font-weight-light">Zaloguj się</p></a>
+                            <div class="register__box">
+                                <p>Nie masz jeszcze konta ?</p>
+                                    <a class="register__item" href="<?php echo $base_url; ?>/register.php">
+                                        <button type="submit" name="register" class="btn btn-danger btn-lg btn__register">  Zarejestruj się <i class="fas fa-user-plus nav__ico"></i></button></a>
+                            </div>
+                        </div>
+                        <div class="nav-item p-2 register__icon__mobile">
+                            <a class="nav-link" href="<?php echo $base_url; ?>/register.php">
+                                <i class="fas fa-user-plus nav__ico"></i>
+                                    <p class="font-weight-light">Zarejestruj się</p></a>
                           </div>
                            <?php endif; ?>
-                      
+                       
                     </div>
                   </div>
             </nav>
+                    
+
                     <h1>Harmonogram / Rozkaz Dzienny / Kalendarz zmianowy</h1>
                     <p class="intro">Witaj ! Dołącz do naszej społeczności i bądź na bieżąco z informacjami</p>
         </header>
