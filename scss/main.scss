@@ -2,7 +2,7 @@
 
 body{
 	margin: 0;
-	font-size: 20px;
+	font-size: 15px;
 	font-family: Lato !important;
 	height: 100%;
 }
@@ -57,23 +57,27 @@ main{
 	}
 }
 &.active{
-	&:hover{
-		margin-top: 5.5px;
-	@include screen('mobile'){
-		padding: .5rem;
-		margin-top: 0;
+		&:hover{
+			margin-top: 5.5px;
+		@include screen('mobile'){
+			padding: .5rem;
+			margin-top: 0;
+		}
+		@include screen('smartphone'){
+			padding: .5rem;
+			margin-top: 0;
+		}
+		@include screen('smartphone-landscape'){
+			padding-top: 0;
+		}
+		@include screen('tablet'){
+			padding-top: 0;
+			}
+		}
+
+	& p{
+		border-bottom: 3px solid white;
 	}
-	@include screen('smartphone'){
-		padding: .5rem;
-		margin-top: 0;
-	}
-	@include screen('smartphone-landscape'){
-		padding-top: 0;
-	}
-	@include screen('tablet'){
-		padding-top: 0;
-	}
-	}	
 }
 & p{
 	margin-bottom: 0 !important;
@@ -117,16 +121,16 @@ main{
 	-moz-box-shadow: -10px 10px 23px -10px rgba(0,0,0,0.75);
 	box-shadow: -10px 10px 23px -10px rgba(0,0,0,0.75);
 		@include screen('mobile'){
-			display: none; 
+			visibility: hidden; 
 		}
 		@include screen('smartphone'){
-			display: none; 
+			visibility: hidden; 
 		}
 		@include screen('smartphone-landscape'){
-			display: none; 
+			visibility: hidden; 
 		}
 		@include screen('tablet'){
-			display: none; 
+			visibility: hidden; 
 		}
 }
 
@@ -144,20 +148,21 @@ main{
 	 	display: block;
 	 }
 }
-
-
-.nav-link::after {
-    content: '';
-    display: block;
-    width: 0;
-    height: 2px;
-    background: #dc3545;
-    transition: width .3s;
-}
-
-.nav-link:hover::after {
-    width: 100%;
-   
+.nav-link{
+		&.active:hover::after {
+			width: 0%;
+		}
+			&::after {
+			    content: '';
+			    display: block;
+			    width: 0;
+			    height: 2px;
+			    background: #dc3545;
+			    transition: width .3s;
+			}
+				&:hover::after {
+				    width: 100%;
+				}
 }
 
 .navbar-nav{
@@ -218,6 +223,18 @@ main{
 		font-style: italic;
 		margin-bottom: 50px;
 }
+	@include screen('mobile'){
+		 background-size: 100%;
+	}
+	@include screen('smartphone'){
+		 background-size: 100%;
+	}
+	@include screen('smartphone-landscape'){
+		 background-size: 100%;
+	}
+	@include screen('mobile'){
+
+	}
 }
 
 

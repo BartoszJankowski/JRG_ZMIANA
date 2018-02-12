@@ -1,165 +1,53 @@
 @import "mixin.scss";
 
-body{
-	margin: 0;
-	font-size: 20px;
-	font-family: Lato !important;
-	height: 100%;
-}
-
-h1{
-	text-align: center;
-	padding: 5px;
-	background: #dc3545;
-	color: #ffffff !important;
-	-webkit-box-shadow: 0px 10px 23px -10px rgba(0,0,0,0.75);
-	-moz-box-shadow: 0px 10px 23px -10px rgba(0,0,0,0.75);
-	box-shadow: 0px 10px 23px -10px rgba(0,0,0,0.75);
-		@include screen('mobile'){
-			font-size: 1.2rem !important;
-		}
-		@include screen('smartphone'){
-			font-size: 1.5rem !important;
-		}
-}
-
 h2{
 	margin-bottom: 50px;
 }
-
-nav{
-	background: #343a40;
-	padding: 0 10px 0 10px !important;
-	min-height: 60px;
+form{
+	margin-top: 50px;
 }
 
-main{
-	min-height: 100%;
-}
-
-.nav-item{
-	text-align: center;
-	border-radius: 0 !important;
-	transition: ease .4s;
-&:hover{
-		padding-top: 2px !important;
-		color: #efefef !important;
-		transition: ease .4s;
-	@include screen('mobile'){
-		padding-top: .5rem !important;
-	}
-	@include screen('smartphone'){
-		padding-top: .5rem !important;
-	}
-	@include screen('smartphone-landscape'){
-		padding-top: .5rem !important;
-	}
-	@include screen('tablet'){
-		padding-top: .5rem !important;
-	}
-}
-&.active{
-	&:hover{
-		margin-top: 5.5px;
-	@include screen('mobile'){
-		padding: .5rem;
-		margin-top: 0;
-	}
-	@include screen('smartphone'){
-		padding: .5rem;
-		margin-top: 0;
-	}
-	@include screen('smartphone-landscape'){
-		padding-top: 0;
-	}
-	@include screen('tablet'){
-		padding-top: 0;
-	}
-	}	
-}
-& p{
-	margin-bottom: 0 !important;
-}
-}
-.logout__icon,
-.login__icon{
-	margin-left: auto;
-	@include screen('mobile'){
-		margin-left: 0;
-	}
-	@include screen('smartphone'){
-		margin-left: 0;
-	}
-	@include screen('smartphone-landscape'){
-		margin-left: 0;
-	}
-	@include screen('tablet'){
-		margin-left: 0;
-	}
-}
-
-.nav-link::after {
-    content: '';
-    display: block;
-    width: 0;
-    height: 2px;
-    background: #dc3545;
-    transition: width .3s;
-}
-
-.nav-link:hover::after {
-    width: 100%;
-   
-}
-
-.navbar-nav{
-	width: 100%;
-	margin-left: auto;
-	margin-right: auto;
-	@include screen('mobile'){
-		width: 40%;
-	}
-	@include screen('smartphone'){
-		width: 40%;
-	}
-	@include screen('smartphone-landscape'){
-		width: 25%;
-	}
-	@include screen('tablet'){
-		width: 20%;
-	}
-}
 
 .navbar-toggler{
 	margin-top: 15px;
 	margin-bottom: 15px;
 }
-.login{
+.login,
+.register{
 	margin-top: 15vh;
 	margin-bottom: 25vh;
 	margin-left: auto;
 	margin-right: auto;
-	 .btn__login__submit{
+}
+.btn__login__submit,
+.btn_register_submit{
+	 	margin-left: auto;
+	 	margin-right: auto;
 		margin-top: 20px;
 		margin-bottom: 20px;
+		padding: .5rem 4rem !important;
 }
+
+
+.form-group{
+	& label{
+		color: #737373;
+	}
+	& input{
+		border: none;
+		border-bottom: 1px solid #B2B2B2;
+		border-radius: 0;
+	}
 }
 
 
-.description{
-	background-image: url(../img/psp_logo_35.png);
-	background-repeat: no-repeat;
-	background-position: center;
-	line-height: 1.8;
-	font-size: 1.1rem;
-	font-weight: 600;
-	& .description__item{
-		font-size: 1.6rem;
-		font-style: italic;
-		margin-bottom: 50px;
-}
+.register__select__jrg{
+	margin-top: 10px;
 }
 
+.info__required{
+	margin-top: 10px;
+}
 
 footer{
 	width: 100%;

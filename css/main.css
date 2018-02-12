@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-size: 20px;
+  font-size: 15px;
   font-family: Lato !important;
   height: 100%; }
 
@@ -68,6 +68,8 @@ main {
     @media only screen and (min-width: 768px) and (max-width: 1023px) {
       .nav-item.active:hover {
         padding-top: 0; } }
+  .nav-item.active p {
+    border-bottom: 3px solid white; }
   .nav-item p {
     margin-bottom: 0 !important; }
 
@@ -110,16 +112,16 @@ main {
   box-shadow: -10px 10px 23px -10px rgba(0, 0, 0, 0.75); }
   @media only screen and (max-width: 320px) {
     .register__box {
-      display: none; } }
+      visibility: hidden; } }
   @media only screen and (min-width: 321px) and (max-width: 480px) {
     .register__box {
-      display: none; } }
+      visibility: hidden; } }
   @media only screen and (min-width: 480px) and (max-width: 767px) {
     .register__box {
-      display: none; } }
+      visibility: hidden; } }
   @media only screen and (min-width: 768px) and (max-width: 1023px) {
     .register__box {
-      display: none; } }
+      visibility: hidden; } }
 
 .btn__register {
   margin-top: 25px;
@@ -133,6 +135,9 @@ main {
   @media only screen and (min-width: 321px) and (max-width: 480px) {
     .register__icon__mobile {
       display: block; } }
+
+.nav-link.active:hover::after {
+  width: 0%; }
 
 .nav-link::after {
   content: '';
@@ -202,6 +207,15 @@ main {
     font-size: 1.6rem;
     font-style: italic;
     margin-bottom: 50px; }
+  @media only screen and (max-width: 320px) {
+    .description {
+      background-size: 100%; } }
+  @media only screen and (min-width: 321px) and (max-width: 480px) {
+    .description {
+      background-size: 100%; } }
+  @media only screen and (min-width: 480px) and (max-width: 767px) {
+    .description {
+      background-size: 100%; } }
 
 .btn__addJrg {
   margin-top: 25px;

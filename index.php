@@ -52,7 +52,7 @@ if(isset($_POST['addJrg'])){
                   <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <div class="navbar-nav mr-auto">
                           <div class="nav-item p-2 active">
-                            <a class="nav-link " href="<?php echo $base_url; ?>">
+                            <a class="nav-link active" href="<?php echo $base_url; ?>">
                                 <i class="fas fa-home nav__ico"></i>
                                     <p class="font-weight-light">Strona główna</p></a>
                           </div>
@@ -94,16 +94,16 @@ if(isset($_POST['addJrg'])){
                     <h1>Harmonogram / Rozkaz Dzienny / Kalendarz zmianowy</h1>
                     <p class="intro">Witaj ! Dołącz do naszej społeczności i bądź na bieżąco z informacjami</p>
         </header>
-                    <section class="col-12 intro__section">
-                        <article class="col-lg-5 col-sm-6 description">
-                                <p class="description__item text-danger">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p> 
+    <section class="col-12 intro__section">
+            <article class="col-lg-5 col-sm-6 description">
+                <p class="description__item text-danger">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p> 
                                 Ut porta interdum neque, at vulputate arcu faucibus in. Fusce aliquam eleifend quam, eu aliquam mi pretium id.</br> 
                                 Donec dapibus facilisis neque a placerat. Sed varius eu ipsum ac commodo. Fusce rhoncus molestie condimentum. 
                                 Donec ultrices eleifend lacus id vulputate. Aenean id gravida enim, ut luctus lacus.</br>
                                 Mauris lacus ex, lobortis vel sapien quis, porttitor finibus dolor. 
                                 Nam egestas lorem vel ex tristique ultrices. Ut vel rhoncus magna.
                                 </br></br> 
-                        </article>
+            </article>
                     
                             <div class="col-lg-6 offset-lg-1 col-sm-6 addJrg">
                                 <!--
@@ -143,7 +143,7 @@ if(isset($_POST['addJrg'])){
                                     <button type="submit" name="addJrg" class="btn btn-danger btn-lg btn__addJrg">Dodaj</button>
                                 </form>
                             </div>
-                    </section>
+    </section>
     </main>
 <?php
 
