@@ -110,7 +110,11 @@ class Emails {
 			$this->mail->Body     = '<div><h3>Dziekujemy za rejestrację</h3><p>Poniżej znajdują się Twoje dane dostępowe:</p></div><div><h4>Login: '.$adres.'</h4><h4>Hasło: '.$password.'</h4><p>Aby się zalogowac wprowadź dane na stronie <a href="http://zmiana.bjit.pl/login.php">logowania</a></p></div>';
 			$this->mail->AltBody = "Dziekujemy za rejestrację \r\n Poniżej znajdują się Twoje dane dostępowe: \r\n Login: ".$adres." \r\n\ Hasło: ".$password." \r\n Aby się zalogowac wprowadź dane na stronie \r\n >> http://zmiana.bjit.pl/login.php \r\n Pozdrawiamy zespół zmiana.bjit.pl ";
 
-			$this->mail->send();
+			if($this->mail->send()){
+				echo 'Poprawnie wysłano wiadomość.';
+			} else {
+				echo  $this->mail->ErrorInfo;
+			}
 		} catch (Exception $e) {
 			echo 'Mailer Error: ' . $this->mail->ErrorInfo;
 		}

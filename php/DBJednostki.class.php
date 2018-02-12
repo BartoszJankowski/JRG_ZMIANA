@@ -131,4 +131,12 @@ class DBJednostki extends DbConn {
 		return $this->selectedJrg["id"];
 	}
 
+	public function getSelectedJrgNr(){
+		return $this->selectedJrg["nr_jrg"];
+	}
+
+	public function getSelectedCity(){
+		return $this->selectedJrg["city"];
+	}
+
 }

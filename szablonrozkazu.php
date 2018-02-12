@@ -12,7 +12,9 @@ $dbUsers     = new DBUsers();
 //$dbJednostki = new DBJednostki();
 //$dbStrazacy = new DBStrazacy();
 $user = new User();
+$dbJednostki = new DBJednostki();
 $dbRozkazy = new DBRozkazy();
+$ltd = new LocalDateTime();
 $info = '';
 if(!$dbUsers->checkSession($user)){
 	header('Location: '.$base_url.'/login.php');
@@ -20,12 +22,14 @@ if(!$dbUsers->checkSession($user)){
 }
 
 
-if(isset($_POST)){
+if(isset($_POST)) {
 	$_POST = test_input($_POST);
 }
 if(isset($_GET)){
 	$_GET = test_input($_GET);
 }
+
+
 if(isset($_GET['start'])){
 	$szablon = new Szablon($user->getJrgId());
 	if($dbRozkazy->utworzSzablon($user, $szablon) ){
@@ -36,11 +40,144 @@ if(isset($_GET['start'])){
 	}
 } elseif(isset($_GET['edit'])){
 	$szablon = new Szablon($user->getJrgId());
+	$dbJednostki->selectJrg($user->getJrgId());
 	if(!$dbRozkazy->getSzablon($user->getJrgId(), $_GET['edit'], $szablon) )
 	{
 		$szablon = false;
 	}
 }
+
+/*
+  <div class="" style="text-align: right;">
+                    <? echo $dbJednostki->getSelectedCity().', dnia '.$ltd->getDate().'r.'; ?>
+                </div>
+                <div class="w3-center">
+                    <h2 class="w3-center">ROZKAZ DZIENNY NR <?php echo '/'.$ltd->getYear(); ?></h2>
+
+                </div>
+ */
+
+try {
+    if(class_exists("HtmlObj", false)){
+	    $miejscowoscIdata = new Sekcja();
+	    $miejscowoscIdata->addClass("align-right");
+	    $miejscowoscIdata->putContent((new Text('miasto'))->setConstant('miasto'));
+	    $miejscowoscIdata->putContent(new Text(', dnia '));
+	    $miejscowoscIdata->putContent((new Text('data'))->setConstant('data'));
+	    $miejscowoscIdata->putContent(new Text('r.'));
+
+	    $naglowek = new Sekcja();
+	    $naglowek->addClass('w3-center');
+	    $h1 = new Naglowek(2);
+	    $h1->addClass("no-margin");
+	    $h1->putContent(new Text("ROZKAZ DZIENNY NR "));
+	    $h1->putContent((new Text('nr rozkazu'))->setVariable('nr_rozkazu'));
+	    $h1->putContent(new Text("/"));
+	    $h1->putContent((new Text('rok'))->setVariable('rok'));
+	    $h4 = new Naglowek(4);
+	    $h4->addClass("no-margin");
+	    $h4->putContent(new Text('Dowódcy JRG nr '));
+	    $h4->putContent((new Text('nr jrg'))->setConstant('nr_jrg'));
+	    $h4->putContent(new Text(' na dzień '));
+	    $h4->putContent((new Text('data'))->setVariable('data'));
+	    $h4->putContent(new Text('r.'));
+	    $naglowek->putContent($h1);
+	    $naglowek->putContent($h4);
+
+	    $pkt1 = new Sekcja();
+	    $pkt1->putContent((new Naglowek(2))->putContent("Pkt 1. Służba: "));
+	    $pkt1Inn = new Sekcja();
+	    $pkt1Inn->addClass("align-right");
+
+	    $pkt1Inn->putContent(
+		    (new Sekcja())
+			    ->putContent(new Text("Zmiana służbowa: zmiana "))
+			    ->putContent((new Text('nr zmiany'))->setVariable('nr_zmiany'))
+	    );
+	    $pkt1Inn->putContent(
+		    (new Sekcja())
+			    ->putContent(new Text("D-ca zmiany służbowej: - "))
+			    ->putContent( (new Select('szefzmiany'))->setList('available_firemans') )
+	    );
+	    $pkt1Inn->putContent(
+		    (new Sekcja())
+			    ->putContent(new Text("Dyspozytor PA: - "))
+			    ->putContent((new Select('dyspozytor'))->setList('available_firemans'))
+	    );
+	    $pkt1Inn->putContent(
+		    (new Sekcja())
+			    ->putContent(new Text("Podoficer dyżurny: - "))
+			    ->putContent((new Select('podoficer'))->setList('available_firemans'))
+	    );
+	    $pkt1Inn->putContent(
+		    (new Sekcja())
+			    ->putContent(new Text("Pomocnik podoficera: - "))
+			    ->putContent((new Select('pomocnik'))->setList('available_firemans'))
+	    );
+	    $pkt1->putContent($pkt1Inn);
+
+	    $pkt2 = new Sekcja();
+	    $pkt2->putContent((new Naglowek(2))->putContent("Pkt 2. Obsada: "));
+	    $tabGba  = new Table(2, 6);
+	    $tabGba->addClass('w3-table-all table-grafik');
+	    $tabGba->addStyle('vertical-align','top');
+	    $tabGba->addCell('GBA 2,5/20',0,1);
+	    $tabGba->addCell('D-ca',1,0);
+	    $tabGba->addCell('Kierowca',2,0);
+	    $tabGba->addCell('Ratownik',3,0);
+	    $tabGba->addCell('Ratownik',4,0);
+
+	    $gcba = new Table(2, 4);
+	    $gcba->addStyle('vertical-align','top');
+	    $gcba->addClass('w3-table-all table-grafik');
+	    $gcba->addCell('GCBA 5/40',0,1);
+	    $gcba->addCell('D-ca',1,0);
+	    $gcba->addCell('Kierowca',2,0);
+	    $gcba->addCell('Ratownik',3,0);
+
+	    $scd = new Table(2, 4);
+	    $scd->addStyle('vertical-align','top');
+	    $scd->addClass('w3-table-all table-grafik');
+	    $scd->addCell('SCD 40',0,1);
+	    $scd->addCell('D-ca',1,0);
+	    $scd->addCell('Kierowca',2,0);
+	    $scd->addCell('Ratownik',3,0);
+
+	    $pkt2->putContent($tabGba);
+	    $pkt2->putContent($gcba);
+	    $pkt2->putContent($scd);
+
+
+	    $pkt3 = new Sekcja();
+	    $pkt3->putContent((new Naglowek(2))->putContent("Pkt 3. Dyżur domowy: "));
+	    $pkt3->putContent(
+	            (new Sekcja())
+                    ->putContent((new Lista())->addClass('w3-padding')->setList('harmo_fireman_Dd'))
+                ->putContent((new Lista())->addClass('w3-padding')->setList('harmo_fireman_D'))
+
+        );
+
+
+
+
+
+	    $szablon->addObjects($miejscowoscIdata, $naglowek, $pkt1, $pkt2, $pkt3);
+        $szablon->setFinished(true);
+	    if($dbRozkazy->saveSzablon($user->getStrazak()->getJrgId(),$szablon)) {
+
+	        echo 'Poprawnie zapisano szablon.';
+
+        }
+    }
+
+
+} catch (UserErrors $e){
+    echo $e->getMessage();
+}
+
+
+
+
 
 
 $title = "Szablon rozkazu";
@@ -56,10 +193,56 @@ require 'header.php';
 	</form>
 	<?  elseif($szablon) :
 		echo '<p>Edycja szablonu '.$szablon->getDataSzablonu().'/'.$szablon->getId().'</p>';
-		$p = new Paragraf('to jest mój paragraf :P');
-		$p->print();
 
-	  else : ?>
+		?>
+        <div class="w3-container">
+            <div class="w3-container w3-twothird w3-border">
+                <?php
+                    foreach ($szablon->getObiektyHtml() as $obiekt){
+                        if($obiekt instanceof HtmlObj){
+	                        $obiekt->print();
+                        }
+                    }
+
+                ?>
+
+
+            </div>
+            <div class="w3-container w3-third w3-border">
+                <div>
+                    <h4>Stałe: </h4>
+                    <span class="jrg_const szablon_element">nr_jrg</span>
+                    <span class="jrg_const szablon_element">miasto</span>
+                </div>
+                <div>
+                    <h4>Zmienne: </h4>
+                    <span class="jrg_var szablon_element">data</span>
+                    <span class="jrg_var szablon_element">dzien</span>
+                    <span class="jrg_var szablon_element">msc</span>
+                    <span class="jrg_var szablon_element">rok</span>
+                    <span class="jrg_var szablon_element">nr_rozkazu</span>
+                    <span class="jrg_var szablon_element">nr_zmiany</span>
+                </div>
+                <div>
+                    <h4>Zmienne listy: </h4>
+                    <span class="jrg_list szablon_element">strażacy na zmianie</span>
+                    <span class="jrg_list szablon_element">dostępni strażacy</span>
+                    <span class="jrg_list szablon_element">strażacy wg. zmiennej z harmonogramu/grafiku</span>
+                    <span class="jrg_list szablon_element">strażacy na dyżurze (aktualny dzień)</span>
+                    <span class="jrg_list szablon_element">strażacy na dyżurze (następny dzień)</span>
+                </div>
+                <div>
+                    <h4>Obiekty: </h4>
+                    <span class="jrg_obj szablon_element">Sekcja</span>
+                    <span class="jrg_obj szablon_element">Nagłówek</span>
+                    <span class="jrg_obj szablon_element">Pole tekstowe</span>
+                    <span class="jrg_obj szablon_element">Lista rozwijana</span>
+                </div>
+            </div>
+
+        </div>
+
+	<?php  else : ?>
 		<h1>Podczas wykonywania żadania wystapił bład:</h1>
 	<?
 		echo  '<p>'.$dbRozkazy->error.'</p>';
