@@ -92,7 +92,7 @@ if(isset($_POST['log_in'])){
          if(isset($_POST['log_in'])){
          if(!$dbUsers->login($_POST['login'],$_POST['password']))
          {
-             echo $dbUsers->error;  do poprawy 
+             echo $dbUsers->error;
                        // popraw !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
          } else {
              header('Location: '.$base_url.'/main.php');
