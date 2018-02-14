@@ -50,7 +50,7 @@ class DbDyzuDomowy extends DbConn {
 	 *
 	 * @return DyzuryDomowe|null
 	 */
-	public function loadDyzuryNaMsc($jrg_id, $zmiana, $rok, $msc) {
+	public function loadDyzuryZmianyNaMsc($jrg_id, $zmiana, $rok, $msc) {
 
 		try {
 			$stmt =  $this->conn->prepare("SELECT id, dyzury FROM ".$this->tbl_dyzurydomowe." 
@@ -71,6 +71,30 @@ class DbDyzuDomowy extends DbConn {
 			echo $this->error = "Error: " . $e->getMessage();
 		}
 		return null;
+	}
+
+	public function loadDyzuryNaMsc($jrg_id, $rok, $msc) : array {
+		$res = array();
+		try {
+			$stmt =  $this->conn->prepare("SELECT id,zmiana, dyzury FROM ".$this->tbl_dyzurydomowe." 
+				WHERE jrg_id = :jrg_id AND rok = :rok AND msc = :msc");
+			$stmt->bindParam(':jrg_id', $jrg_id);
+			$stmt->bindParam(':rok', $rok);
+			$stmt->bindParam(':msc', $msc);
+			$stmt->execute();
+			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+			if($result){
+				foreach ($result as $dyzur){
+					$res[] = new DyzuryDomowe($dyzur['id'],$dyzur['zmiana'],$rok,$msc,$dyzur['dyzury']);
+				}
+			} else {
+				$this->error = "Podano błedny login lub hasło.";
+			}
+		} catch (PDOException $e){
+			echo $this->error = "Error: " . $e->getMessage();
+		}
+		return $res;
 	}
 
 	public function addNewDD(DyzuryDomowe $dyzury_domowe, $jrg_id) : bool {

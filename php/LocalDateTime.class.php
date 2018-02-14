@@ -15,8 +15,15 @@ class LocalDateTime extends DateTime {
 	public function getDataTime(){
 		return $this->format('d-m-Y H:i:s');
 	}
+	public function getDate(){
+		return $this->format('d-m-Y');
+	}
 	public function unixTime(){
 		return time();
+	}
+
+	public function getDayOfYearNum(){
+		return ($this->format('z')+1);
 	}
 
 	/**
@@ -28,6 +35,10 @@ class LocalDateTime extends DateTime {
 
 	public function getMonth(){
 		return intval($this->format('n'));
+	}
+
+	public function getDayOfMsc(){
+		return $this->format('j');
 	}
 
 }

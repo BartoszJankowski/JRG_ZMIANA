@@ -136,7 +136,7 @@ class Kalendarz {
 		$this->currentDataTime = $tempDate;
 	}
 
-	private function getCurrentZmiana() {
+	public function getCurrentZmiana() {
 		if(array_key_exists($this->getYear(), $this->tabGenDays)){
 			if(array_key_exists($this->numDayOfYear(), $this->tabGenDays[$this->getYear()] )){
 				return $this->tabGenDays[$this->getYear()][$this->numDayOfYear()]["zmiana"];

@@ -44,7 +44,7 @@ if(isset($_GET)){
 }
 
 
-$ddomowe = $dbDyzury->loadDyzuryNaMsc($user->getStrazak()->getJrgId(),$user->getStrazak()->getZmiana(),$ldt->getYear(), $ldt->getMonth());
+$ddomowe = $dbDyzury->loadDyzuryZmianyNaMsc($user->getStrazak()->getJrgId(),$user->getStrazak()->getZmiana(),$ldt->getYear(), $ldt->getMonth());
 
 if($ddomowe==null){
 	$ddomowe = new DyzuryDomowe(null, $user->getStrazak()->getZmiana(), $ldt->getYear(), $ldt->getMonth());

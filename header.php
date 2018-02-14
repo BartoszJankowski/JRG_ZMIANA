@@ -110,6 +110,38 @@ $$t = ' w3-green ';
             background-color: rgba(255, 153, 153,0.6);
         }
 
+        /*
+        Tymczasowe klasy do szablonu rozkazu
+         */
+        .szablon_element {
+            display: inline-block;
+            border-radius:5px;
+            padding:4px;
+            margin:4px;
+            white-space: nowrap ;
+        }
+        .jrg_const {
+            background-color: #999999;
+        }
+        .jrg_var {
+            background-color: #c69500;
+        }
+
+        .jrg_list {
+            background-color: #9fcdff;
+        }
+        .jrg_obj {
+            background-color: #1e7e34;
+        }
+        .align-right {
+            text-align: right;
+        }
+        .align-left {
+            text-align: left;
+        }
+        .no-margin {
+            margin:2px;
+        }
 
     </style>
 

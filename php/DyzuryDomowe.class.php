@@ -212,6 +212,18 @@ class DyzuryDomowe {
 		}
 	}
 
+	public function listaStrZDyzuru(int $dzien) : array {
+		$res = array();
+		foreach ($this->dyzury as $pozycja_DD){
+			if($pozycja_DD->dd == $dzien){
+				foreach ($pozycja_DD->getStrList() as $strazak_DD){
+					$res[] = $strazak_DD->getName();
+				}
+			}
+		}
+		return $res;
+	}
+
 	public function autoUzupelnienie($dane){
 		//$min = min($dane['range']);
 		//$max = max($dane['range']);
@@ -461,7 +473,9 @@ class PozycjaDD {
 		$this->strazacy = array();
 	}
 
-
+	public function getStrList(){
+		return $this->strazacy;
+	}
 
 }
 
