@@ -16,6 +16,8 @@ class Szablon {
 
 	protected $obiekty = array();
 
+	public static $currentHtmlId = 0;
+
 	public function __construct(int $jrg_id) {
 		$this->jrg_id = $jrg_id;
 		$this->dataSzablonu = (new DateTime())->format('Y-m-d');
@@ -113,8 +115,14 @@ abstract class HtmlObj {
 	 */
 	protected $cnt;
 
-	public function __construct() {}
+	public function __construct() {
+		if($this->isInputType())
+			$this->i = 'ord-'.(++Szablon::$currentHtmlId);
+	}
 
+	private function isInputType(){
+		return ($this instanceof Input || $this instanceof Select || $this instanceof Variable);
+	}
 	/**
 	 * @return mixed
 	 */
@@ -122,30 +130,27 @@ abstract class HtmlObj {
 		return $this->i;
 	}
 
-	/**
-	 * @param mixed $i
-	 */
-	public function setId( $i ): void {
-		$this->i = $i;
-	}
 
-	public function addClass(string $class) : HtmlObj{
-		if(!in_array($class, $this->c)){
-			$this->c[] = $class;
+	public function addClass(string ...$class) : HtmlObj{
+		for ($i = 0; $i<count($class); $i++){
+			if(!in_array($class[$i], $this->c)){
+				$this->c[] = $class[$i];
+			}
 		}
+
 		return $this;
 	}
 
-	public function removeClass(string $class){
-		if(in_array($class, $this->c)){
-			$temp = array();
-			foreach($this->c as $klasa){
-				if($klasa !== $class){
-					$temp[] = $klasa;
-				}
+	public function removeClasses(string ...$class){
+
+		$temp = array();
+		foreach($this->c as $klasa){
+			if(!in_array($klasa, $class)){
+				$temp[] = $klasa;
 			}
-			$this->c = $temp;
 		}
+		$this->c = $temp;
+
 	}
 
 	public function addStyle($key, $val) : HtmlObj{
@@ -192,9 +197,26 @@ abstract class HtmlObj {
 
 	protected function getHtml() {
 		$content = $this->getContent();
-		$class = count($this->c) > 0 ? ' class="' . implode(' ',$this->c) . '" ' : '';
-		$attr = '';
+		$class = $this->getClasses();
+		$attr = $this->getAttributes();
 		$style = '';
+
+
+		foreach ($this->s as $key=>$val){
+			$style = $key.':'.$val.';';
+		}
+		if(strlen($style)>0){
+			$attr .= ' style="'.$style.'"';
+		}
+		return $this->getHtmlTag($class, $attr, $content);
+	}
+
+	protected function getClasses(){
+		return count($this->c) > 0 ? ' class="' . implode(' ',$this->c) . '" ' : '';
+	}
+
+	protected function  getAttributes(){
+		$attr = '';
 		if( count($this->a) > 0){
 			$atab = array();
 			foreach ($this->a as $name=>$val){
@@ -205,18 +227,7 @@ abstract class HtmlObj {
 		if( $this->i != null){
 			$attr .= ' id="'.$this->i . '"';
 		}
-
-		foreach ($this->s as $key=>$val){
-			$style = $key.':'.$val.';';
-		}
-		if(strlen($style)>0){
-			$attr .= ' style="'.$style.'"';
-		}
-
-
-
-		return $this->getHtmlTag($class, $attr, $content);
-
+		return $attr;
 	}
 
 	protected function getHtmlTag($class, $attr, $content){
@@ -244,18 +255,22 @@ abstract class HtmlObj {
 		if(strlen($name)>1){
 			$this->addAttr('data-jrg', 'variable-'.$name );
 		} else {
-			throw new UserErrors("Nazwa stałej musi zawierać więcej niz 1 znak");
+			throw new UserErrors("Nazwa zmiennej musi zawierać więcej niz 1 znak");
 		}
 		return $this;
 	}
 
-	public function setList(string $name){
+	public function setList(string ...$names) : HtmlObj{
 		$this->addClass('jrg_list');
 		$this->addClass('szablon_element');
-		if(strlen($name)>1){
-			$this->addAttr('data-jrg', 'list-'.$name );
+		$wartosc = '';
+		foreach ($names as $name){
+			$wartosc .= $name.' ';
+		}
+		if(strlen($wartosc)>1){
+			$this->addAttr('data-jrg', 'list-'.$wartosc );
 		} else {
-			throw new UserErrors("Nazwa stałej musi zawierać więcej niz 1 znak");
+			throw new UserErrors("Nazwa listy musi zawierać więcej niz 1 znak");
 		}
 		return $this;
 	}
@@ -286,10 +301,14 @@ abstract class HtmlObj {
 }
 
 class Sekcja extends HtmlObj {
-	public function __construct() {
+	public function __construct(string ...$klasy) {
 		parent::__construct();
 		$this->n   = 'div';
 		$this->cnt = array();
+
+		for($i =0; $i<count($klasy); $i++){
+			$this->addClass($klasy[$i]);
+		}
 	}
 
 
@@ -330,7 +349,7 @@ class Naglowek extends HtmlObj {
 	}
 }
 
-class Input extends HtmlObj {
+class Input extends HtmlObj implements ValueAdapter {
 
 	public function __construct(string $typ, string $name) {
 		parent::__construct();
@@ -348,15 +367,19 @@ class Input extends HtmlObj {
 		throw new UserErrors("Ten obiekt nie posiada zawartości");
 		return $this;
 	}
+
+	public function setVal( $value ) {
+
+	}
 }
 
-class Select extends HtmlObj implements ListAdapter{
+class Select extends HtmlObj implements ListAdapter,ValueAdapter {
 
 	public function __construct( string $name) {
 		parent::__construct();
 		$this->n   = 'select';
 		$this->cnt = array();
-		$this->addAttr('name',$name);
+		$this->addAttr('name',$this->i);
 	}
 
 	public function putContent( $content ) : HtmlObj {
@@ -367,16 +390,32 @@ class Select extends HtmlObj implements ListAdapter{
 
 
 	protected function getContent() {
-		$res = '<option >wybór z listy</option>';
+		$res = '<option disabled '.(isset($this->value) ? "":"selected").' >&nbsp;</option>';
 		foreach ($this->cnt as $cont){
-			$res .= '<option value="'.$cont['value'].'" >'.$cont['key'].'</option>';
+			if(isset($this->value) && $this->value === $cont['value'] ){
+				$res .= '<option value="'.$cont['value'].'" selected >'.$cont['key'].'</option>';
+			} else {
+				$res .= '<option value="'.$cont['value'].'"  >'.$cont['key'].'</option>';
+			}
+
 		}
 		return $res;
 	}
 
+	protected function getHtmlTag( $class, $attr, $content ) {
+		return  '<'.$this->n . ' ' . $attr . ' ' . $class . ' value="'.( isset($this->value) ? $this->value : '' ).'" >' . $content . '</' . $this->n . '>';
+	}
+
 
 	public function setListContent( array $name ) {
-			$this->cnt = $name;
+		foreach ($name as $value){
+			$this->cnt[] = $value;
+		}
+
+	}
+
+	public function setVal( $value ) {
+		$this->value = $value;
 	}
 }
 
@@ -398,6 +437,36 @@ class Text extends HtmlObj {
 			throw new UserErrors("Nie można dodać obiektu innego niz String do tego elementu.");
 		}
 		return $this;
+	}
+}
+
+class Variable extends HtmlObj implements ValueAdapter {
+
+	public function __construct( string $name) {
+		parent::__construct();
+		$this->n = 'input';
+		$this->addAttr('type','hidden');
+		$this->addAttr('name',$this->i);
+		$this->cnt = $name;
+
+	}
+
+	protected function getHtmlTag( $class, $attr, $content ) {
+		return '<label '.$class.'><'.$this->n . ' ' . $attr . ' value="'.$content.'" />'.$content.'</label>';
+	}
+
+
+	public function putContent( $content ) : HtmlObj{
+		if(is_string($content)){
+			$this->cnt = $content;
+		} else {
+			throw new UserErrors("Nie można dodać obiektu innego niz String do tego elementu.");
+		}
+		return $this;
+	}
+
+	public function setVal( $value ) {
+		$this->cnt = $value;
 	}
 }
 
@@ -453,55 +522,145 @@ class Lista extends HtmlObj implements ListAdapter {
 	}
 }
 
+class Col extends HtmlObj implements ListAdapter {
+
+	/**
+	 * @var int Rowsa
+	 */
+	private $r = 0;
+
+	public function __construct($header,int $min_rows = 0) {
+		parent::__construct();
+		$this->cnt  = array();
+		$this->n = $header;
+		$this->r = $min_rows;
+	}
+
+	public function setName(string $naem){
+		$this->n = $naem;
+	}
+
+	public function getNameTd(){
+
+		return '<td '.$this->getClasses().' '.$this->getAttributes().' >'.$this->n.'</td>';
+	}
+
+	public function setListContent( array $lista ) {
+
+		foreach ($lista as $el){
+			$this->cnt[] = $el['key'];
+		}
+	}
+
+	public function getRowVal(int $row){
+		if(array_key_exists($row, $this->cnt)){
+			if($this->cnt[$row] instanceof HtmlObj)
+				return '<td>'.$this->cnt[$row]->getHtml().'</td>';
+			else
+				return '<td>'.$this->cnt[$row].'</td>';
+		} else if($row < $this->r){
+			return '<td></td>';
+		} else {
+			return false;
+		}
+	}
+
+	public function putContent( $content ): HtmlObj {
+		$this->cnt[] = $content;
+		return $this;
+	}
+
+	public function getHtml() {
+		throw new UserErrors('Ten obiekt nie zwraca zwartości. Może byc wywołany tylko z klasy Table.');
+	}
+
+}
+
 class Table extends HtmlObj{
 
-	public function __construct($cols = 0, $rows = 0) {
+	public function __construct($cols = 0, $minRows = 0) {
 		parent::__construct();
 		$this->n = 'table';
 
 		$this->cnt = array();
 
-		for($i = 0; $i<$rows; $i++){
-			for ($k = 0; $k<$cols; $k++){
-				$this->cnt[$i][$k] = null;
-			}
+		for($k = 0; $k<$cols; $k++){
+			$this->cnt[$k] = new Col('', $minRows);
 		}
 	}
 
 	public function putContent( $content) : HtmlObj {
-		throw new UserErrors("Dla elementu typu table użyj funkcji dodaj wiersz/kolumnę.");
-	}
-
-	public function addCell($value, $row, $kolumn){
-
-		if( $this->cnt[$row][$kolumn] instanceof HtmlObj){
-			$this->cnt[$row][$kolumn]->putContent($value);
+		if($content instanceof Col){
+			$this->cnt[] = $content;
 		} else {
-			$this->cnt[$row][$kolumn] = $value;
+			throw new UserErrors("Dla elementu typu table użyj funkcji addCell lub dodaj obiekt 'Kolumna'.");
 		}
+		return $this;
 	}
 
 	protected function getContent() : string {
-		$content = '';
-		if(is_array($this->cnt)){
-			foreach ($this->cnt as $row){
-				$content .= '<tr>';
-				if(is_array($row)){
-					foreach ($row as $col){
-						if($col instanceof HtmlObj){
-							$content .= '<td>'.$col->getHtml().'</td>';
-						} else {
-							$content .= '<td>'.$col.'</td>';
-						}
-					}
-				}
-				$content .= '</tr>';
+		/**
+		 * NAGLOWEK
+		 */
+		$content = '<tr>';
+		foreach ($this->cnt as $col){
+			if($col instanceof Col){
+				$content .= $col->getNameTd();
 			}
 		}
+		$content .= '</tr>';
+
+		/**
+		 * ZAWARTOSC / WIERSZE
+		 */
+		$a = 0;
+		do{
+
+			$content .= '<tr>';
+			$kontynuuj = false;
+			foreach ($this->cnt as $col){
+				if($col instanceof Col){
+					$val = $col->getRowVal($a);
+					if($val){
+						$kontynuuj = true;
+						$content.= $val;
+					} else {
+						$content .= '<td></td>';
+					}
+				}
+			}
+			$content .= '</tr>';
+			$a++;
+		} while($kontynuuj);
+
+
 		return $content;
 	}
+
+	public function addCol(Col $col,int $colId = -1){
+		if($colId>0)
+			$this->cnt[$colId-1] = $col;
+		else
+			$this->cnt[] = $col;
+	}
+
+	public function addCell($value,int $kolumn) : HtmlObj{
+		if(array_key_exists($kolumn, $this->cnt)){
+			$this->cnt[$kolumn]->putContent($value);
+		} else {
+			$col = new Col('');
+			$col->putContent($value);
+			$this->cnt[$kolumn] = $col;
+		}
+		return $this;
+	}
+
 }
 
 interface ListAdapter {
 	public function setListContent( array $name );
+}
+
+interface ValueAdapter {
+	public function setVal($value);
 }

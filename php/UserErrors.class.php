@@ -8,9 +8,18 @@
 
 class UserErrors extends Exception {
 
+	private static $errorSet = false;
+
 	//TODO: zrobic blędy dla uzytkowników
 
-	public function printError(){
-
+	public function __construct( string $message = "", int $code = 0, Throwable $previous = null ) {
+		parent::__construct( $message, $code, $previous );
+		self::$errorSet = true;
 	}
+
+	public static function hasError(){
+		return self::$errorSet;
+	}
+
+
 }

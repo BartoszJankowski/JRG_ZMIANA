@@ -7,12 +7,12 @@
  */
 
 class User {
+	private const SESSION_TIME = 1800 ; // 1800 sekund czyli 30 minut
 
 	public $logged = false;
 	public $sessionSet = false;
 	public $login;
-	public $sesId;
-
+	private $session;
 	/**
 	 * Strazak class
 	 */
@@ -20,7 +20,7 @@ class User {
 
 
 
-	private $id, $email, $name, $surname, $jrg_id, $session, $dateTime, $previlages;
+	private $id, $email, $name, $surname, $jrg_id, $dateTime, $previlages;
 
 	/**
 	 * User constructor.
@@ -41,12 +41,11 @@ class User {
 			$this->name       = $tab['name'];
 			$this->surname    = $tab['surname'];
 			$this->jrg_id     = $tab['jrg_id'];
-			$this->session    = $tab['session'];
 			$this->dateTime   = $tab['datatime'];
 			$this->previlages = $tab['previlages'];
-		} elseif(isset($_SESSION['login'],$_SESSION['id']) && strlen($_SESSION['id'])>0 && strlen($_SESSION['login'])>0){
+		} elseif(isset($_SESSION['login'],$_SESSION['session']) && strlen($_SESSION['session'])>0 && strlen($_SESSION['login'])>0){
 			$this->login = $_SESSION['login'];
-			$this->sesId = $_SESSION['id'];
+			$this->session = $_SESSION['session'];
 			$this->sessionSet = true;
 		}
 	}
@@ -57,7 +56,6 @@ class User {
 			$this->name       = $tab['name'];
 			$this->surname    = $tab['surname'];
 			$this->jrg_id     = $tab['jrg_id'];
-			$this->session    = $tab['session'];
 			$this->dateTime   = $tab['datatime'];
 			$this->previlages = $tab['previlages'];
 			$dbStr = new DBStrazacy();
@@ -68,14 +66,33 @@ class User {
 					$this->previlages = "CHEF";
 				}
 			}
+
 	}
 
+	public function checkSessionTime() : bool {
+		$ltd =new LocalDateTime($this->dateTime);
+		return (!($this->isChef() && $ltd->getTimeTillNow() > self::SESSION_TIME ));
+	}
 
 	/**
 	 * @return int
 	 */
 	public function getId() {
 		return $this->id;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getSession() {
+		return $this->session;
+	}
+
+	/**
+	 * @param mixed $session
+	 */
+	public function setSession( $session ): void {
+		$this->session = $session;
 	}
 
 	/**
@@ -106,12 +123,7 @@ class User {
 		return $this->jrg_id;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getSession() {
-		return $this->session;
-	}
+
 
 	/**
 	 * @return time

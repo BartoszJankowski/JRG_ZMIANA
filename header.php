@@ -143,6 +143,18 @@ $$t = ' w3-green ';
             margin:2px;
         }
 
+        .podglad-rozkazu select {
+           border:none;
+            -webkit-appearance: none;
+            background-color: transparent;
+            min-width:150px;
+        }
+        /*
+        * Styl definiowany odrębnie w zmiennej $style na podstronach
+        * (zmienna powinna znajdowac się zaraz przed wczytaniem header.php)
+         */
+        <?php echo $style; ?>
+
     </style>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -164,14 +176,14 @@ $$t = ' w3-green ';
 			<a  href="shiftmanage.php" class="w3-bar-item w3-button <?php echo $shiftmanage;?> "><i class="fa fa-fw fa-users w3-xlarge"></i><div class="w3-small">Zarządzaj zmianą</div></a>
 			<a href="grafiksluzb.php" class="w3-bar-item w3-button  <?php echo $grafiksluzb;?> "><i class="fa fa-fw fa-calendar w3-xlarge"></i><div class="w3-small">Grafik</div></a>
             <a href="harmonogramsluzb.php" class="w3-bar-item w3-button  <?php echo $harmonogramsluzb;?> "><i class="fa fa-fw fa-history w3-xlarge"></i><div class="w3-small">Harmonogram</div></a>
-            <a href="edycjarozkazu.php" class="w3-bar-item w3-button  <?php echo $edycjarozkazu;?> "><i class="fa fa-fw fa-list-alt w3-xlarge"></i><div class="w3-small">Rozkaz</div></a>
+            <a href="rozkazpodglad.php" class="w3-bar-item w3-button  <?php echo $edycjarozkazu;?> "><i class="fa fa-fw fa-list-alt w3-xlarge"></i><div class="w3-small">Rozkaz</div></a>
             <a href="homeduties.php" class="w3-bar-item w3-button  <?php echo $homeduties;?> "><i class="fa fa-fw fa-bed w3-xlarge"></i><div class="w3-small">Dyzury domowe</div></a>
 		<?php
 		endif;
 		?>
-        <a  href="mojkalendarz.php" class="w3-bar-item w3-button  <?php echo $mojkalendarz;?> "><i class="fa fa-fw fa-address-book-o w3-xlarge" aria-hidden="true"></i><div class="w3-small">Kalendarz</div></a>
+        <a  href="mojkalendarz.php" class="w3-bar-item w3-button  <?php echo $mojkalendarz;?> "><i class="fa fa-fw fa-address-book w3-xlarge" aria-hidden="true"></i><div class="w3-small">Kalendarz</div></a>
         <a  href="main.php?account_settings" class="w3-bar-item w3-button  <?php echo $main;?> "><i class="fa fa-fw fa-cog w3-xlarge"></i><div class="w3-small">Ustawienia</div></a>
-		<a href="logout.php?logout=1" class="w3-bar-item w3-button  <?php echo $logout;?> "><i class="fa fa-fw fa-sign-out w3-xlarge"></i><div class="w3-small">Wyloguj</div></a>
+		<a href="logout.php?logout=1" class="w3-bar-item w3-button  <?php echo $logout;?> "><i class="fa fa-fw fa-sign-out-alt w3-xlarge"></i><div class="w3-small">Wyloguj</div></a>
 	</div>
 
     <div class="w3-bar  w3-border w3-light-grey  w3-hide-large">
