@@ -1,4 +1,5 @@
 <?php
+$activePage = "homeduties";
 /**
  * Created by PhpStorm.
  * User: Bartosz

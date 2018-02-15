@@ -9,13 +9,11 @@
 $proceedTime = round(microtime(true) - $timeStart,3);
 
 ?>
-	<footer class="p-3 bg-dark text-white">
-		<div class="w3-row">
-			<div class="w3-col l3">
+	<footer class="footer">
+		<div class="container">
 				<?php
 				echo 'Wygenerowano w '.$proceedTime.'s';
 				?>
-			</div>
 	        <button class="w3-button w3-gray w3-right" id="print" title="Drukuj"><i class="fa fa-print w3-large" aria-hidden="true"></i></button>
 		</div>
 	</footer>

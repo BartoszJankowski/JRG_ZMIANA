@@ -1,4 +1,6 @@
+
 <?php
+$activePage = "jrgmanage";
 /**
  * Created by PhpStorm.
  * User: Bartosz
@@ -53,6 +55,7 @@ if(isset($_POST['deleteFireman'] )){
 $title = "Zarządzaj JRG";
 require 'header.php';
 ?>
+
 <main>
 	<div>
 		Witaj, <?php echo $user->getName() != null ? $user->getName() . ' ' . $user->getSurname() : $user->login; echo ' [' . $user->getPrevilages() . ']'; ?>
@@ -155,7 +158,7 @@ require 'header.php';
 							?></div>
 						<input type="submit" class="w3-input w3-margin-top" name="addStrazak" value="Dodaj" />
 					</form>
-				<? endif;?>
+				<?php endif;?>   <!-- /*poprawka php -->
 			</div>
 			<div class="w3-threequarter w3-border">
 				<?php
@@ -213,7 +216,7 @@ require 'header.php';
 
 
 
-            <? endif;
+            <?php endif;  //poprawka php
                  ?>
         </div>
 		<!-- KONIEC PANELU ADMINA -->

@@ -1,4 +1,5 @@
 <?php
+$activePage = "grafiksluzb";
 /**
  * Created by PhpStorm.
  * User: Bartosz

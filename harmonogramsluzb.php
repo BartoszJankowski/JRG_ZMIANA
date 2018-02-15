@@ -1,4 +1,5 @@
 <?php
+$activePage = "harmonogramsluzb";
 /**
  * Created by PhpStorm.
  * User: Bartosz

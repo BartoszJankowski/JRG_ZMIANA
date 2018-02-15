@@ -1,4 +1,5 @@
 <?php
+$activePage = "mojkalendarz";
 /**
  * Created by PhpStorm.
  * User: Bartosz
@@ -90,47 +91,8 @@ require 'header.php';
 	?>
 	</div>
 	<div class="w3-padding w3-center" style="width: 300px;"><div class="w3-third w3-padding-small"><div class="zmiana-1">I</div></div><div class="w3-third w3-padding-small"><div class="zmiana-2">II</div></div><div class="w3-third w3-padding-small"><div class="zmiana-3">III</div></div></div>
-	<? else: echo $info ; endif; ?>
+	<?php else: echo $info ; endif; ?>   <!-- dodałem na początku przed ? php ; nie odpalało kalendarza na serwerze lokalnym  -->
 </main>
-<script>
-
-
-	$(".nextMsc").click(function () {
-	    var tabs = $('.kalendar-div').toArray();
-        var parentDiv = $(this).parent().parent().get(0);
-
-	    for(var i=0; i<tabs.length ;i++){
-	        if(parentDiv.id === tabs[i].id){
-	            if((i+1) === tabs.length){
-	                //koniec - zaladowac nowy msc
-                    $("#nextYear").submit();
-	            } else {
-                    $(parentDiv).toggleClass('w3-hide-small');
-                    $(tabs[i+1]).toggleClass('w3-hide-small');
-                    return;
-	            }
-	        }
-	    }
-    });
-
-    $(".prevMsc").click(function () {
-        var tabs = $('.kalendar-div').toArray();
-        var parentDiv = $(this).parent().parent().get(0);
-
-        for(var i=0; i<tabs.length ;i++){
-            if(parentDiv.id === tabs[i].id){
-                if((i-1) === -1){
-                    //koniec - zaladowac nowy msc
-                    $("#prevYear").submit();
-                } else {
-                    $(parentDiv).toggleClass('w3-hide-small');
-                    $(tabs[i-1]).toggleClass('w3-hide-small');
-                    return;
-                }
-            }
-        }
-    });
-</script>
 <?php
 
 require 'footer.php';

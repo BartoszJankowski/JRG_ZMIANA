@@ -34,12 +34,12 @@ if(isset($_POST['addJrg'])){
     <title>Zmiana-main</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-            <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
-                <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-                        <link rel="stylesheet" type="text/css" href="css/main.css" />
-                            <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" /> 
-                                <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&amp;subset=latin-ext" rel="stylesheet">
+                <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+                    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+                            <link rel="stylesheet" type="text/css" href="css/main.css">
+                                <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"> 
+                                    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&amp;subset=latin-ext" rel="stylesheet">
 </head>
 
 <body>

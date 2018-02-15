@@ -1,4 +1,5 @@
 <?php
+$activePage = "main";
 /**
  * Created by PhpStorm.
  * User: Bartosz
@@ -57,10 +58,18 @@ $title = "Panel główny";
 require 'header.php';
 ?>
 <main>
+
     <div>
-        Witaj, <?php echo $user->getName() != null ? $user->getName() . ' ' . $user->getSurname() : $user->login; echo ' [' . $user->getPrevilages() . ']'; ?>
+        <h4>Witaj, <?php echo $user->getName() != null ? $user->getName() . ' ' . $user->getSurname() : $user->login; echo ' [' . $user->getPrevilages() . ']'; ?>
+        </h4>
+            <div>
+            </div>
     </div>
-    <?php if(isset($_GET['account_settings'])) : ?>
+
+        <?php 
+            if(isset($_GET['account_settings'])) : 
+        ?>
+
     <div>
         <!-- USTAWIENIA KONTA -->
         <form action="" id="changeUserData" method="post" class="w3-quarter w3-margin w3-padding  w3-border">
