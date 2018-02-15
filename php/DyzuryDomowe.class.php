@@ -20,10 +20,6 @@ class DyzuryDomowe {
 	private $strazacyIn = array();
 
 	/**
-	 * @var DBJrgSettings
-	 */
-	public $settings;
-	/**
 	 * @var Harmonogram[]
 	 */
 	private $harmonogramy;
@@ -56,12 +52,7 @@ class DyzuryDomowe {
 		}
 	}
 
-	/**
-	 * @param DBJrgSettings $settings
-	 */
-	public function setSettings( DBJrgSettings $settings ): void {
-		$this->settings = $settings;
-	}
+
 	public function setHarmo(array $harmonogramy){$this->harmonogramy = $harmonogramy;}
 
 	/**
@@ -162,7 +153,7 @@ class DyzuryDomowe {
 		foreach ($this->strazacyIn as $id=>$tab){
 			$uprI = '';
 			foreach ($tab['str']->getUprawnienia() as $nr){
-				$uprawnienie = $this->settings->getUprawnienie($nr);
+				$uprawnienie = DBJrgSettings::getUprawnienie($nr);
 				$uprI .= '<i class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'"></i>';
 			}
 			$row = '<tr><td>'.$uprI.'</td><td>'.$tab['strDD']->getname().'</td>';
@@ -188,13 +179,13 @@ class DyzuryDomowe {
 
 	public function printStrazacyInRows(){
 		$res = '<tr><th>Upr.</th><th>Strażak</th><th>Liczba dyżurów</th></tr>';
-		$uprawnieniaJrg = $this->settings->getUprawnienia();
+		$uprawnieniaJrg = DBJrgSettings::getUprawnienia();
 
 		foreach($this->strazacyIn as $str_id=> $tab){
 			if($tab['str'] instanceof Strazak){
 				$uprI = '';
 				foreach ($tab['str']->getUprawnienia() as $id){
-					$uprawnienie = $this->settings->getUprawnienie($id);
+					$uprawnienie = DBJrgSettings::getUprawnienie($id);
 					$uprI .= '<i class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'"></i>';
 				}
 				$res .= '<tr><td nowrap >'.$uprI.'</td><td class="highlightFireman" id="str_id_'.$str_id.'">'.$tab['strDD']->getName().' </td><td>'.$this->countStrOccurences($str_id).'</td></tr>';
@@ -413,7 +404,7 @@ class PozycjaDD {
 				$idStr = $this->strazacy[$i]->getId();
 				$uprawnienia = $dyzury_domowe->getStrazakIn($idStr)->getUprawnienia();
 				foreach ($uprawnienia as $id){
-					$uprawnienie =  $dyzury_domowe->settings->getUprawnienie($id);
+					$uprawnienie =  DBJrgSettings::getUprawnienie($id);
 					$uprI .= '<i class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'"></i>';
 				}
 

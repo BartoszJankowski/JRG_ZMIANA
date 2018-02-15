@@ -165,7 +165,7 @@ require 'header.php';
                         <div>
                             <label class="w3-text-gray">Zaznacz uprawnienia pracownika: </label><br>
 	                        <?php
-	                        foreach ( $dbSettings->getUprawnienia() as $uprawnienie ) {
+	                        foreach ( DBJrgSettings::getUprawnienia() as $uprawnienie ) {
 
 	                            if(array_search($uprawnienie->getId(),$edytowanyStrazak->getUprawnienia())!==false)
 		                            echo '<label><input type="checkbox" name="uprawnienia[]" value="'.$uprawnienie->getId().'" checked  /><i class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'" ></i> '.$uprawnienie->getName().'</label><br>';
@@ -185,7 +185,7 @@ require 'header.php';
 				    $strazacy = $dbStrazacy->getZmianaListStrazacy($strazak->getJrgId(),$strazak->getZmiana());
 				    echo '<div class="w3-container"><h4>zmiana '.$strazak->getZmiana().' <span class="w3-small">('.count($strazacy).' strażaków)</span></h4><ul class="w3-ul">';
 				    foreach ($strazacy as $str){
-					    $str->printHtml($uzytkownicy, $dbSettings );
+					    $str->printHtml($uzytkownicy );
 				    }
 				    echo '</ul></div>';
 				    ?>
@@ -275,7 +275,7 @@ require 'header.php';
                         <div>
                             <label class="w3-text-gray">Zaznacz uprawnienia pracownika: </label><br>
                             <?php
-                            foreach ( $dbSettings->getUprawnienia() as $uprawnienie ) {
+                            foreach ( DBJrgSettings::getUprawnienia() as $uprawnienie ) {
                                 echo '<label><input type="checkbox" name="uprawnienia[]" value="'.$uprawnienie->getId().'" /><i class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'" ></i> '.$uprawnienie->getName().'</label><br>';
                             }
 
@@ -290,7 +290,7 @@ require 'header.php';
                     $strazacy = $dbStrazacy->getZmianaListStrazacy($strazak->getJrgId(),$strazak->getZmiana());
                     echo '<div class="w3-container"><h4>zmiana '.$strazak->getZmiana().' <span class="w3-small">('.count($strazacy).' strażaków)</span></h4><ul class="w3-ul">';
                     foreach ($strazacy as $str){
-                        $str->printHtml($uzytkownicy, $dbSettings);
+                        $str->printHtml($uzytkownicy);
                     }
                     echo '</ul></div>';
                     ?>

@@ -53,8 +53,6 @@ if($ddomowe==null){
 }
 
 
-
-$ddomowe->setSettings($dbSettings);
 $ddomowe->setHarmo($dbharmo->getJrgharmos($user->getStrazak()->getJrgId(),$ldt->getYear() ));
 $ddomowe->setStrazacy($dbStrazacy->getZmianaListStrazacy($user->getStrazak()->getJrgId(), $user->getStrazak()->getZmiana()));
 
@@ -111,7 +109,7 @@ require 'header.php';
             <form action="" method="post">
                 <p>Wybierz uprawnienia wymagane na każdy dzień dyżuru: </p>
                 <?php
-                    foreach ($dbSettings->getUprawnienia() as $uprawnienie){
+                    foreach (DBJrgSettings::getUprawnienia() as $uprawnienie){
                         echo '<div><label><input type="checkbox" class="w3-check" name="wymagane[]" '.((isset($_POST['wymagane']) && in_array($uprawnienie->getId(),$_POST['wymagane'] ))? "checked":"").' value="'.$uprawnienie->getId().'" ><i class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'"></i>  '.$uprawnienie->getName().'</label></div>';
                     }
                 ?>

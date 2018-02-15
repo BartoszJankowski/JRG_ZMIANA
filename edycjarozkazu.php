@@ -6,6 +6,12 @@
  * Time: 15:19
  */
 
+//TODO: rozpoczac edycję w bazieDanych
+//TODO: dodac uzytkownikowi wpis o rozpoczętej edycji
+
+//TODO: sprawdzić usera który edytuje rozkaz oraz jego czas zalogowania i aktywność
+
+//TODO: zakonczyc edycje w bazie danych
 
 session_start();
 require 'php/config.php';

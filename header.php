@@ -161,7 +161,7 @@ $$t = ' w3-green ';
     <script src="/js/jquery.validate.min.js"></script>
 </head>
 
-<body >
+<body   >
 <header class="w3-top">
 
 	<div class="w3-bar w3-border w3-light-grey w3-hide-small w3-hide-medium">

@@ -7,7 +7,8 @@
  */
 
 class User {
-	private const SESSION_TIME = 1800 ; // 1800 sekund czyli 30 minut
+	//TODO: zmniejszyć wartośc przy deploymencie
+	private const SESSION_TIME = 18000 ; // 1800 sekund czyli 30 minut
 
 	public $logged = false;
 	public $sessionSet = false;

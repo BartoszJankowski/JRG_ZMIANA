@@ -167,7 +167,7 @@ class Strazak {
 
 
 
-	public function printHtml(array $listUsers, DBJrgSettings $settings = null){
+	public function printHtml(array $listUsers){
 		$star = $this->isChef() ? '<i class="fa fa-star fa-fw w3-text-amber"></i>': '';
 		if(!empty($this->getUserId())){
 			foreach($listUsers as $us){
@@ -183,13 +183,11 @@ class Strazak {
 		}
 		$funkcja = get_nazwa_funkcji($this->nazwa_funkcji);
 		$uprI = '';
-		if($settings!=null){
 			$uprawnienia = $this->uprawnienia;
 			foreach ($uprawnienia as $id){
-				$uprawnienie =  $settings->getUprawnienie($id);
+				$uprawnienie =  DBJrgSettings::getUprawnienie($id);
 				$uprI .= '<i class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'"></i>';
 			}
-		}
 		echo '<form class="" action="" method="post" ><li class="w3-display-container"><i class="w3-large">#'.$this->getNrPorz().' </i> '.$user.$star.' <a href="?editFireman='.$this->id.'">'.get_stopien_short($this->stopien).' '.$this->nazwisko.' '.$this->imie.$uprI.'</a><input type="hidden" value="'.$this->getStrazakId().'" name="strazakId"><button type="submit" class="w3-button w3-border w3-display-right" name="deleteFireman" ><i class="fa fa-trash"></i></button></li>
 				<span class="w3-text-gray">'.$funkcja.'</span>
 				</form>';
