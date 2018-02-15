@@ -99,7 +99,7 @@ class Kalendarz {
 		$nr = 0 ;
 		foreach($this->tabGenDays[$this->getYear()] as $dzien){
 				if($dzien['msc'] == $month){
-					$tab[$nr] = array('z'=>$dzien['zmiana'],'t'=>$dzien['dzien_tyg'],'nr'=>$nr+1);
+					$tab[$nr] = array('z'=>$dzien['zmiana'],'t'=>$dzien['dzien_tyg'],'nr'=>$nr+1,'nr_0'=>$nr);
 					$nr++;
 				}
 		}

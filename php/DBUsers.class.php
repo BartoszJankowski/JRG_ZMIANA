@@ -147,6 +147,7 @@ class DBUsers extends DbConn {
 	 * @return bool
 	 */
 	public function checkSession(User $user){
+
 		if($user->sessionSet){
 			try {
 				$stmt =  $this->conn->prepare("SELECT id,email,session,datatime,name,surname,jrg_id,previlages FROM ".$this->tbl_users." WHERE email = :email");

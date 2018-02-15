@@ -65,5 +65,7 @@ $invalid_mod = '$adminemail is not a valid email address';
 //Makes readable version of timeout (in minutes). Do not change.
 $timeout_minutes = round(($login_timeout / 60), 1);
 
+//ZMIENNA GLOBALNA
+$_SETTINGS = new DBJrgSettings();
 
 

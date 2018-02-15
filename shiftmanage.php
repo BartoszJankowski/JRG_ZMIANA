@@ -12,15 +12,13 @@ require 'php/config.php';
 $dbUsers     = new DBUsers();
 $dbJednostki = new DBJednostki();
 $dbStrazacy = new DBStrazacy();
-$dbSettings = new DBJrgSettings();
 $user = new User();
 
 if(!$dbUsers->checkSession($user)){
 	header('Location: '.$base_url.'/login.php');
 	exit;
 }
-
-$dbSettings->load($user->getStrazak()->getJrgId());
+$_SETTINGS->load($user->getJrgId());
 
 if(isset($_POST)){
 	$_POST = test_input($_POST);

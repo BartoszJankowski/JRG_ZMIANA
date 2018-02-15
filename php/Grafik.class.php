@@ -64,8 +64,14 @@ class Grafik {
 	}
 
 	private function getSelectOptions(string $val){
+		$harmVal = get_harmo_val($val);
 		$res = '';
-		$res .= '<option '.(""==$val ? " selected" : "").' value=""></option>';
+		if(!empty($harmVal)){
+			$res .= '<option selected disabled >'.$val.'</option><option value="" ></option>';
+		} else {
+			$res .= '<option '.(empty($val) ? "selected" : "").' value=""></option>';
+		}
+
 		foreach (get_grafik_values() as $v=>$tab) {
 
 			$res .= '<option '.($v==$val ? " selected" : "").' value="' . $v . '">' . $v . '</option>';

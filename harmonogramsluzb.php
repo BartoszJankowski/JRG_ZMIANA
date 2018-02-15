@@ -19,6 +19,8 @@ if(!$dbUsers->checkSession($user)){
 	header('Location: '.$base_url.'/login.php');
 	exit;
 }
+$_SETTINGS->load($user->getJrgId());
+
 
 if(isset($_POST)){
 	$_POST = test_input($_POST);
@@ -95,7 +97,7 @@ require 'header.php';
     <div class="w3-conteiner w3-row w3-row-padding w3-margin">
         <?php
         foreach (get_harmo_values() as $v=>$tab){
-            echo '<div class="w3-col l2 w3-small "><span class="'.$tab['col'].' w3-padding-small" style="width: 20px;height: 20px" >'.$v.'</span> - '.$tab['n'].'</div>';
+            echo '<div class="w3-col l2 w3-small "><span class=" w3-padding-small" style="width: 20px;height: 20px;background-color: '.$tab['col'].'" >'.$v.'</span> - '.$tab['n'].'</div>';
         }
         ?>
     </div>

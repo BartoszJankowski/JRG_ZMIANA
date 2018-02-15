@@ -20,7 +20,7 @@ if(!$dbUsers->checkSession($user)){
 	header('Location: '.$base_url.'/login.php');
 	exit;
 }
-
+$_SETTINGS->load($user->getJrgId());
 if(isset($_POST)){
 	$_POST = test_input($_POST);
 }

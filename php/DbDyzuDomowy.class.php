@@ -10,6 +10,8 @@ class DbDyzuDomowy extends DbConn {
 
 	private $tbl_dyzurydomowe;
 
+	private $zaladowaneDyzuryDomowe =array();
+
 	public function __construct() {
 		parent::__construct();
 		$this->tbl_dyzurydomowe = $this->tbl_prefix.'homeduties';
@@ -135,5 +137,41 @@ class DbDyzuDomowy extends DbConn {
 			$this->error = "Obiekt nie posiada poprawnego ID.";
 			return false;
 		}
+	}
+
+	public function loadDyzuryNaRok($jrg_id, $zmiana, $rok){
+		try {
+			$stmt =  $this->conn->prepare("SELECT id, dyzury, msc FROM ".$this->tbl_dyzurydomowe." 
+				WHERE jrg_id = :jrg_id AND zmiana = :zmiana AND rok = :rok ");
+			$stmt->bindParam(':jrg_id', $jrg_id);
+			$stmt->bindParam(':zmiana', $zmiana);
+			$stmt->bindParam(':rok', $rok);
+			$stmt->execute();
+			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+			if($result){
+				foreach ($result as $dane){
+					$this->zaladowaneDyzuryDomowe[] = new DyzuryDomowe($dane['id'],$zmiana,$rok,$dane['msc'],$dane['dyzury']);
+				}
+
+			} else {
+				$this->error = "Podano błedny login lub hasło.";
+			}
+		} catch (PDOException $e){
+			 $this->error = "Error: " . $e->getMessage();
+		}
+	}
+
+	public function hasFiremanHomeduty($str_id, $month, $day) : bool{
+		if(!empty($this->zaladowaneDyzuryDomowe)){
+			foreach ($this->zaladowaneDyzuryDomowe as $dyzury_domowe){
+				if($dyzury_domowe instanceof DyzuryDomowe){
+					if($dyzury_domowe->getMsc() == $month){
+						return $dyzury_domowe->czyStrazakMaDyzur($str_id, $day);
+					}
+				}
+			}
+		}
+		return false;
 	}
 }

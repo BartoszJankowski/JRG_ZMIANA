@@ -22,7 +22,8 @@ if(!$dbUsers->checkSession($user)){
 	header('Location: '.$base_url.'/login.php');
 	exit;
 }
-$dbSettings->load($user->getStrazak()->getJrgId());
+$_SETTINGS->load($user->getJrgId());
+
 $ldt = new LocalDateTime();
 
 if(isset($_POST)){
@@ -45,21 +46,21 @@ if(isset($_GET)){
 }
 
 
-$ddomowe = $dbDyzury->loadDyzuryZmianyNaMsc($user->getStrazak()->getJrgId(),$user->getStrazak()->getZmiana(),$ldt->getYear(), $ldt->getMonth());
+$ddomowe = $dbDyzury->loadDyzuryZmianyNaMsc($user->getJrgId(),$user->getStrazak()->getZmiana(),$ldt->getYear(), $ldt->getMonth());
 
 if($ddomowe==null){
 	$ddomowe = new DyzuryDomowe(null, $user->getStrazak()->getZmiana(), $ldt->getYear(), $ldt->getMonth());
 	$ddomowe->createEmpty();
-	$dbDyzury->addNewDD($ddomowe, $user->getStrazak()->getJrgId() );
+	$dbDyzury->addNewDD($ddomowe, $user->getJrgId() );
 }
 
 
-$ddomowe->setHarmo($dbharmo->getJrgharmos($user->getStrazak()->getJrgId(),$ldt->getYear() ));
-$ddomowe->setStrazacy($dbStrazacy->getZmianaListStrazacy($user->getStrazak()->getJrgId(), $user->getStrazak()->getZmiana()));
+$ddomowe->setHarmo($dbharmo->getJrgharmos($user->getJrgId(),$ldt->getYear() ));
+$ddomowe->setStrazacy($dbStrazacy->getZmianaListStrazacy($user->getJrgId(), $user->getStrazak()->getZmiana()));
 
 if(isset($_POST['saveDD'])){
 	$ddomowe->fillWithPostData($_POST);
-	if($dbDyzury->updateDD($user->getStrazak()->getJrgId(), $user->getStrazak()->getZmiana(), $ddomowe)){
+	if($dbDyzury->updateDD($user->getJrgId(), $user->getStrazak()->getZmiana(), $ddomowe)){
 		header('Location: '.$base_url.$_SERVER['PHP_SELF'].'?month='.$ldt->getMonth().'&year='.$ldt->getYear());
 	exit;
 	} else {

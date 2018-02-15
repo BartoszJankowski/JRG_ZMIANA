@@ -104,7 +104,7 @@ class Harmonogram {
 		$inner = '<td>'.$strazak->getNrPorz().'.</td><td>'.$strazak->toString().'</td>';
 		foreach ($this->miesiace[$month] as $nrDnia =>$dzien){
 			$color = get_harmo_val($dzien['v'])['col'];
-			$inner .= '<td class=" '.$color.' tdHarmCell"><label><input class="w3-hide harmoCheck" type="checkbox" name="'.$strazak->getStrazakId().'[]" value="'.$nrDnia.'" /><div class="harmoCell ">'.( $dzien['h']>0 ? '<b>'.$dzien['h'].'</b>': $dzien['h'] ).'</div></label></td>';
+			$inner .= '<td class="  tdHarmCell" style="background-color: '.$color.'"><label><input class="w3-hide harmoCheck" type="checkbox" name="'.$strazak->getStrazakId().'[]" value="'.$nrDnia.'" /><div class="harmoCell ">'.( $dzien['h']>0 ? '<b>'.$dzien['h'].'</b>': $dzien['h'] ).'</div></label></td>';
 
 		}
 		echo '<tr>'.$inner.'</tr>';
@@ -136,4 +136,8 @@ class Harmonogram {
 			$this->miesiace[$month][$day]['v'] = $change;
 		}
 	}
+
+
+
+
 }

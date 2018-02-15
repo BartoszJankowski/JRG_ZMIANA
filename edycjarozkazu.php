@@ -31,6 +31,8 @@ if(!$dbUsers->checkSession($user)){
 	header('Location: '.$base_url.'/login.php');
 	exit;
 }
+$_SETTINGS->load($user->getJrgId());
+
 if(!$user->isChef()){
     echo 'Musisz posiadac uprawnienia szefa aby edytować rozkaz.';
     echo '<a href="'.$base_url.'">Powrót</a>';

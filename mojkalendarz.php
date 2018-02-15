@@ -11,6 +11,7 @@ session_start();
 require 'php/config.php';
 $dbUsers = new DBUsers();
 $dbHarmo = new DBHarmonogramy();
+$dbDyzury = new DbDyzuDomowy();
 $user = new User();
 
 /** Sprawdza sesje i przekierwouje uzytkownika gdy nie zalogowany */
@@ -18,6 +19,8 @@ if(!$dbUsers->checkSession($user)){
 	header('Location: '.$base_url.'/login.php');
 	exit;
 }
+$_SETTINGS->load($user->getJrgId());
+
 
 if($user->getStrazak()){
 	$czas = new LocalDateTime();
@@ -27,6 +30,7 @@ if($user->getStrazak()){
 			$czas = new LocalDateTime($_GET['year'].'-'.$_GET['month'].'-1');
 	}
 
+	$dbDyzury->loadDyzuryNaRok($user->getJrgId(), $user->getStrazak()->getZmiana(),$czas->getYear() );
 	$kalendarz = new Kalendarz($czas->getYear());
 	$harmonogram = $dbHarmo->getHarmo($user->getStrazak(), $czas->getYear());
 } else {
@@ -72,7 +76,11 @@ require 'header.php';
 				$inn .= '<tr>';
 				while ($tygIterator->valid()){
 					if($monthIterator->valid() && $tygIterator->current() === $monthIterator->current()['t']){
-						$inn .= '<td class="zmiana-'.$monthIterator->current()['z'].' w3-display-container"><span class="w3-tiny w3-display-topleft">'.$monthIterator->current()['nr'].'</span><span class="w3-medium w3-display-bottomright">'.$harmonogram->getDayVal($i, $monthIterator->current()['nr']).'</span></td>';
+					    $dyzurBool = $dbDyzury->hasFiremanHomeduty($user->getStrazak()->getStrazakId(),$i, $monthIterator->current()['nr_0']);
+					    $dayVal = $harmonogram->getDayVal($i, $monthIterator->current()['nr_0']);
+					    $val = $dyzurBool ? 'Dd':$dayVal;
+                        //$val = $dayVal;
+						$inn .= '<td class="zmiana-'.$monthIterator->current()['z'].' w3-display-container"><span class="w3-tiny w3-display-topleft">'.$monthIterator->current()['nr'].'</span><span class="w3-medium w3-display-bottomright">'.$val.'</span></td>';
 						$monthIterator->next();
 					} else {
 						$inn .= '<td></td>';

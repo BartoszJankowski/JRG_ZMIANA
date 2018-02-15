@@ -14,8 +14,9 @@ class User {
 	public $sessionSet = false;
 	public $login;
 	private $session;
+
 	/**
-	 * Strazak class
+	 * @var Strazak
 	 */
 	public $strazak;
 
@@ -121,6 +122,9 @@ class User {
 	 * @return int
 	 */
 	public function getJrgId() {
+		if(!empty($this->strazak) ){
+			return $this->strazak->getJrgId();
+		}
 		return $this->jrg_id;
 	}
 

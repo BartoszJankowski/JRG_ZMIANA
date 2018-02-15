@@ -368,7 +368,14 @@ class DyzuryDomowe {
 			}
 		}
 		return false;
+	}
 
+	public function czyStrazakMaDyzur($strId, $day){
+
+		if(array_key_exists($day, $this->dyzury )){
+			return  $this->dyzury[$day]->checkIfExists($strId);
+		}
+		return false;
 	}
 }
 

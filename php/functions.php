@@ -133,6 +133,12 @@ function get_harmo_types(){
 }
 
 function get_harmo_values(){
+	$res = array();
+	foreach (DBJrgSettings::getHarmoValues() as $harmo_value){
+		$res[$harmo_value->getId()] = array('col'=>$harmo_value->getColor(),'n'=>$harmo_value->getName(),'opis'=>$harmo_value->getDesc());
+	}
+	return $res;
+	/*
 	return array(
 		'D'=>array('col'=>'w3-cyan','n'=>'Delegacja'),
 		'Ch'=>array('col'=>'w3-khaki','n'=>'Chorobowe'),
@@ -140,8 +146,15 @@ function get_harmo_values(){
 		'Uw'=>array('col'=>'w3-green','n'=>'Urlop wypoczynkowy'),
 		'O'=>array('col'=>'w3-pale-red','n'=>'Urlop okolicznościowy')
 	);
+	*/
 }
 function get_grafik_values(){
+	$res = array();
+	foreach (DBJrgSettings::getGrafValues() as $grafik_value){
+		$res[$grafik_value->getId()] = array('n'=>$grafik_value->getName(),'opis'=>$grafik_value->getDesc());
+	}
+	return $res;
+	/*
 	return array(
 		'Ws'=>array('col'=>'','n'=>'Wolna służba'),
 		'D'=>array('col'=>'','n'=>'Delegacja'),
@@ -152,6 +165,7 @@ function get_grafik_values(){
 		'PA'=>array('col'=>'','n'=>'Punkt alarmowy'),
 		'PD'=>array('col'=>'','n'=>'Podoficer')
 	);
+	*/
 }
 
 function get_harmo_val(string $v){
