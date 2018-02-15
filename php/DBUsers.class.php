@@ -31,7 +31,7 @@ class DBUsers extends DbConn {
 	            jrg_id INT(6),
 	            password CHAR(255) NOT NULL,
 	            session CHAR(255),
-	            datatime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	            datatime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	            previlages ENUM('SUPERADMIN','ADMIN','CHEF','USER') NOT NULL
 	            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
@@ -128,16 +128,17 @@ class DBUsers extends DbConn {
 	private function setSession($email, $hash){
 		try{
 			//$random = sha1($this->genPassword().microtime());
-			$stmt =  $this->conn->prepare("UPDATE ".$this->tbl_users." SET session = :sesId WHERE email = :email");
-			$stmt->bindParam(':sesId', $hash);
+			$stmt =  $this->conn->prepare("UPDATE ".$this->tbl_users." SET session = :session WHERE email = :email");
+			$stmt->bindParam(':session', $hash);
 			$stmt->bindParam(':email', $email);
 			$stmt->execute();
-
 			$_SESSION['login'] = $email;
-			$_SESSION['id'] = $hash;
+			$_SESSION['session'] = $hash;
+			return true;
 		} catch (PDOException $e){
 			$this->error = "Error: " . $e->getMessage();
 		}
+		return false;
 	}
 
 	/**
@@ -148,14 +149,25 @@ class DBUsers extends DbConn {
 	public function checkSession(User $user){
 		if($user->sessionSet){
 			try {
-				$stmt =  $this->conn->prepare("SELECT id,email,session,name,surname,jrg_id,previlages FROM ".$this->tbl_users." WHERE email = :email");
+				$stmt =  $this->conn->prepare("SELECT id,email,session,datatime,name,surname,jrg_id,previlages FROM ".$this->tbl_users." WHERE email = :email");
 				$stmt->bindParam(':email', $user->login);
 				$stmt->execute();
 				$result = $stmt->fetch(PDO::FETCH_ASSOC);
-				if($result && isset($result['session']) && $result['session'] === $user->sesId){
+				if($result && isset($result['session']) && $result['session'] === $user->getSession()){
 					$user->setuserData($result);
-					$user->logged = true;
-					return true;
+					//sprawdza czas ostatniej akcji, i jesli uzytkownik jest szefem to po przekroczeniu 30 min bezczynnosci wyloguje go
+					if($user->checkSessionTime()){
+						$user->logged = true;
+						$hashSession = sha1($this->genPassword().microtime());
+						if($this->setSession($user->login, $hashSession )){
+							$user->setSession($hashSession);
+						}
+						return true;
+					} else {
+						$this->destroySession($user);
+						return false;
+					}
+
 				}
 				$this->error = "Błedna sesja lub brak sesji.";
 			} catch (PDOException $e){
@@ -166,6 +178,7 @@ class DBUsers extends DbConn {
 		}
 		return false;
 	}
+
 
 	/**
 	 * Niszczy sesję
@@ -178,7 +191,7 @@ class DBUsers extends DbConn {
 				$stmt->bindParam(':email', $user->login);
 				$stmt->execute();
 				$result = $stmt->fetch(PDO::FETCH_ASSOC);
-				if($result && isset($result['session']) && $result['session'] === $user->sesId){
+				if($result && isset($result['session']) && $result['session'] === $user->getSession()){
 					$this->setSession($user->login, null);
 				}
 			} catch (\PDOException $ignored){}

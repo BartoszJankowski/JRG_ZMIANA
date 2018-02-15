@@ -24,7 +24,10 @@ class DBRozkazy extends DbConn {
 	            jrg_id INT(6) NOT NULL,
 	            data DATE NOT NULL,
 	            rozkaz TEXT,
-	            nr_rozkazu INT (3) NOT NULL
+	            edit_bool CHAR(4),
+	            edit_user INT(6),
+	            edit_time TIMESTAMP,
+	            CONSTRAINT ROZKAZ_ID UNIQUE(jrg_id,data)
 	        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
 			$this->conn->exec($sql);
@@ -63,13 +66,13 @@ class DBRozkazy extends DbConn {
 		}
 	}
 
-	public function FselectFinSzablony($jrg_id){
+	public function selectCurrentOrderTemplate($jrg_id){
 
 			try {
 				$stmt = $this->conn->prepare("SELECT id, szablon, dataSzablonu FROM ".$this->tbl_szablony_rozkazu." WHERE jrg_id = :jrg_id AND finished = 1");
 				$stmt->bindParam(':jrg_id',$jrg_id);
 				$stmt->execute();
-				$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+				$result = $stmt->fetch(PDO::FETCH_ASSOC);
 				if($result){
 					return $result;
 				}
@@ -113,6 +116,83 @@ class DBRozkazy extends DbConn {
 				$this->error = "Brak wybranego szablonu w bazie danych.";
 			}
 		}catch (PDOException $e){
+			$this->error = "DB error:".$e->getMessage();
+		}
+		return false;
+	}
+
+	public function saveSzablon($jrg_id, Szablon $szablon) : bool{
+		try {
+			$stmt = $this->conn->prepare("UPDATE ".$this->tbl_szablony_rozkazu." SET szablon = :szablon, finished = :finished WHERE jrg_id = :jrg_id AND id = :id");
+			$stmt->bindParam(':jrg_id',$jrg_id);
+			$stmt->bindParam(':id',$szablon->getId());
+			$stmt->bindParam(':finished',$szablon->getFinished());
+			$stmt->bindParam(':szablon',serialize($szablon->getObiektyHtml()));
+			$stmt->execute();
+			return true;
+		} catch (PDOException $e){
+			$this->error = "DB error:".$e->getMessage();
+		}
+		return false;
+	}
+
+	public function selectRozkaz( $jrg_id, LocalDateTime $date_time ) {
+		$data = $date_time->getMySqlDate();
+		try {
+			$stmt = $this->conn->prepare("SELECT id,rozkaz FROM ".$this->tbl_rozkazy." WHERE jrg_id=:jrg_id AND data=:data");
+			$stmt->bindParam(':jrg_id',$jrg_id);
+			$stmt->bindParam(':data',$data);
+			$stmt->execute();
+			$result = $stmt->fetch(PDO::FETCH_ASSOC);
+			if($result) {
+				$rozkaz = new Rozkaz();
+				$rozkaz->setDane($result['id'],$jrg_id, $date_time, $result['rozkaz']);
+				//print_r((unserialize($result['rozkaz']))['id'] );
+				return $rozkaz;
+			}
+		} catch (PDOException $e){
+			$this->error = $e;
+		}
+		return false;
+	}
+
+	public function saveRozkaz($jrg_id, Rozkaz $rozkaz) : bool{
+		//TODO: zamknąc edycję po poprawnym zapisie rozkazu
+		try{
+			if($rozkaz->getRozkazId()<0){
+				//dodać nowy rozkaz
+				$stmt = $this->conn->prepare("INSERT INTO ".$this->tbl_rozkazy." (jrg_id,data, rozkaz)
+						VALUES (:jrg_id, :data, :rozkaz)");
+				$stmt->bindParam(':jrg_id',$jrg_id );
+				$stmt->bindParam(':data',$rozkaz->getDate() );
+				$stmt->bindParam(':rozkaz',serialize($rozkaz->getDaneRozkazu()) );
+				$stmt->execute();
+				return true;
+			} else {
+				//TODO: nadpisac istniejący rozkaz
+				$stmt = $this->conn->prepare("UPDATE ".$this->tbl_rozkazy." SET rozkaz = :rozkaz WHERE jrg_id=:jrg_id AND id=:id");
+				$stmt->bindParam(':jrg_id',$jrg_id );
+				$stmt->bindParam(':id',$rozkaz->getRozkazId() );
+				$stmt->bindParam(':rozkaz',serialize($rozkaz->getDaneRozkazu()) );
+				$stmt->execute();
+				return true;
+			}
+		} catch (PDOException $e){
+			$this->error = $e;
+		}
+		return false;
+	}
+
+	public function hasActiveTemplate($jrg_id) : bool {
+		try {
+			$stmt = $this->conn->prepare("SELECT id FROM ".$this->tbl_szablony_rozkazu." WHERE jrg_id = :jrg_id AND finished = 1");
+			$stmt->bindParam(':jrg_id',$jrg_id);
+			$stmt->execute();
+			$result = $stmt->fetch(PDO::FETCH_ASSOC);
+			if($result){
+				return true;
+			}
+		} catch (PDOException $e){
 			$this->error = "DB error:".$e->getMessage();
 		}
 		return false;

@@ -18,6 +18,10 @@ class LocalDateTime extends DateTime {
 	public function getDate(){
 		return $this->format('d-m-Y');
 	}
+	public function getMySqlDate(){
+		return $this->format('Y-m-d');
+	}
+
 	public function unixTime(){
 		return time();
 	}
@@ -39,6 +43,21 @@ class LocalDateTime extends DateTime {
 
 	public function getDayOfMsc(){
 		return $this->format('j');
+	}
+
+	public function addDays($days) : LocalDateTime{
+		if($days>0)
+			$this->add(new DateInterval('P'.$days.'D'));
+		else
+			$this->sub(new DateInterval('P'.($days*-1).'D'));
+
+		return $this;
+	}
+
+	public function getTimeTillNow(){
+		$ltdTImestamp = (new LocalDateTime())->getTimestamp();
+		return $ltdTImestamp-$this->getTimestamp();
+
 	}
 
 }
