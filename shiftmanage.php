@@ -1,5 +1,4 @@
 <?php
-$activePage = "shiftmanage";
 /**
  * Created by PhpStorm.
  * User: Bartosz

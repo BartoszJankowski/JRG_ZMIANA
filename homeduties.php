@@ -1,5 +1,4 @@
 <?php
-$activePage = "homeduties";
 /**
  * Created by PhpStorm.
  * User: Bartosz
@@ -77,7 +76,7 @@ require 'header.php';
 
 //TODO: js editing
 ?>
-	<main class="w3-container">
+	<main >
         <form action="" method="get" >
             <input type="hidden" name="month" value="<?php echo $ldt->getMonth(); ?>"> <input type="hidden" name="year" value="<?php echo $ldt->getYear(); ?>">
             <h1 class="w3-center w3-border-bottom"><button name="mscAction" value="-1" type="submit" class="w3-button w3-xlarge"><i class="fa fa-fw fa-chevron-left"></i></button><span style="width: 25%;display: inline-block"><?php echo get_moth_name($ldt->getMonth()).' '.$ldt->getYear(); ?></span><button name="mscAction" value="1" type="submit" class="w3-button w3-xlarge"><i class="fa fa-fw fa-chevron-right"></i></button></h1>

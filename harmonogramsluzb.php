@@ -1,5 +1,4 @@
 <?php
-$activePage = "harmonogramsluzb";
 /**
  * Created by PhpStorm.
  * User: Bartosz
@@ -88,7 +87,7 @@ require 'header.php';
 
 
 ?>
-<main class="w3-container" xmlns="http://www.w3.org/1999/html">
+<main class="" xmlns="http://www.w3.org/1999/html">
     <form action="" method="get">
         <input type="hidden" name="month" value="<?php echo $month?>"> <input type="hidden" name="year" value="<?php echo $year ?>">
         <h1 class="w3-center"><button name="mscAction" value="-1" type="submit" class="w3-button w3-xlarge"><i class="fa fa-fw fa-chevron-left"></i></button><span style="width: 25%;display: inline-block"><?php echo get_moth_name($month).' '.$year; ?></span><button name="mscAction" value="1" type="submit" class="w3-button w3-xlarge"><i class="fa fa-fw fa-chevron-right"></i></button></h1>

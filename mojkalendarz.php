@@ -1,5 +1,4 @@
 <?php
-$activePage = "mojkalendarz";
 /**
  * Created by PhpStorm.
  * User: Bartosz

@@ -1,5 +1,4 @@
 <?php
-$activePage = "jrgmanage";
 /**
  * Created by PhpStorm.
  * User: Bartosz

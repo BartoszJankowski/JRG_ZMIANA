@@ -1,5 +1,4 @@
 <?php
-$activePage = "edycjarozkazu";
 /**
  * Created by PhpStorm.
  * User: Bartosz

@@ -1,5 +1,4 @@
 <?php
-$activePage = "grafiksluzb";
 /**
  * Created by PhpStorm.
  * User: Bartosz
@@ -73,7 +72,7 @@ $title = "Grafik";
 require 'header.php';
 ?>
 
-	<main class="w3-container" xmlns="http://www.w3.org/1999/html">
+	<main class="" xmlns="http://www.w3.org/1999/html">
 		<form action="" method="get" >
 			<input type="hidden" name="month" value="<?php echo $localDateTime->getMonth(); ?>"> <input type="hidden" name="year" value="<?php echo $localDateTime->getYear(); ?>">
 			<h1 class="w3-center">
