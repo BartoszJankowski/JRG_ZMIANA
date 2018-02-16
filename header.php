@@ -9,7 +9,8 @@
 
 
 $t = str_replace(array('/','.php'),'',$_SERVER['PHP_SELF']);
-$$t = ' w3-green ';
+$$t = ' active ';
+function isActivePage($nazwa){global $t, $$t; echo $$nazwa;}
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
@@ -40,16 +41,16 @@ $$t = ' w3-green ';
         </button>
                     <div class="collapse navbar-collapse nav__mobile" id="navbarSupportedContent">
                         <div class="navbar-nav nav__bar mr-auto">
-                            <div <?php if ($activePage =="main") {?> class="nav-item p-2 active" <?php } ?> class="nav-item p-2">
-                                    <a href="main.php" <?php if ($activePage =="main") {?> class="nav-link active" <?php } ?>class="nav-link" class="nav-link">
+                            <div class="nav-item p-2 <?php isActivePage('main') ?>">
+                                    <a href="main.php"  class="nav-link <?php isActivePage('main') ?>">
                                         <i class="fas fa-user nav__ico"></i>
                                             <p class="font-weight-light">Konto</p></a>
                             </div>
         		<?php 
                     if($user->isAdmin()): 
                 ?>
-                                <div <?php if ($activePage =="jrgmanage") {?> class="nav-item p-2 active" <?php } ?> class="nav-item p-2">
-                        			<a  href="jrgmanage.php" <?php if ($activePage =="jrgmanage") {?> class="nav-link active" <?php } ?> class="nav-link">
+                                <div class="nav-item p-2 <?php isActivePage('jrgmanage') ?>">
+                        			<a  href="jrgmanage.php" class="nav-link <?php isActivePage('jrgmanage') ?>">
                                         <i class="fas fa-sitemap nav__ico"></i>
                                             <p class="font-weight-light">Zarządzaj JRG</p></a>
                                 </div>  
@@ -58,46 +59,46 @@ $$t = ' w3-green ';
                                             if($user->isChef() ):
                                 		?>
 
-                                        <div <?php if ($activePage =="shiftmanage") {?> class="nav-item p-2 active" <?php } ?> class="nav-item p-2">
-                                			<a  href="shiftmanage.php" <?php if ($activePage =="shiftmanage") {?> class="nav-link active" <?php } ?> class="nav-link <?php echo $shiftmanage;?> ">
+                                        <div class="nav-item p-2 <?php isActivePage('shiftmanage') ?>">
+                                			<a  href="shiftmanage.php" class="nav-link <?php isActivePage('shiftmanage') ?> ">
                                                 <i class="fas fa-users nav__ico"></i>
                                                     <p class="font-weight-light">Zarządzaj zmianą</p></a>
                                         </div>
-                                            <div <?php if ($activePage =="grafiksluzb") {?> class="nav-item p-2 active" <?php } ?> class="nav-item p-2">
-                                            	<a href="grafiksluzb.php" <?php if ($activePage =="grafiksluzb") {?> class="nav-link active" <?php } ?> class="nav-link  <?php echo $grafiksluzb;?> ">
+                                            <div class="nav-item p-2 <?php isActivePage('grafiksluzb') ?>">
+                                            	<a href="grafiksluzb.php" class="nav-link <?php isActivePage('grafiksluzb') ?> ">
                                                     <i class="fas fa-newspaper nav__ico"></i>
                                                         <p class="font-weight-light">Grafik</p></a>
                                             </div>
-                                                <div <?php if ($activePage =="harmonogramsluzb") {?> class="nav-item p-2 active" <?php } ?> class="nav-item p-2">
-                                                    <a href="harmonogramsluzb.php" <?php if ($activePage =="harmonogramsluzb") {?> class="nav-link active" <?php } ?> class="nav-link  <?php echo $harmonogramsluzb;?> ">
+                                                <div class="nav-item p-2 <?php isActivePage('harmonogramsluzb') ?>">
+                                                    <a href="harmonogramsluzb.php" class="nav-link  <?php isActivePage('harmonogramsluzb') ?> ">
                                                         <i class="fas fa-history nav__ico"></i>
                                                             <p class="font-weight-light">Harmonogram</p></a>
                                                 </div>
-                                                    <div <?php if ($activePage =="edycjarozkazu") {?> class="nav-item p-2 active" <?php } ?> class="nav-item p-2">
-                                                        <a href="edycjarozkazu.php" <?php if ($activePage =="edycjarozkazu") {?> class="nav-link active" <?php } ?> class="nav-link  <?php echo $edycjarozkazu;?> ">
+                                                    <div  class="nav-item p-2 <?php isActivePage('rozkazpodglad') ?>">
+                                                        <a href="rozkazpodglad.php"  class="nav-link  <?php isActivePage('rozkazpodglad') ?> ">
                                                             <i class="fas fa-list-alt nav__ico"></i>
                                                                 <p class="font-weight-light">Rozkaz</p></a>
                                                     </div>
-                                                        <div <?php if ($activePage =="homeduties") {?> class="nav-item p-2 active" <?php } ?> class="nav-item p-2">
-                                                            <a href="homeduties.php" <?php if ($activePage =="homeduties") {?> class="nav-link active" <?php } ?> class="nav-link  <?php echo $homeduties;?> ">
+                                                        <div  class="nav-item p-2 <?php isActivePage('homeduties') ?>">
+                                                            <a href="homeduties.php"  class="nav-link <?php isActivePage('homeduties') ?> ">
                                                                 <i class="fas fa-bed nav__ico"></i>
                                                                      <p class="font-weight-light">Dyzury domowe</p></a>
                                                         </div>
                                                         
-                                                    		<?php endif; ?>
+                                            <?php endif; ?>
 
-                                                            <div <?php if ($activePage =="mojkalendarz") {?> class="nav-item p-2 active" <?php } ?> class="nav-item p-2">
-                                                                <a  href="mojkalendarz.php" <?php if ($activePage =="mojkalendarz") {?> class="nav-link active" <?php } ?> class="nav-link  <?php echo $mojkalendarz;?> ">
+                                                            <div  class="nav-item p-2 <?php isActivePage('mojkalendarz') ?>">
+                                                                <a  href="mojkalendarz.php"  class="nav-link  <?php isActivePage('mojkalendarz') ?> ">
                                                                     <i class="fas fa-calendar-alt nav__ico" aria-hidden="true"></i>
                                                                         <p class="font-weight-light">Kalendarz</P></a>
                                                             </div>
-                                                                <div <?php if ($activePage =="grafiksluzb") {?> class="nav-item p-2 active" <?php } ?> class="nav-item p-2">
-                                                                    <a  href="main.php?account_settings" <?php if ($activePage =="grafiksluzb") {?> class="nav-link active" <?php } ?> class="nav-link  <?php echo $main;?> ">
+                                                                <div  class="nav-item p-2 <?php isActivePage('ustawienia') ?>">
+                                                                    <a  href="ustawienia.php"  class="nav-link  <?php isActivePage('ustawienia') ?> ">
                                                                         <i class="fas fa-cog nav__ico"></i>
                                                                             <p class="font-weight-light">Ustawienia</p></a>
                                                                 </div>
                                                                      <div class="nav-item p-2 logout__icon">
-                                                                        <a href="logout.php?logout=1" class="nav-link  <?php echo $logout;?> ">
+                                                                        <a href="logout.php?logout=1" class="nav-link ">
                                                                             <i class="fas fa-sign-out-alt nav__ico"></i>
                                                                               <p class="font-weight-light">Wyloguj się</p></a>
                                                                     </div>

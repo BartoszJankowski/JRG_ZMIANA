@@ -1,4 +1,6 @@
 <?php
+$activePage = "rozkazpodglad";
+
 /**
  * Created by PhpStorm.
  * User: Bartosz
