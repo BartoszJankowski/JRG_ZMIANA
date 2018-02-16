@@ -271,6 +271,10 @@ class Uprawnienie extends Value{
 	public function setColor( $color ): void {
 		$this->c = $color;
 	}
+
+	public function getValueName(): string {
+		return 'upr_'.$this->id;
+	}
 }
 
 class GrafikValue extends Value{
@@ -314,6 +318,9 @@ class GrafikValue extends Value{
 	public function printLiElement(){
 
 		echo '<li class="w3-padding"><span class="w3-border">'.$this->id.'</span> '.$this->getName().' <div class="w3-small w3-center"><i>'.$this->getDesc().'</i></div></li>';
+	}
+	public function getValueName(): string {
+		return 'grafik_'.$this->id;
 	}
 }
 
@@ -371,6 +378,10 @@ class HarmoValue extends Value {
 
 		echo '<li class="w3-padding"><span class="w3-padding" style="background-color: '.$this->getColor().'">'.$this->id.'</span> '.$this->getName().' <div class="w3-small w3-center"><i>'.$this->getDesc().'</i></div></li>';
 	}
+
+	public function getValueName(): string {
+		return 'harmo_'.$this->id;
+	}
 }
 
 abstract class Value {
@@ -412,5 +423,7 @@ abstract class Value {
 	public function setId( $id ): void {
 		$this->id = $id;
 	}
+
+	public abstract function getValueName(): string ;
 }
 

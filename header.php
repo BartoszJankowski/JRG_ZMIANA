@@ -24,7 +24,7 @@ function isActivePage($nazwa){global $t, $$t; echo $$nazwa;}
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
             <link rel="stylesheet" type="text/css" href="css/main.css" />
-            <link rel="stylesheet" type="text/css" href="css/maine.css" />
+            <link rel="stylesheet" type="text/css" href="css/maine.css?ver=1.1" />
                 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" /> 
                     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&amp;subset=latin-ext" rel="stylesheet">
                         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -34,7 +34,7 @@ function isActivePage($nazwa){global $t, $$t; echo $$nazwa;}
 </head>
 
 <body >
-<header class="w3-top"> 
+<header class="w3-top">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
