@@ -26,30 +26,45 @@ if(isset($_GET)){
 }
 
 
-if(  isset($_GET['manage_jrg']) && $user->isAdmin() ) {
-	$dbJednostki->selectJrg( $_GET['manage_jrg'] );
-	$_SETTINGS->load($dbJednostki->getSelectedId());
-	if(isset($_POST['addUpr'])){
-	    if($_SETTINGS->addUpr($_POST)){
-		    header('Location: '.$base_url.$_SERVER['REQUEST_URI']);
-		    exit;
-	    }
-    }
-    if(isset($_POST['addharmoVal'])){
-	    if($_SETTINGS->addHarmoValue($_POST)){
-		    header('Location: '.$base_url.$_SERVER['REQUEST_URI']);
-		    exit;
-        }
-    }
-	if(isset($_POST['addgrafVal'])){
-		if($_SETTINGS->addGrafValue($_POST)){
-			header('Location: '.$base_url.$_SERVER['REQUEST_URI']);
-			exit;
+if(   $user->isAdmin() ) {
+	$list = $dbJednostki->getJrgListForAdmin($user);
+	if(count($list)==1){
+		$dbUsers->setTempJrgId($list[0]['id']);
+		$list = array();
+    } else if(isset($_GET['manage_jrg'])) {
+		$dbUsers->setTempJrgId($user,$_GET['manage_jrg']);
+	}
+
+	if($user->getAdminJrgId()>0){
+		$dbJednostki->selectJrg( $user->getAdminJrgId() );
+
+		$_SETTINGS->load($dbJednostki->getSelectedId());
+		if(isset($_POST['addUpr'])){
+			if($_SETTINGS->addUpr($_POST)){
+				header('Location: '.$base_url.$_SERVER['REQUEST_URI']);
+				exit;
+			}
+		}
+		if(isset($_POST['addharmoVal'])){
+			if($_SETTINGS->addHarmoValue($_POST)){
+				header('Location: '.$base_url.$_SERVER['REQUEST_URI']);
+				exit;
+			}
+		}
+		if(isset($_POST['addgrafVal'])){
+			if($_SETTINGS->addGrafValue($_POST)){
+				header('Location: '.$base_url.$_SERVER['REQUEST_URI']);
+				exit;
+			}
+		}
+		if(isset($_POST['uprDelete'])){
+			$_SETTINGS->deleteUpr($_POST['deleteUpr']);
 		}
 	}
-    if(isset($_POST['uprDelete'])){
-	    $_SETTINGS->deleteUpr($_POST['deleteUpr']);
-    }
+
+} else {
+    echo 'Nie posiadasz odpowiednich uprawnień do przebywania na tej stronie.';
+    exit;
 }
 
 
@@ -76,19 +91,21 @@ require 'header.php';
 	<!--  PANEL ADMINA -->
 	<?php if($user->isAdmin()): ?>
 		<div id="manageJrg">
+            <?php if(!empty($list)) : ?>
 			<div id="list_jrg" class="w3-border-bottom w3-row-padding">
 				<h5>Zarządzaj jednostką: </h5>
 				<?php
-				$list = $dbJednostki->getJrgListForAdmin($user);
 				foreach ($list as $jrg){
 					$dbJednostki->printJrgBtn($jrg);
 				}
 				?>
 			</div>
-			<?php	if($dbJednostki->getSelectedId()>0) : ?>
+			<?php endif;
+			    if($dbJednostki->getSelectedId()>0) :?>
                 <div class="w3-bar w3-black">
                     <a href="#listaStrazakow"  class="w3-bar-item w3-hover-green settings_bars">Lista strażaków</a>
                     <a href="#zmienneJrg" class="w3-bar-item w3-hover-green settings_bars">Ustawienia zmiennych</a>
+                    <a href="szablonrozkazu.php" class="w3-bar-item w3-hover-green" data-toggle="tooltip" data-placement="bottom" title="Edycja szablonu">Szablon rozkazu</a>
                 </div>
             <div  class="jrg_settings w3-row listaStrazakow">
                 <div class="w3-quarter w3-border">

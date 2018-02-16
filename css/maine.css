@@ -1,6 +1,6 @@
 main {
   min-height: 125vh !important;
-  margin-top: 80px;
+  margin: 80px auto 60px auto;
   background-image: url(../img/psp_logo_35.png);
   background-repeat: no-repeat;
   background-position: center; }

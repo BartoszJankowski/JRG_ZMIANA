@@ -29,6 +29,7 @@ class DBUsers extends DbConn {
 	            name CHAR(255),
 	            surname CHAR(255),
 	            jrg_id INT(6),
+	            temp_jrg INT(6),
 	            password CHAR(255) NOT NULL,
 	            session CHAR(255),
 	            datatime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -93,7 +94,7 @@ class DBUsers extends DbConn {
 
 			if($result && isset($result['password'])){
 				if(password_verify($password, $result['password'])){
-					$this->setSession($email, sha1($this->genPassword().microtime()) );
+					$this->setSession($email, sha1($this->genPassword().microtime()), true );
 					return true;
 				} else {
 					$this->error = "Podano błedny login lub hasło.";
@@ -125,12 +126,18 @@ class DBUsers extends DbConn {
 	 * oraz ID sesji które zapisuje w bazie danych uzytkownika
 	 * @void
 	 */
-	private function setSession($email, $hash){
+	private function setSession($email, $hash, bool $tempDestroy = false){
 		try{
 			//$random = sha1($this->genPassword().microtime());
-			$stmt =  $this->conn->prepare("UPDATE ".$this->tbl_users." SET session = :session WHERE email = :email");
+			if($tempDestroy){
+				$sql = ', temp_jrg = 0';
+			} else {
+				$sql = '';
+			}
+			$stmt =  $this->conn->prepare("UPDATE ".$this->tbl_users." SET session = :session".$sql." WHERE email = :email");
 			$stmt->bindParam(':session', $hash);
 			$stmt->bindParam(':email', $email);
+
 			$stmt->execute();
 			$_SESSION['login'] = $email;
 			$_SESSION['session'] = $hash;
@@ -150,7 +157,7 @@ class DBUsers extends DbConn {
 
 		if($user->sessionSet){
 			try {
-				$stmt =  $this->conn->prepare("SELECT id,email,session,datatime,name,surname,jrg_id,previlages FROM ".$this->tbl_users." WHERE email = :email");
+				$stmt =  $this->conn->prepare("SELECT id,email,session,datatime,name,surname,jrg_id,temp_jrg,previlages FROM ".$this->tbl_users." WHERE email = :email");
 				$stmt->bindParam(':email', $user->login);
 				$stmt->execute();
 				$result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -193,7 +200,7 @@ class DBUsers extends DbConn {
 				$stmt->execute();
 				$result = $stmt->fetch(PDO::FETCH_ASSOC);
 				if($result && isset($result['session']) && $result['session'] === $user->getSession()){
-					$this->setSession($user->login, null);
+					$this->setSession($user->login, null, true);
 				}
 			} catch (\PDOException $ignored){}
 		}
@@ -480,6 +487,20 @@ class DBUsers extends DbConn {
 	}
 
 
+	public function setTempJrgId(User $user,$temp_jrg){
+		//TODO: sprawdzic czy user admin moze miec ten nr jrg jako TEMP (musi byc adminem jrg)
+		try{
+			$stmt =  $this->conn->prepare("UPDATE ".$this->tbl_users." SET temp_jrg = :temp_jrg WHERE id = :id");
+			$stmt->bindParam(':temp_jrg', $temp_jrg);
+			$stmt->bindParam(':id', $user->getId());
+			$stmt->execute();
+			$user->setTempJrgId($temp_jrg);
+			return $user;
+		} catch (PDOException $e){
+			//TODO: log error
+			$this->error = $e->getMessage();
+		}
+	}
 
 
 }

@@ -7,7 +7,7 @@
  */
 
 class Szablon {
-
+	private $createdOrders  =0;
 
 	protected $id;
 	protected $jrg_id;
@@ -84,7 +84,16 @@ class Szablon {
 
 	}
 
+	public function setNumOfCreatedOrders($num = null){
+		if($num!=null && $num>0){
+			$this->createdOrders = $num;
+		}
+	}
 
+
+	public function getCreatedOrdersNum(): int {
+		return $this->createdOrders;
+	}
 
 }
 

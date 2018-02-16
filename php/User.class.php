@@ -15,6 +15,7 @@ class User {
 	public $login;
 	private $session;
 
+
 	/**
 	 * @var Strazak
 	 */
@@ -22,7 +23,7 @@ class User {
 
 
 
-	private $id, $email, $name, $surname, $jrg_id, $dateTime, $previlages;
+	private $id, $email, $name, $surname, $jrg_id, $dateTime, $previlages, $tempJrgId;
 
 	/**
 	 * User constructor.
@@ -58,6 +59,7 @@ class User {
 			$this->name       = $tab['name'];
 			$this->surname    = $tab['surname'];
 			$this->jrg_id     = $tab['jrg_id'];
+			$this->tempJrgId = $tab['temp_jrg'];
 			$this->dateTime   = $tab['datatime'];
 			$this->previlages = $tab['previlages'];
 			$dbStr = new DBStrazacy();
@@ -122,10 +124,21 @@ class User {
 	 * @return int
 	 */
 	public function getJrgId() {
+
 		if(!empty($this->strazak) ){
 			return $this->strazak->getJrgId();
 		}
 		return $this->jrg_id;
+	}
+
+	public function getAdminJrgId(){
+		if($this->isAdmin() && !empty($this->tempJrgId)){
+			return $this->tempJrgId;
+		}
+		return -1;
+	}
+	public function setTempJrgId($jrg_id){
+		$this->tempJrgId = $jrg_id;
 	}
 
 

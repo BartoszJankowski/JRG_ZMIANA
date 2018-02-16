@@ -9,17 +9,21 @@
 session_start();
 require 'php/config.php';
 $dbUsers     = new DBUsers();
-//$dbJednostki = new DBJednostki();
-//$dbStrazacy = new DBStrazacy();
 $user = new User();
 $dbJednostki = new DBJednostki();
 $dbRozkazy = new DBRozkazy();
 $ltd = new LocalDateTime();
 $info = '';
+
 if(!$dbUsers->checkSession($user)){
 	header('Location: '.$base_url.'/login.php');
 	exit;
 }
+if(!$user->isAdmin()){
+   echo 'Nie masz odpowiednich uprawnień do edycji tej strony.';
+   exit;
+}
+
 $_SETTINGS->load($user->getJrgId());
 
 
@@ -37,26 +41,20 @@ if(isset($_GET['start'])){
 		header('Location: '.$base_url.$_SERVER['PHP_SELF'].'?edit='.$szablon->getId());
 		exit;
 	} else {
-		$info = '<h2>Nie udało sie utworzyć szabnlonu</h2><p>'.$dbRozkazy->error.'</p>';
+		$info = '<h2>Nie udało sie utworzyć szablonu</h2><p>'.$dbRozkazy->error.'</p>';
 	}
 } elseif(isset($_GET['edit'])){
-	$szablon = new Szablon($user->getJrgId());
-	$dbJednostki->selectJrg($user->getJrgId());
-	if(!$dbRozkazy->getSzablon($user->getJrgId(), $_GET['edit'], $szablon) )
+	$szablon = new Szablon($user->getAdminJrgId());
+	$dbJednostki->selectJrg($user->getAdminJrgId());
+	if(!$dbRozkazy->getSzablon($user->getAdminJrgId(), $_GET['edit'], $szablon) )
 	{
 		$szablon = false;
 	}
+} else {
+    $szablony = $dbRozkazy->getSzablony($user->getAdminJrgId());
 }
 
 /*
-  <div class="" style="text-align: right;">
-                    <? echo $dbJednostki->getSelectedCity().', dnia '.$ltd->getDate().'r.'; ?>
-                </div>
-                <div class="w3-center">
-                    <h2 class="w3-center">ROZKAZ DZIENNY NR <?php echo '/'.$ltd->getYear(); ?></h2>
-
-                </div>
- */
 
 try {
     if(class_exists("HtmlObj", false)){
@@ -196,7 +194,7 @@ try {
 }
 
 
-
+*/
 
 
 
@@ -204,14 +202,50 @@ $title = "Szablon rozkazu";
 require 'header.php';
 ?>
 <main>
-	<?php
-	echo $info;
-		if(!isset($_GET['edit'])) :
-	?>
-	<form action="" method="get">
-		<button type="submit" name="start" value="1">Utwórz nowy szablon</button>
-	</form>
-	<?  elseif($szablon) :
+    <?php
+        echo $info;
+        ?>
+    <div class="w3-row" style="background-color: rgba(0,0,0,0.1)">
+        <h3>Szablony rozkazu: </h3>
+        <?php
+            if(!isset($_GET['edit'])) {
+
+	            foreach ($szablony as  $szbl){
+
+		            if($szbl instanceof  Szablon){
+			            echo '<div class="w3-col l2 m2 s2 w3-border w3-padding w3-margin">
+                                    <div>Data utworzenia: <b>'.$szbl->getDataSzablonu().'</b></div>
+                                    <div>Szablon id: <b>'.$szbl->getId().'</b></div>
+                                    <div>Aktywny: <b>'.(($szbl->getFinished())?'TAK':'NIE').'</b></div>
+                                    <div>Rozkazy dzienne: <b>'.$szbl->getCreatedOrdersNum().'</b></div>
+                                    <div>
+                                     <form action="" method="get">
+                                        <button type="submit" name="edit" value="'.$szbl->getId().'">Edytuj</button>
+                                    </form>
+                                    </div>
+                               </div>';
+		            }
+
+	            }
+            }
+        ?>
+        <div class="w3-col l1 m1 s1 w3-border w3-padding w3-margin">
+        <form action="" method="get">
+            <button type="submit" name="create" value="1">Utwórz nowy szablon</button>
+        </form>
+        </div>
+    </div>
+	<?php  if(isset($_GET['create'])) : ?>
+    <div class="w3-container">
+        <h3>Nowy szablon</h3>
+        <p>Rozpocznij tworzenie szablonu rozkazu od podstawowych ustawień nagłówka i stopki rozkazu oraz ilości sekcji.</p>
+        <form  action="" method="post">
+            <h4>Nagłówek</h4>
+
+        </form>
+    </div>
+
+    <?php elseif($szablon) :
 		echo '<p>Edycja szablonu '.$szablon->getDataSzablonu().'/'.$szablon->getId().'</p>';
 
 		?>
@@ -262,12 +296,7 @@ require 'header.php';
 
         </div>
 
-	<?php  else : ?>
-		<h1>Podczas wykonywania żadania wystapił bład:</h1>
-	<?
-		echo  '<p>'.$dbRozkazy->error.'</p>';
-		endif;
-	?>
+	<?php endif; ?>
 </main>
 <?php
 
