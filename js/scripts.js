@@ -1,3 +1,6 @@
+
+
+
     $("#print").click(function () {
         window.print();
     });
@@ -9,7 +12,7 @@ $(".login__icon").mouseleave(function () {
       $(".register__box").fadeOut(400);
 
 });
-
+/*
     $("#formRegister").validate({
         rules: {
             login : {
@@ -27,7 +30,7 @@ $(".login__icon").mouseleave(function () {
             }
         }
     });
-
+*/
 $(".nextMsc").click(function () {
         var tabs = $('.kalendar-div').toArray();
         var parentDiv = $(this).parent().parent().get(0);

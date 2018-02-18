@@ -29,7 +29,8 @@ $proceedTime = round(microtime(true) - $timeStart,3);
 
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
-        $('[data-toggle="popover"]').popover({content:createSelect})
+        $('button[data-toggle="popover"]').popover({content:createSelect});
+        $('.table-calendar td[data-toggle="popover"]').popover({content:addInfo});
 
     });
 
@@ -43,6 +44,10 @@ $proceedTime = round(microtime(true) - $timeStart,3);
             '</select>' +
             '<button type="submit" name="editHarmoType" class="w3-input" value="'+this.value+'" >Zmień</button>' +
             '</form>';
+    }
+
+    function addInfo(){
+        console.log(this);
     }
 
 
