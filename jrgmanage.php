@@ -101,7 +101,8 @@ require 'header.php';
 				?>
 			</div>
 			<?php endif;
-			    if($dbJednostki->getSelectedId()>0) :?>
+			    if($dbJednostki->getSelectedId()>0) 
+            :?>
                 <div class="w3-bar w3-black">
                     <a href="#listaStrazakow"  class="w3-bar-item w3-hover-green settings_bars">Lista strażaków</a>
                     <a href="#zmienneJrg" class="w3-bar-item w3-hover-green settings_bars">Ustawienia zmiennych</a>
@@ -322,7 +323,7 @@ require 'header.php';
                  </div>
              </div>
 
-            <? endif;   ?>
+            <?php endif;   ?>
         </div>
 		<!-- KONIEC PANELU ADMINA -->
 	<?php endif; ?>
