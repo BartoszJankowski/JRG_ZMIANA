@@ -45,7 +45,13 @@ $proceedTime = round(microtime(true) - $timeStart,3);
     }
 
     function addInfo(){
-        console.log(this);
+        console.log();
+
+        return '<form action="" method="post">' +
+            '<input type="hidden" name="data" value="'+$(this).attr("data-jrg")+'">' +
+            '<textarea class="w3-input w3-border" name="info" >'+$(this).attr("data-val2")+'</textarea>' +
+            '<button type="submit" class="w3-input" name="addUserInfo">Zapisz</button> ' +
+            '</form>';
     }
 
 

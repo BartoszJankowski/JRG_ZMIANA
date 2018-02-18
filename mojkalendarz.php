@@ -33,6 +33,16 @@ if($user->getStrazak()){
 	$dbDyzury->loadDyzuryNaRok($user->getJrgId(), $user->getStrazak()->getZmiana(),$czas->getYear() );
 	$kalendarz = new Kalendarz($czas->getYear());
 	$harmonogram = $dbHarmo->getHarmo($user->getStrazak(), $czas->getYear());
+	if(isset($_POST['addUserInfo'])){
+	    $dataPost = new LocalDateTime($_POST['data']);
+		if($harmonogram->setV2($dataPost,$_POST['info'] )){
+			if($dbHarmo->changeHarmo($czas->getYear(),$user->getStrazak()->getStrazakId(),$harmonogram)){
+			   // echo 'zapisano';
+            } else {
+			    $info = $dbHarmo->getError();
+            }
+        }
+    }
 } else {
 	$info = '<div class="w3-container"><h1>Nie zostałeś przypisany !</h1><p>Twoje konto nie zostało powiązane jeszcze z istniejącym profilem strażaka. Skontaktuj się z administratorem JRG lub swoim szefem zmiany aby to zrobił.</p></div>';
 }
@@ -84,6 +94,7 @@ require 'header.php';
 					if($monthIterator->valid() && $tygIterator->current() === $monthIterator->current()['t']){
 					    $dyzurBool = $dbDyzury->hasFiremanHomeduty($user->getStrazak()->getStrazakId(),$msc, $monthIterator->current()['nr_0']);
 					    $dayVal = $harmonogram->getDayVal($msc, $monthIterator->current()['nr_0']);
+					    $dayVal2 =  $harmonogram->getDayVal2($msc, $monthIterator->current()['nr_0']);
 					    $val = $dyzurBool ? 'Dd':$dayVal;
 					    $tdDzis = '';
 					    if($dataDzis->getYear() == $czas->getYear()){
@@ -93,11 +104,16 @@ require 'header.php';
                                 }
                             }
                         }
+                        if($dayVal2){
+					        $val2ico = '<i class="fas fa-comment-alt w3-display-topright"></i>';
+                        } else {
+	                        $val2ico = '';
+                        }
                         //$val = $dayVal;
-						$inn .= '<td data-toggle="popover" title="Dodaj notkę" data-placement="bottom" class="zmiana-'.$monthIterator->current()['z'].' '.$tdDzis.' w3-display-container"><span class="w3-tiny w3-display-topleft">'.$monthIterator->current()['nr'].'</span><span class="w3-medium w3-display-bottomright">'.$val.'</span></td>';
+						$inn .= '<td data-toggle="popover" data-html="true" data-val2="'.$dayVal2.'" data-jrg="'.$dataDzis->getYear().'-'.$msc.'-'.$monthIterator->current()['nr'].'" title="Dodaj notatkę dla szefa zmiany" data-placement="bottom" class="zmiana-'.$monthIterator->current()['z'].' '.$tdDzis.' w3-display-container"><span class="w3-tiny w3-display-topleft">'.$monthIterator->current()['nr'].'</span>'.$val2ico.'<span class="w3-medium w3-display-bottomright">'.$val.'</span></td>';
 						$monthIterator->next();
 					} else {
-						$inn .= '<td data-toggle="popover" title="Dodaj notkę"  data-placement="bottom"  ></td>';
+						$inn .= '<td></td>';
 					}
 					$tygIterator->next();
 				}

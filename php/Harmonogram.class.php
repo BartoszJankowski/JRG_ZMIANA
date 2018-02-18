@@ -128,6 +128,15 @@ class Harmonogram {
 		}
 		return false;
 	}
+	public function getDayVal2($month, $day){
+		if(array_key_exists($month, $this->miesiace)){
+			if(array_key_exists($day,$this->miesiace[$month] )){
+				return $this->miesiace[$month][$day]['v2'];
+			}
+		}
+		return false;
+	}
+
 
 
 
@@ -147,6 +156,17 @@ class Harmonogram {
 			}
 			$this->miesiace[$month][$day]['v'] = $change;
 		}
+	}
+
+	public function setV2(LocalDateTime $ltd, string $info) : bool{
+		if(array_key_exists($ltd->getMonth(),$this->miesiace)){
+			if(array_key_exists($ltd->getDayOfMsc()-1,$this->miesiace[$ltd->getMonth()])){
+				//stripslashesh itp -already done in POST input_check
+				$this->miesiace[$ltd->getMonth()][$ltd->getDayOfMsc()-1]['v2'] = $info;
+				return true;
+			}
+		}
+		return false;
 	}
 
 
