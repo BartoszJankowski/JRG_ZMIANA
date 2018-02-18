@@ -43,7 +43,9 @@ $style = '
         border:2px solid red !important;  
     }
 ';
+
 $title = "Kalendarz";
+
 require 'header.php';
 ?>
 

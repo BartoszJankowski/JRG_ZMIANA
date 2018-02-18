@@ -60,11 +60,11 @@ $res = $jednostki->getJrgList();
                 </button>
                   <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <div class="navbar-nav mr-auto">
-                          <div class="nav-item p-2">
-                            <a class="nav-link " href="<?php echo $base_url; ?>">
-                                <i class="fas fa-home nav__ico"></i>
-                                    <p class="font-weight-light">Strona główna</p></a>
-                          </div>
+                           <div class="nav-item p-2 add__user active">
+                                <a class="nav-link active" href="#">
+                                    <i class="fas fa-user-plus  nav__ico"></i>
+                                        <p class="font-weight-light">Rejestracja</p></a>
+                        </div>
                           <?php if($user->logged):?>
 
                         <div class="nav-item p-2 logout__icon">
@@ -73,11 +73,11 @@ $res = $jednostki->getJrgList();
                                     <p class="font-weight-light">Wyloguj się</p></a>
                           </div>
                            <?php else : ?>
-                        <div class="nav-item p-2 login__icon active">
-                                <a class="nav-link active" href="#">
-                                    <i class="fas fa-user-plus  nav__ico"></i>
-                                        <p class="font-weight-light">Rejestracja</p></a>
-                        </div>
+                            <div class="nav-item p-2 login__icon">
+                            <a class="nav-link" href="<?php echo $base_url; ?>">
+                                <i class="fas fa-home nav__ico"></i>+
+                                    <p class="font-weight-light">Dodaj jednostkę</p></a>
+                          </div>
                            <?php endif; ?>
                        
                     </div>

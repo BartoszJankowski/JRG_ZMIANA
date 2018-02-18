@@ -322,7 +322,7 @@ require 'header.php';
                  </div>
              </div>
 
-            <? endif;   ?>
+            <?php endif;  ?>
         </div>
 		<!-- KONIEC PANELU ADMINA -->
 	<?php endif; ?>

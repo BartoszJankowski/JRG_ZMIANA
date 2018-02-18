@@ -90,10 +90,10 @@ require 'header.php';
 				<input type="hidden" name="data" value="<? echo $ltd->getMySqlDate(); ?>">
 				<button  class="w3-input w3-margin-top"  type="submit" name="edit">Rozpocznij edycję</button>
 			</form>
-			<? endif; ?>
+			<?php endif; ?>
 		</div>
 	</div>
-	<? endif; ?>
+	<?php endif; ?>
 </main>
 
 <?php

@@ -41,8 +41,6 @@ if(isset($_GET)){
 		header('Location: '.$base_url.$_SERVER['PHP_SELF'].'?month='.$localDateTime->getMonth().'&year='.$localDateTime->getYear());
 		exit;
     }
-
-
 }
 
 $month= $localDateTime->getMonth() ;
@@ -63,7 +61,8 @@ if(isset($_GET['createHarmo'])){
 		    $harmonogramy[$strazak->getStrazakId()] = $harmonogram;
 		}
     }
-} elseif(isset($_POST['editHarmoType'])){
+} 
+elseif(isset($_POST['editHarmoType'])){
     $idStr = $_POST['editHarmoType'];
     if(is_numeric($idStr)){
         if(array_key_exists($idStr, $harmonogramy)){
