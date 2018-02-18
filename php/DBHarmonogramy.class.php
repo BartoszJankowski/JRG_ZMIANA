@@ -76,7 +76,6 @@ class DBHarmonogramy extends DbConn {
 			$this->error = "DB error:".$e->getMessage();
 		}
 		$harmo =  new Harmonogram($rok);
-		$harmo->genHarmoForStrazak($strazak);
 		return $harmo;
 	}
 

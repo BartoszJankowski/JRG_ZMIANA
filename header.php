@@ -28,9 +28,6 @@ function isActivePage($nazwa){global $t, $$t; echo $$nazwa;}
                 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" /> 
                     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&amp;subset=latin-ext" rel="stylesheet">
                         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="/js/jquery.validate.min.js"></script>
     <style>
         <?php  echo $style; ?>
     </style>
