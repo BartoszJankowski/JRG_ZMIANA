@@ -141,21 +141,6 @@ require 'header.php';
                             <label class="w3-text-gray">Imię</label>
                             <input class="w3-input" type="text" name="imie"  value="<?php echo $edytowanyStrazak->getImie(); ?>" />
                         </div>
-
-                        <div>
-                            <label class="w3-text-gray">Harmonogram</label>
-                            <select class="w3-select" name="typHarmo">
-                                <?php
-                                foreach (get_harmo_types() as $typ=>$val){
-                                    if($edytowanyStrazak->getHarmoType()==$typ){
-	                                    echo '<option selected value="'.$typ.'">'.$val[0].'</option>';
-                                    } else{
-	                                    echo '<option value="'.$typ.'">'.$val[0].'</option>';
-                                    }
-                                }
-                                ?>
-                            </select>
-                        </div>
                         <div>
                             <label class="w3-text-gray">Kolor</label>
                             <input class="w3-input" type="color" name="kolor" value="<?php echo $edytowanyStrazak->getKolor(); ?>" />
@@ -166,9 +151,9 @@ require 'header.php';
 	                        foreach ( DBJrgSettings::getUprawnienia() as $uprawnienie ) {
 
 	                            if(array_search($uprawnienie->getId(),$edytowanyStrazak->getUprawnienia())!==false)
-		                            echo '<label><input type="checkbox" name="uprawnienia[]" value="'.$uprawnienie->getId().'" checked  /><i class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'" ></i> '.$uprawnienie->getName().'</label><br>';
+		                            echo '<label><input type="checkbox" name="uprawnienia[]" value="'.$uprawnienie->getId().'" checked  /><msc class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'" ></msc> '.$uprawnienie->getName().'</label><br>';
 	                            else
-	                                echo '<label><input type="checkbox" name="uprawnienia[]" value="'.$uprawnienie->getId().'"/><i class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'" ></i> '.$uprawnienie->getName().'</label><br>';
+	                                echo '<label><input type="checkbox" name="uprawnienia[]" value="'.$uprawnienie->getId().'"/><msc class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'" ></msc> '.$uprawnienie->getName().'</label><br>';
 
 	                        }
 
@@ -254,17 +239,6 @@ require 'header.php';
                             <label class="w3-text-gray">Imię</label>
                             <input class="w3-input" type="text" name="imie"  />
                         </div>
-                        <div>
-                            <label class="w3-text-gray">Harmonogram</label>
-                            <select class="w3-select" name="typHarmo">
-			                    <?php
-			                    foreach (get_harmo_types() as $typ=>$val){
-
-				                    echo '<option value="'.$typ.'">'.$val[0].'</option>';
-			                    }
-			                    ?>
-                            </select>
-                        </div>
 
                         <div>
                             <label class="w3-text-gray">Kolor</label>
@@ -274,7 +248,7 @@ require 'header.php';
                             <label class="w3-text-gray">Zaznacz uprawnienia pracownika: </label><br>
                             <?php
                             foreach ( DBJrgSettings::getUprawnienia() as $uprawnienie ) {
-                                echo '<label><input type="checkbox" name="uprawnienia[]" value="'.$uprawnienie->getId().'" /><i class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'" ></i> '.$uprawnienie->getName().'</label><br>';
+                                echo '<label><input type="checkbox" name="uprawnienia[]" value="'.$uprawnienie->getId().'" /><msc class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'" ></msc> '.$uprawnienie->getName().'</label><br>';
                             }
 
                             ?>

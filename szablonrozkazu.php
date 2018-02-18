@@ -239,8 +239,16 @@ require 'header.php';
     <div class="w3-container">
         <h3>Nowy szablon</h3>
         <p>Rozpocznij tworzenie szablonu rozkazu od podstawowych ustawień nagłówka i stopki rozkazu oraz ilości sekcji.</p>
-        <form  action="" method="post">
-            <h4>Nagłówek</h4>
+        <form class="w3-container"  action="" method="post">
+            <ul>
+                <li>
+                    <h4>Nagłówek</h4>
+                    <div>
+                        <label><input type="checkbox" /> Adres i data</label>
+                    </div>
+                </li>
+            </ul>
+
 
         </form>
     </div>

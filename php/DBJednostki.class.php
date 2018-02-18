@@ -100,7 +100,7 @@ class DBJednostki extends DbConn {
 	}
 
 	/**
-	 * Wybiera JRG i zapisuje w obiekcie
+	 * Wybiera JRG msc zapisuje w obiekcie
 	 * @param $id
 	 *
 	 * @return bool

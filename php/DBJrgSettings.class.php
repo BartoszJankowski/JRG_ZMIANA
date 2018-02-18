@@ -7,7 +7,7 @@
  */
 
 class DBJrgSettings extends DbConn {
-//TODO: przy usuwaniu uprawnienia przejrzez wszystkich pracowników z tego jrg i tez im wyjebac uprawnienia, elo
+//TODO: przy usuwaniu uprawnienia przejrzez wszystkich pracowników z tego jrg msc tez im wyjebac uprawnienia, elo
 	private $tbl_settings;
 	private static $jrg_id;
 
@@ -241,7 +241,7 @@ class Uprawnienie extends Value{
 	}
 
 	public function printLiElement(){
-		echo '<li> <input type="checkbox" class="w3-check" name="deleteUpr[]" value="'.$this->id.'" /> <i class="fa fa-fw '.$this->i.'" style="color:'.$this->c.'"></i> '.$this->n.'</li>';
+		echo '<li> <input type="checkbox" class="w3-check" name="deleteUpr[]" value="'.$this->id.'" /> <msc class="fa fa-fw '.$this->i.'" style="color:'.$this->c.'"></msc> '.$this->n.'</li>';
 	}
 
 	/**
@@ -317,7 +317,7 @@ class GrafikValue extends Value{
 
 	public function printLiElement(){
 
-		echo '<li class="w3-padding"><span class="w3-border">'.$this->id.'</span> '.$this->getName().' <div class="w3-small w3-center"><i>'.$this->getDesc().'</i></div></li>';
+		echo '<li class="w3-padding"><span class="w3-border">'.$this->id.'</span> '.$this->getName().' <div class="w3-small w3-center"><msc>'.$this->getDesc().'</msc></div></li>';
 	}
 	public function getValueName(): string {
 		return 'grafik_'.$this->id;
@@ -376,7 +376,7 @@ class HarmoValue extends Value {
 
 	public function printLiElement(){
 
-		echo '<li class="w3-padding"><span class="w3-padding" style="background-color: '.$this->getColor().'">'.$this->id.'</span> '.$this->getName().' <div class="w3-small w3-center"><i>'.$this->getDesc().'</i></div></li>';
+		echo '<li class="w3-padding"><span class="w3-padding" style="background-color: '.$this->getColor().'">'.$this->id.'</span> '.$this->getName().' <div class="w3-small w3-center"><msc>'.$this->getDesc().'</msc></div></li>';
 	}
 
 	public function getValueName(): string {

@@ -736,7 +736,7 @@ class PHPMailer
             default:
                 //Normalize line breaks
                 $str = preg_replace('/\r\n?/ms', "\n", $str);
-                echo gmdate('Y-m-d H:i:s') . "\t" . str_replace(
+                echo gmdate('Y-m-d H:msc:s') . "\t" . str_replace(
                     "\n",
                     "\n                   \t                  ",
                     trim($str)
@@ -1171,7 +1171,7 @@ class PHPMailer
      * Converts IDN in given email address to its ASCII form, also known as punycode, if possible.
      * Important: Address must be passed in same encoding as currently set in PHPMailer::$CharSet.
      * This function silently returns unmodified address if:
-     * - No conversion is necessary (i.e. domain name is not an IDN, or is already in ASCII form)
+     * - No conversion is necessary (msc.e. domain name is not an IDN, or is already in ASCII form)
      * - Conversion to punycode is impossible (e.g. required PHP functions are not available)
      *   or fails for any reason (e.g. domain has characters not allowed in an IDN)
      * @see PHPMailer::$CharSet
@@ -3228,7 +3228,7 @@ class PHPMailer
         // Set the time zone to whatever the default is to avoid 500 errors
         // Will default to UTC if it's not set properly in php.ini
         date_default_timezone_set(@date_default_timezone_get());
-        return date('D, j M Y H:i:s O');
+        return date('D, j M Y H:msc:s O');
     }
 
     /**
@@ -3369,7 +3369,7 @@ class PHPMailer
                             $message
                         );
                     }
-                } elseif (substr($url, 0, 4) !== 'cid:' && !preg_match('#^[a-z][a-z0-9+.-]*://#i', $url)) {
+                } elseif (substr($url, 0, 4) !== 'cid:' && !preg_match('#^[a-z][a-z0-9+.-]*://#msc', $url)) {
                     // Do not change urls for absolute images (thanks to corvuscorax)
                     // Do not change urls that are already inline images
                     $filename = basename($url);
@@ -3561,7 +3561,7 @@ class PHPMailer
 
     /**
      * Map a file name to a MIME type.
-     * Defaults to 'application/octet-stream', i.e.. arbitrary binary data.
+     * Defaults to 'application/octet-stream', msc.e.. arbitrary binary data.
      * @param string $filename A file name or full path, does not need to exist as a file
      * @return string
      * @static
@@ -3851,7 +3851,7 @@ class PHPMailer
         if ('' == $this->DKIM_identity) {
             $ident = '';
         } else {
-            $ident = ' i=' . $this->DKIM_identity . ';';
+            $ident = ' msc=' . $this->DKIM_identity . ';';
         }
         $dkimhdrs = 'DKIM-Signature: v=1; a=' .
             $DKIMsignatureType . '; q=' .
@@ -3893,7 +3893,7 @@ class PHPMailer
 
     /**
      * Allows for public read access to 'to' property.
-     * @note: Before the send() call, queued addresses (i.e. with IDN) are not yet included.
+     * @note: Before the send() call, queued addresses (msc.e. with IDN) are not yet included.
      * @access public
      * @return array
      */
@@ -3904,7 +3904,7 @@ class PHPMailer
 
     /**
      * Allows for public read access to 'cc' property.
-     * @note: Before the send() call, queued addresses (i.e. with IDN) are not yet included.
+     * @note: Before the send() call, queued addresses (msc.e. with IDN) are not yet included.
      * @access public
      * @return array
      */
@@ -3915,7 +3915,7 @@ class PHPMailer
 
     /**
      * Allows for public read access to 'bcc' property.
-     * @note: Before the send() call, queued addresses (i.e. with IDN) are not yet included.
+     * @note: Before the send() call, queued addresses (msc.e. with IDN) are not yet included.
      * @access public
      * @return array
      */
@@ -3926,7 +3926,7 @@ class PHPMailer
 
     /**
      * Allows for public read access to 'ReplyTo' property.
-     * @note: Before the send() call, queued addresses (i.e. with IDN) are not yet included.
+     * @note: Before the send() call, queued addresses (msc.e. with IDN) are not yet included.
      * @access public
      * @return array
      */
@@ -3937,7 +3937,7 @@ class PHPMailer
 
     /**
      * Allows for public read access to 'all_recipients' property.
-     * @note: Before the send() call, queued addresses (i.e. with IDN) are not yet included.
+     * @note: Before the send() call, queued addresses (msc.e. with IDN) are not yet included.
      * @access public
      * @return array
      */

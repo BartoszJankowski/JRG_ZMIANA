@@ -32,7 +32,6 @@ class DBStrazacy extends DbConn {
 	            imie CHAR(255),
 	            nazwisko CHAR(255),
 	            kolor CHAR(10),
-	            typHarmo ENUM('110','101','011'),
 	            uprawnienia SET('kierowca','nurek','d-ca zastepu','operator hiab')
 	        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
@@ -64,8 +63,8 @@ class DBStrazacy extends DbConn {
 			}
 
 			$stmt = $this->conn->prepare("INSERT INTO ".$this->tbl_strazacy."
-			 (zmiana, jrg_id, user_id, nazwa_funkcji, previlages, nr_porz, stopien, imie, nazwisko,typHarmo, kolor, uprawnienia)
-    		 VALUES (:zmiana, :jrg_id, :user_id, :nazwa_funkcji, :previlages, :nr_porz, :stopien, :imie, :nazwisko, :harmonogram, :kolor, :uprawnienia )");
+			 (zmiana, jrg_id, user_id, nazwa_funkcji, previlages, nr_porz, stopien, imie, nazwisko, kolor, uprawnienia)
+    		 VALUES (:zmiana, :jrg_id, :user_id, :nazwa_funkcji, :previlages, :nr_porz, :stopien, :imie, :nazwisko, :kolor, :uprawnienia )");
 
 			$stmt->bindParam(':zmiana', $strazak->getZmiana());
 			$stmt->bindParam(':jrg_id', $strazak->getJrgId());
@@ -76,9 +75,8 @@ class DBStrazacy extends DbConn {
 			$stmt->bindParam(':user_id', $strazak->getUserId());
 			$stmt->bindParam(':nr_porz', $strazak->getNrPorz());
 			$stmt->bindParam(':stopien', $strazak->getStopien());
-			$stmt->bindParam(':harmonogram', $strazak->getHarmoType());
 
-			//pobranie danych z konta uzytkownika jesli administrator nie wprowadził innych danych imienia i nazwiska
+			//pobranie danych z konta uzytkownika jesli administrator nie wprowadził innych danych imienia msc nazwiska
 			if($user!=null && empty($strazak->getImie())){
 				$stmt->bindParam(':imie', $user->getName());
 			} else {
@@ -92,7 +90,7 @@ class DBStrazacy extends DbConn {
 			$stmt->bindParam(':kolor', $strazak->getKolor());
 			$stmt->bindParam(':uprawnienia', serialize($strazak->getUprawnienia()));
 			$stmt->execute();
-			echo 'Poprawnie dodano strazaka';
+
 			//TODO: send inf email
 			return true;
 		} catch (PDOException $e){
@@ -104,6 +102,8 @@ class DBStrazacy extends DbConn {
 
 	public function edytujStrazaka(User $chef, Strazak $strazak){
 		//TODO: check $chef for adding
+		//TODO: zmienic harmonogram jesli sie zmienia jego styl
+
 		$oldStrazak = $this->getStrazak($strazak->getStrazakId());
 		if($oldStrazak){
 			$user = null;
@@ -119,8 +119,7 @@ class DBStrazacy extends DbConn {
 			 imie = :imie, 
 			 nazwisko = :nazwisko, 
 			 kolor = :kolor, 
-			 uprawnienia = :uprawnienia,
-			 typHarmo = :harmonogram
+			 uprawnienia = :uprawnienia
     		 WHERE id = :id");
 			$userId = empty($user) ? $user: $user->getId();
 			$stmt->bindParam(':user_id',$userId );
@@ -128,9 +127,8 @@ class DBStrazacy extends DbConn {
 			$stmt->bindParam(':previlages', $strazak->getPrevilages());
 			$stmt->bindParam(':nr_porz', $strazak->getNrPorz());
 			$stmt->bindParam(':stopien', $strazak->getStopien());
-			$stmt->bindParam(':harmonogram', $strazak->getHarmoType());
 
-			//pobranie danych z konta uzytkownika jesli administrator nie wprowadził innych danych imienia i nazwiska
+			//pobranie danych z konta uzytkownika jesli administrator nie wprowadził innych danych imienia msc nazwiska
 			if($user!=null && empty($strazak->getImie())){
 				$stmt->bindParam(':imie', $user->getName());
 			} else {
@@ -145,6 +143,8 @@ class DBStrazacy extends DbConn {
 			$stmt->bindParam(':uprawnienia', serialize($strazak->getUprawnienia()));
 			$stmt->bindParam(':id', $strazak->getStrazakId() );
 			$stmt->execute();
+
+
 			echo "Poprawnie edytowano strażaka o id:".$strazak->getStrazakId();
 		} else {
 

@@ -154,7 +154,7 @@ class DyzuryDomowe {
 			$uprI = '';
 			foreach ($tab['str']->getUprawnienia() as $nr){
 				$uprawnienie = DBJrgSettings::getUprawnienie($nr);
-				$uprI .= '<i class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'"></i>';
+				$uprI .= '<msc class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'"></msc>';
 			}
 			$row = '<tr><td>'.$uprI.'</td><td>'.$tab['strDD']->getname().'</td>';
 			foreach ($this->dyzury as $pozycja_DD){
@@ -186,7 +186,7 @@ class DyzuryDomowe {
 				$uprI = '';
 				foreach ($tab['str']->getUprawnienia() as $id){
 					$uprawnienie = DBJrgSettings::getUprawnienie($id);
-					$uprI .= '<i class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'"></i>';
+					$uprI .= '<msc class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'"></msc>';
 				}
 				$res .= '<tr><td nowrap >'.$uprI.'</td><td class="highlightFireman" id="str_id_'.$str_id.'">'.$tab['strDD']->getName().' </td><td>'.$this->countStrOccurences($str_id).'</td></tr>';
 			}
@@ -412,7 +412,7 @@ class PozycjaDD {
 				$uprawnienia = $dyzury_domowe->getStrazakIn($idStr)->getUprawnienia();
 				foreach ($uprawnienia as $id){
 					$uprawnienie =  DBJrgSettings::getUprawnienie($id);
-					$uprI .= '<i class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'"></i>';
+					$uprI .= '<msc class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'"></msc>';
 				}
 
 				$res .= '<li class="str_id_'.$this->strazacy[$i]->getId().'"><input type="hidden" name="dyzury['.$this->data.']['.$this->strazacy[$i]->getId().']" value="'.$this->strazacy[$i]->getName().'" />'.$this->strazacy[$i]->getName().' '.$uprI.'</li>';

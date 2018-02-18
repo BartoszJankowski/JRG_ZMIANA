@@ -13,12 +13,13 @@ $dbHarmo = new DBHarmonogramy();
 $dbDyzury = new DbDyzuDomowy();
 $user = new User();
 
-/** Sprawdza sesje i przekierwouje uzytkownika gdy nie zalogowany */
+/** Sprawdza sesje msc przekierwouje uzytkownika gdy nie zalogowany */
 if(!$dbUsers->checkSession($user)){
 	header('Location: '.$base_url.'/login.php');
 	exit;
 }
 $_SETTINGS->load($user->getJrgId());
+$dataDzis = new LocalDateTime();
 
 
 if($user->getStrazak()){
@@ -37,14 +38,18 @@ if($user->getStrazak()){
 }
 
 
-
+$style = '
+    .tdDzis {
+        border:2px solid red !important;  
+    }
+';
 $title = "Kalendarz";
 require 'header.php';
 ?>
 
 <main>
 	<?php if($user->getStrazak()) : ?>
-	<div class="w3-container">
+	<div class="">
 		<h1 class="w3-hide-small w3-center">
 			<div style="display: inline-block;">
 				<form class=" w3-left" id="prevYear" action="" method="get" >
@@ -64,22 +69,30 @@ require 'header.php';
 
 	<?php
 
-		for($i=1; $i<=12 ;$i++){
-			if($i%4==1){
+		for($msc=1; $msc <= 12 ;$msc++){
+			if( $msc % 4 == 1){
 				echo '<div class="w3-cell-row">';
 			}
 			$inn = '';
-			$monthIterator = (new ArrayObject($kalendarz->getDayForMonth($i)))->getIterator();
+			$monthIterator = (new ArrayObject($kalendarz->getDayForMonth($msc)))->getIterator();
 			$tygIterator = get_dni_tyg_iterator();
 			while ($monthIterator->valid()){
 				$inn .= '<tr>';
 				while ($tygIterator->valid()){
 					if($monthIterator->valid() && $tygIterator->current() === $monthIterator->current()['t']){
-					    $dyzurBool = $dbDyzury->hasFiremanHomeduty($user->getStrazak()->getStrazakId(),$i, $monthIterator->current()['nr_0']);
-					    $dayVal = $harmonogram->getDayVal($i, $monthIterator->current()['nr_0']);
+					    $dyzurBool = $dbDyzury->hasFiremanHomeduty($user->getStrazak()->getStrazakId(),$msc, $monthIterator->current()['nr_0']);
+					    $dayVal = $harmonogram->getDayVal($msc, $monthIterator->current()['nr_0']);
 					    $val = $dyzurBool ? 'Dd':$dayVal;
+					    $tdDzis = '';
+					    if($dataDzis->getYear() == $czas->getYear()){
+					        if( $dataDzis->getMonth() == $msc){
+					            if($dataDzis->getDayOfMsc() == $monthIterator->current()['nr']){
+						            $tdDzis = ' tdDzis';
+                                }
+                            }
+                        }
                         //$val = $dayVal;
-						$inn .= '<td class="zmiana-'.$monthIterator->current()['z'].' w3-display-container"><span class="w3-tiny w3-display-topleft">'.$monthIterator->current()['nr'].'</span><span class="w3-medium w3-display-bottomright">'.$val.'</span></td>';
+						$inn .= '<td class="zmiana-'.$monthIterator->current()['z'].' '.$tdDzis.' w3-display-container"><span class="w3-tiny w3-display-topleft">'.$monthIterator->current()['nr'].'</span><span class="w3-medium w3-display-bottomright">'.$val.'</span></td>';
 						$monthIterator->next();
 					} else {
 						$inn .= '<td></td>';
@@ -90,14 +103,14 @@ require 'header.php';
 				$inn .= '</tr>';
 			}
 
-			echo '<div id="kal-'.$czas->getYear().'-'.$i.'" class="w3-container kalendar-div w3-cell w3-quarter '.($i==$czas->getMonth()? '':'w3-hide-small').' " style=" min-height: 300px;"><h3 class="w3-border-bottom w3-center "><button class="w3-left w3-btn w3-large prevMsc w3-hide-large"><i class="fa fa-chevron-left" aria-hidden="true"></i></button><button class="w3-btn w3-right w3-large nextMsc w3-hide-large"><i class="fa fa-chevron-right" aria-hidden="true"></i></button><div>'.get_moth_name($i).'</div><div class="w3-small w3-hide-large">'.$czas->getYear().'</div></h3><table class="table-calendar "><tr><td>Pn</td><td>Wt</td><td>Śr</td><td>Cz</td><td>Pt</td><td>Sb</td><td>Nd</td></tr>'.$inn.'</table></div>';
-			if($i%4==0){
+			echo '<div id="kal-'.$czas->getYear().'-' . $msc . '" class="w3-container kalendar-div w3-cell w3-quarter ' . ( $msc == $czas->getMonth()? '':'w3-hide-small') . ' " style=" min-height: 300px;"><h3 class="w3-border-bottom w3-center "><button class="w3-left w3-btn w3-large prevMsc w3-hide-large"><msc class="fa fa-chevron-left" aria-hidden="true"></msc></button><button class="w3-btn w3-right w3-large nextMsc w3-hide-large"><msc class="fa fa-chevron-right" aria-hidden="true"></msc></button><div>' . get_moth_name($msc) . '</div><div class="w3-small w3-hide-large">' . $czas->getYear() . '</div></h3><table class="table-calendar "><tr><td>Pn</td><td>Wt</td><td>Śr</td><td>Cz</td><td>Pt</td><td>Sb</td><td>Nd</td></tr>' . $inn . '</table></div>';
+			if( $msc % 4 == 0){
 				echo '</div>';
 			}
 		}
 	?>
 	</div>
-	<div class="w3-padding w3-center" style="width: 300px;"><div class="w3-third w3-padding-small"><div class="zmiana-1">I</div></div><div class="w3-third w3-padding-small"><div class="zmiana-2">II</div></div><div class="w3-third w3-padding-small"><div class="zmiana-3">III</div></div></div>
+	<div class="w3-padding w3-center w3-row" style="width: 300px;"><div class="w3-third w3-padding-small"><div class="zmiana-1">I</div></div><div class="w3-third w3-padding-small"><div class="zmiana-2">II</div></div><div class="w3-third w3-padding-small"><div class="zmiana-3">III</div></div></div>
 	<?php else: echo $info ; endif; ?>   <!-- dodałem na początku przed ? php ; nie odpalało kalendarza na serwerze lokalnym  -->
 </main>
 <?php

@@ -12,7 +12,7 @@ class Strazak {
 	 * Dane bazy danych
 	 * @var
 	 */
-	private $id,$jrg_id, $zmiana, $nazwa_funkcji, $previlages, $user_id, $nr_porz, $imie, $nazwisko, $typHarmo, $stopien, $kolor;
+	private $id,$jrg_id, $zmiana, $nazwa_funkcji, $previlages, $user_id, $nr_porz, $imie, $nazwisko, $stopien, $kolor;
 	private $uprawnienia = array();
 
 	/**
@@ -129,12 +129,6 @@ class Strazak {
 		return $this->uprawnienia;
 	}
 
-	/**
-	 * @return mixed
-	 */
-	public function getHarmoType() {
-		return $this->typHarmo;
-	}
 
 	/**
 	 * @return Harmonogram
@@ -168,27 +162,27 @@ class Strazak {
 
 
 	public function printHtml(array $listUsers){
-		$star = $this->isChef() ? '<i class="fa fa-star fa-fw w3-text-amber"></i>': '';
+		$star = $this->isChef() ? '<msc class="fa fa-star fa-fw w3-text-amber"></msc>': '';
 		if(!empty($this->getUserId())){
 			foreach($listUsers as $us){
 				if($us->getId()===$this->getUserId()){
-					$user =  '<i class="fa fa-user-circle-o fa-fw" title="Użytkownik: '.$us->getNameEmailIfNull().' (id.'.$us->getId().')"></i>';
+					$user =  '<msc class="fa fa-user-circle-o fa-fw" title="Użytkownik: '.$us->getNameEmailIfNull().' (id.'.$us->getId().')"></msc>';
 					break;
 				}
 			}
 
 		} else {
 
-			$user ='<i class="fa fa-user-times fa-fw" title="Brak przypisanego użytkownika aplikacji."></i>';
+			$user ='<msc class="fa fa-user-times fa-fw" title="Brak przypisanego użytkownika aplikacji."></msc>';
 		}
 		$funkcja = get_nazwa_funkcji($this->nazwa_funkcji);
 		$uprI = '';
 			$uprawnienia = $this->uprawnienia;
 			foreach ($uprawnienia as $id){
 				$uprawnienie =  DBJrgSettings::getUprawnienie($id);
-				$uprI .= '<i class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'"></i>';
+				$uprI .= '<msc class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'"></msc>';
 			}
-		echo '<form class="" action="" method="post" ><li class="w3-display-container"><i class="w3-large">#'.$this->getNrPorz().' </i> '.$user.$star.' <a href="?editFireman='.$this->id.'">'.get_stopien_short($this->stopien).' '.$this->nazwisko.' '.$this->imie.$uprI.'</a><input type="hidden" value="'.$this->getStrazakId().'" name="strazakId"><button type="submit" class="w3-button w3-border w3-display-right" name="deleteFireman" ><i class="fa fa-trash"></i></button></li>
+		echo '<form class="" action="" method="post" ><li class="w3-display-container"><msc class="w3-large">#'.$this->getNrPorz().' </msc> '.$user.$star.' <a href="?editFireman='.$this->id.'">'.get_stopien_short($this->stopien).' '.$this->nazwisko.' '.$this->imie.$uprI.'</a><input type="hidden" value="'.$this->getStrazakId().'" name="strazakId"><button type="submit" class="w3-button w3-border w3-display-right" name="deleteFireman" ><msc class="fa fa-trash"></msc></button></li>
 				<span class="w3-text-gray">'.$funkcja.'</span>
 				</form>';
 	}

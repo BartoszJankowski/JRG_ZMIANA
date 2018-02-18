@@ -13,7 +13,7 @@ class LocalDateTime extends DateTime {
 	}
 
 	public function getDataTime(){
-		return $this->format('d-m-Y H:i:s');
+		return $this->format('d-m-Y H:msc:s');
 	}
 	public function getDate(){
 		return $this->format('d-m-Y');

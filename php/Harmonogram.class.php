@@ -7,10 +7,9 @@
  */
 
 class Harmonogram {
-	//TODO: Iwonka po dodaniu nie miała harmonogramu :O
 
 	private $rok;
-
+	private $typ; // 110,101,011
 	private $miesiace = array();
 
 	public function __construct($rok, $serializeMsc = false) {
@@ -39,11 +38,12 @@ class Harmonogram {
 	 * Tworzy puste pola z godzinami w harmonogramie dla strazaka
 	 * @param Strazak $strazak
 	 */
-	public function genHarmoForStrazak(Strazak $strazak){
+	public function genHarmoForStrazak(Strazak $strazak, string $har_T){
+		$this->setharmoType($har_T);
 		$kalendarz = new Kalendarz($this->rok, 1,1);
 		$tab = $kalendarz->getDayForYear($this->rok);
 		if($tab){
-			$sluzby = get_harmo_types()[$strazak->getHarmoType()][1];
+			$sluzby = get_harmo_types()[$this->typ][1];
 			$obj = new ArrayObject( $sluzby );
 			$i = $obj->getIterator();
 			foreach ($tab as $num=>$day){
@@ -101,12 +101,21 @@ class Harmonogram {
 	 * @param int $month
 	 */
 	public function printharmoRow(Strazak $strazak, int $month){
-		$inner = '<td>'.$strazak->getNrPorz().'.</td><td>'.$strazak->toString().'</td>';
-		foreach ($this->miesiace[$month] as $nrDnia =>$dzien){
-			$color = get_harmo_val($dzien['v'])['col'];
-			$inner .= '<td class="  tdHarmCell" style="background-color: '.$color.'"><label><input class="w3-hide harmoCheck" type="checkbox" name="'.$strazak->getStrazakId().'[]" value="'.$nrDnia.'" /><div class="harmoCell ">'.( $dzien['h']>0 ? '<b>'.$dzien['h'].'</b>': $dzien['h'] ).'</div></label></td>';
-
+		$inner = '<td >'.$strazak->getNrPorz().'.</td><td class="tdHarmCell"><button type="button" name="'.$strazak->getHarmonogram()->getHarmoType().'" value="'.$strazak->getStrazakId().'" data-toggle="popover"  data-html="true" title="Zmień typ harmonogramu"  class="w3-btn w3-small"><i class="fa fa-wrench"></i></button> '.$strazak->toString().'</td>';
+		if(!empty($this->miesiace)){
+			foreach ($this->miesiace[$month] as $nrDnia =>$dzien){
+				$color = get_harmo_val($dzien['v'])['col'];
+				$inner .= '<td title="Zmień godziny pracy" data-placement="top"  class="w3-center  tdHarmCell" style="background-color: '.$color.'">
+							<label>
+							<input class="w3-hide harmoCheck" type="checkbox" name="'.$strazak->getStrazakId().'['.$nrDnia.'][v]" value="'.$nrDnia.'" />
+							<div class="harmoCell "><input type="text" name="'.$strazak->getStrazakId().'['.$nrDnia.'][h]" min="0" max="24" value="'.$dzien['h'].'" /></div>
+							</label>
+							</td>';
+			}
+		} else {
+			$inner .= '<td class="w3-center " colspan="10"></form><b>Brak harmonogramu </b></td><td  class="tdHarmCell" colspan="21" ><form action="" method="get"><select class="" name="typ"><option value="110">Służba Służba Wolne</option><option value="101">Służba Wolne Służba</option><option value="011">Wolne Służba Służba</option></select><button type="submit" name="createHarmo" value="'.$strazak->getStrazakId().'" class="">Stwórz</button></form></td>';
 		}
+
 		echo '<tr>'.$inner.'</tr>';
 	}
 
@@ -123,8 +132,11 @@ class Harmonogram {
 
 
 	public function putChanges(int $month, array $changes, string $value){
-		foreach($changes as $day){
-			$this->miesiace[$month][$day]['v'] = $value ;
+		foreach($changes as $day=>$val){
+			if(isset($val['v']))
+				$this->miesiace[$month][$day]['v'] = $value ;
+			if(isset($val['h']))
+				$this->miesiace[$month][$day]['h'] = $val['h'] ;
 		}
 	}
 
@@ -138,6 +150,45 @@ class Harmonogram {
 	}
 
 
+	public function setHarmoType(string $harm_t){
+		$typy = get_harmo_types();
+		if(array_key_exists($harm_t, $typy)){
+			$this->typ = $harm_t;
+		} else {
+			$this->typ = array_keys($typy)[0];
+		}
+	}
 
+	public function changeHarmoType(Strazak $strazak, string $harmT){
 
+		$this->setharmoType($harmT);
+		$kalendarz = new Kalendarz($this->rok, 1,1);
+		$tab = $kalendarz->getDayForYear($this->rok);
+		$licznik  = array();
+		if($tab){
+			$sluzby = get_harmo_types()[$this->typ][1];
+			$obj = new ArrayObject( $sluzby );
+			$i = $obj->getIterator();
+
+			foreach ($tab as $num=>$day){
+				$g = $this->calcHours($strazak->getZmiana(), $day['zmiana'], $i);
+				if(!isset($licznik[$day['msc']])){
+					$licznik[$day['msc']] = 0;
+				}
+				$old = $this->miesiace[$day['msc']][$licznik[$day['msc']]];
+				$this->miesiace[$day['msc']][$licznik[$day['msc']]] = array('v'=>$old['v'],'h'=>$g,'v2'=>$old['v2']);
+
+				if(!$i->valid()){
+					$i->rewind();
+				}
+				$licznik[$day['msc']] ++;
+			}
+		} else {
+			echo "Podano zły rok";
+		}
+	}
+
+	public function getHarmoType(){
+		return $this->typ;
+	}
 }

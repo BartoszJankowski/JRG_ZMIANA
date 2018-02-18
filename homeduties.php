@@ -111,7 +111,7 @@ require 'header.php';
                 <p>Wybierz uprawnienia wymagane na każdy dzień dyżuru: </p>
                 <?php
                     foreach (DBJrgSettings::getUprawnienia() as $uprawnienie){
-                        echo '<div><label><input type="checkbox" class="w3-check" name="wymagane[]" '.((isset($_POST['wymagane']) && in_array($uprawnienie->getId(),$_POST['wymagane'] ))? "checked":"").' value="'.$uprawnienie->getId().'" ><i class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'"></i>  '.$uprawnienie->getName().'</label></div>';
+                        echo '<div><label><input type="checkbox" class="w3-check" name="wymagane[]" '.((isset($_POST['wymagane']) && in_array($uprawnienie->getId(),$_POST['wymagane'] ))? "checked":"").' value="'.$uprawnienie->getId().'" ><msc class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'"></msc>  '.$uprawnienie->getName().'</label></div>';
                     }
                 ?>
                 <!--

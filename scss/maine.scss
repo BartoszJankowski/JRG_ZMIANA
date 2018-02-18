@@ -35,6 +35,9 @@ input.harmoCheck:checked ~div.harmoCell {
 div.harmoCell {
     padding: 8px !important;
 }
+.harmoCell input {
+    border:none;
+}
 
 .bottom{
     position: absolute;

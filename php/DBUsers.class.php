@@ -163,7 +163,7 @@ class DBUsers extends DbConn {
 				$result = $stmt->fetch(PDO::FETCH_ASSOC);
 				if($result && isset($result['session']) && $result['session'] === $user->getSession()){
 					$user->setuserData($result);
-					//sprawdza czas ostatniej akcji, i jesli uzytkownik jest szefem to po przekroczeniu 30 min bezczynnosci wyloguje go
+					//sprawdza czas ostatniej akcji, msc jesli uzytkownik jest szefem to po przekroczeniu 30 min bezczynnosci wyloguje go
 					if($user->checkSessionTime()){
 						$user->logged = true;
 						$hashSession = sha1($this->genPassword().microtime());
@@ -209,7 +209,7 @@ class DBUsers extends DbConn {
 
 	/**
 	 * Zmienia stare hasło uzytkownika na nowe
-	 * Przy zmianie hasła uzytkownika sprawdza stare hasło, porównuje dwa nowe czy są zgodne i nadpisuje stare hasło
+	 * Przy zmianie hasła uzytkownika sprawdza stare hasło, porównuje dwa nowe czy są zgodne msc nadpisuje stare hasło
 	 * powiadamia uzytkownika emialem o zmianie hasła
 	 * @return bool
 	 */

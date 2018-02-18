@@ -80,6 +80,8 @@ class DBHarmonogramy extends DbConn {
 		return $harmo;
 	}
 
+
+
 	public function saveHarmos($jrgId, $rok, array $harmos  ){
 
 		try{
@@ -108,6 +110,36 @@ class DBHarmonogramy extends DbConn {
 		catch (PDOException $e){
 			$this->error = "DB error:".$e->getMessage();
 			echo $this->error;
+		}
+	}
+
+	public function saveHarmonogram($jrgId, $rok,$strId, Harmonogram $harmonogram){
+			try{
+			$stmt = $this->conn->prepare("INSERT INTO ".$this->tbl_harmonogramy." (jrg_id, strazak_id, rok, harmo ) 
+						VALUES(:jrg_id, :str_id, :rok, :harmo)");
+			$stmt->bindParam(':jrg_id',$jrgId);
+			$stmt->bindParam(':str_id',$strId);
+			$stmt->bindParam(':rok',$rok);
+			$stmt->bindParam(':harmo',serialize($harmonogram) );
+				$stmt->execute();
+
+			}
+			 catch (PDOException $e){
+				$this->error = "DB error:".$e->getMessage();
+
+			}
+	}
+	public function changeHarmo( $rok,$strId, Harmonogram $harmonogram){
+		try{
+			$stmt = $this->conn->prepare("UPDATE ".$this->tbl_harmonogramy." SET harmo = :harmo WHERE strazak_id = :str_id AND rok = :rok");
+			$stmt->bindParam(':harmo',serialize($harmonogram) );
+			$stmt->bindParam(':str_id',$strId);
+			$stmt->bindParam(':rok',$rok);
+			$stmt->execute();
+		}
+		catch (PDOException $e){
+			$this->error = "DB error:".$e->getMessage();
+
 		}
 	}
 

@@ -26,7 +26,7 @@ if(isset($_POST)){
 }
 
 /**
- * Odpowiada za ustawienie i zmiane miesiąca
+ * Odpowiada za ustawienie msc zmiane miesiąca
  */
 if(isset($_GET)){
 	$_GET = test_input($_GET);
@@ -41,6 +41,8 @@ if(isset($_GET)){
 		header('Location: '.$base_url.$_SERVER['PHP_SELF'].'?month='.$localDateTime->getMonth().'&year='.$localDateTime->getYear());
 		exit;
     }
+
+
 }
 
 $month= $localDateTime->getMonth() ;
@@ -49,8 +51,32 @@ $year = $localDateTime->getYear() ;
 $harmo = new Harmonogram($year);
 $harmo->genHarmonogram();
 
-$strazacy = $dbStrazacy->getZmianaListStrazacy($user->getStrazak()->getJrgId(),$user->getStrazak()->getZmiana());
-$harmonogramy = $dbharmo->getJrgharmos($user->getStrazak()->getJrgId(),$year );
+$strazacy = $dbStrazacy->getZmianaListStrazacy($user->getJrgId(),$user->getStrazak()->getZmiana());
+$harmonogramy = $dbharmo->getJrgharmos($user->getJrgId(),$year );
+
+if(isset($_GET['createHarmo'])){
+	$harmonogram = new Harmonogram($year);
+	foreach ($strazacy as $strazak){
+	    if( $strazak->getStrazakId() == $_GET['createHarmo'] ){
+		    $harmonogram->genHarmoForStrazak($strazak, $_GET['typ']);
+		    $dbharmo->saveHarmonogram($user->getJrgId(),$year,$strazak->getStrazakId(),$harmonogram);
+		    $harmonogramy[$strazak->getStrazakId()] = $harmonogram;
+		}
+    }
+} elseif(isset($_POST['editHarmoType'])){
+    $idStr = $_POST['editHarmoType'];
+    if(is_numeric($idStr)){
+        if(array_key_exists($idStr, $harmonogramy)){
+	        foreach ($strazacy as $strazak){
+		        if( $strazak->getStrazakId() == $idStr ){
+			        $harmonogramy[$idStr]->changeHarmoType($strazak, $_POST['typ']);
+			        $dbharmo->changeHarmo($year,$idStr,$harmonogramy[$idStr]);
+		        }
+	        }
+
+        }
+    }
+}
 
 if(isset($_POST['harmoVal'])){
 	$daneDoZapisu = array();
@@ -59,11 +85,6 @@ if(isset($_POST['harmoVal'])){
 			if(array_key_exists($nr, $harmonogramy)){
 				$harmonogramy[$nr]->putChanges($_POST['month'],$harmoChanges,  $_POST['harmoVal']);
 				$daneDoZapisu[$nr] = array('harmonogram'=>$harmonogramy[$nr],'exists'=>true);
-			} else {
-				$harmonogram = new Harmonogram($_POST['year']);
-				$harmonogram->genHarmoForStrazak($dbStrazacy->getStrazak($nr));
-				$harmonogram->putChanges($_POST['month'],$harmoChanges, $_POST['harmoVal']);
-				$daneDoZapisu[$nr] = array('harmonogram'=>$harmonogram,'exists'=>false); ;
 			}
 		}
 	}
@@ -76,16 +97,25 @@ if(isset($_POST['harmoVal'])){
 			$strazak->setHarmonogram( $harmonogramy[$strazak->getStrazakId()] );
 		} else {
 		    $harm = new Harmonogram($year);
-		    $harm->genHarmoForStrazak($strazak);
+		   // $harm->genHarmoForStrazak($strazak);
 			$strazak->setHarmonogram( $harm );
         }
 	}
 }
 
+$style ='
+td:nth-of-type(2) {
+    min-width:200px;
+}
+.harmoCell input {
+  border:none;
+  background-color:transparent;
+  width:100%;
+}
+';
+
 $title = "Harmonogram służb";
 require 'header.php';
-
-
 ?>
 <main class="" xmlns="http://www.w3.org/1999/html">
     <form action="" method="get">
@@ -101,34 +131,37 @@ require 'header.php';
         ?>
     </div>
 	<form action="" method="post">
+        <div class="w3-row">
+
+            <select class="w3-select w3-border w3-col l3 w3-margin harmoValSelect" name="harmoVal">
+				<?php
+
+				foreach (get_harmo_values() as $val=>$tab){
+					echo '<option class="'.$tab['col'].'" value="'.$val.'">'.$tab['n'].'</option>';
+				}
+				echo '<option class="" value="">Usuń</option>';
+				?>
+            </select>
+
+        </div>
 		<table class="w3-table-all w3-hoverable w3-small">
 		<?php
-		$timeS = microtime(true);
 		echo '<input type="hidden" name="year" value="'.$year.'"/>';
 		echo '<input type="hidden" name="month" value="'.$month.'"/>';
 		$harmo->printHarmoHeader($month);
 		 foreach ($strazacy as $str){
 		     $str->getHarmonogram()->printHarmoRow($str, $month);
 		 }
-		echo 'print harms = '.round(microtime(true)-$timeS,3).'s';
 		?>
 		</table>
-        <div class="w3-row">
-
-            <select class="w3-select w3-border w3-col l3 w3-margin harmoValSelect" name="harmoVal">
-		        <?php
-
-		        foreach (get_harmo_values() as $val=>$tab){
-			        echo '<option class="'.$tab['col'].'" value="'.$val.'">'.$tab['n'].'</option>';
-		        }
-		        echo '<option class="" value="">Usuń</option>';
-		        ?>
-            </select>
-            <input class="w3-input  w3-col l3 w3-margin" type="submit" value="Dodaj" />
+        <div class="w3-row w3-container w3-padding">
+            <input class="w3-input " type="submit" value="Zapisz" />
         </div>
+
 
 	</form>
 </main>
+
 
 <?php
 

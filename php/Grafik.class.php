@@ -43,7 +43,7 @@ class Grafik {
 		foreach ($strazacy as $strazak){
 			echo $this->strazakLine($strazak);
 		}
-		echo '</table><div class="w3-margin-top"><button class="w3-button w3-border w3-light-grey " type="submit" name="saveGraf"  ><i class="fa fa-fw fa-save"></i> Zapisz grafik</button></div></form>';
+		echo '</table><div class="w3-margin-top"><button class="w3-button w3-border w3-light-grey " type="submit" name="saveGraf"  ><msc class="fa fa-fw fa-save"></msc> Zapisz grafik</button></div></form>';
 	}
 
 	private function printHeader():string {

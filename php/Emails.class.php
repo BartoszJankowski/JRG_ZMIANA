@@ -167,7 +167,7 @@ class Emails {
 
 			//Content
 			$this->mail->Subject  = 'Reset hasła';
-			$this->mail->Body     = '<div><h3>Reset hasła</h3><p>W odpowiedzi na Twoje zgłoszenie zresetowaliśmy hasło do twojego konta</p></div><div><h4>Nowe hasło: '.$password.'</h4><p>Aby się zalogowac wprowadź login i hasło na stronie <a href="http://zmiana.bjit.pl/login.php">logowania</a></p></div>';
+			$this->mail->Body     = '<div><h3>Reset hasła</h3><p>W odpowiedzi na Twoje zgłoszenie zresetowaliśmy hasło do twojego konta</p></div><div><h4>Nowe hasło: '.$password.'</h4><p>Aby się zalogowac wprowadź login msc hasło na stronie <a href="http://zmiana.bjit.pl/login.php">logowania</a></p></div>';
 			$this->mail->AltBody = "Reset hasła \r\n W odpowiedzi na Twoje zgłoszenie zresetowaliśmy hasło do twojego konta: \r\n Nowe hasło: ".$password." \r\n Aby się zalogowac wprowadź dane na stronie \r\n >> http://zmiana.bjit.pl/login.php \r\n Pozdrawiamy zespół zmiana.bjit.pl ";
 
 			$this->mail->send();

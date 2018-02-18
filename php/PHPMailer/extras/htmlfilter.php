@@ -687,7 +687,7 @@ function tln_fixstyle($body, $pos, $trans_image_path, $block_external_images)
             case '>':
                  if ($bEndTag) {
                     $sToken .= $char;
-                    if (preg_match('/\<\/\s*style\s*\>/i',$sToken,$aMatch)) {
+                    if (preg_match('/\<\/\s*style\s*\>/msc',$sToken,$aMatch)) {
                         $newpos = $i + 1;
                         $bSucces = true;
                         break 2;
@@ -751,7 +751,7 @@ function tln_fixstyle($body, $pos, $trans_image_path, $block_external_images)
     // remove @import line
     $content = preg_replace("/^\s*(@import.*)$/mi","\n<!-- @import rules forbidden -->\n",$content);
 
-    $content = preg_replace("/(\\\\)?u(\\\\)?r(\\\\)?l(\\\\)?/i", 'url', $content);
+    $content = preg_replace("/(\\\\)?u(\\\\)?r(\\\\)?l(\\\\)?/msc", 'url', $content);
     preg_match_all("/url\s*\((.+)\)/si",$content,$aMatch);
     if (count($aMatch)) {
         $aValue = $aReplace = array();
@@ -773,13 +773,13 @@ function tln_fixstyle($body, $pos, $trans_image_path, $block_external_images)
     tln_unspace($contentTemp);
 
     $match   = Array('/\/\*.*\*\//',
-                    '/expression/i',
-                    '/behaviou*r/i',
-                    '/binding/i',
-                    '/include-source/i',
-                    '/javascript/i',
-                    '/script/i',
-                    '/position/i');
+                    '/expression/msc',
+                    '/behaviou*r/msc',
+                    '/binding/msc',
+                    '/include-source/msc',
+                    '/javascript/msc',
+                    '/script/msc',
+                    '/position/msc');
     $replace = Array('','idiocy', 'idiocy', 'idiocy', 'idiocy', 'idiocy', 'idiocy', '');
     $contentNew = preg_replace($match, $replace, $contentTemp);
     if ($contentNew !== $contentTemp) {
@@ -1050,18 +1050,18 @@ function HTMLFilter($body, $trans_image_path, $block_external_images = false)
     $rm_attnames = array(
         "/.*/" =>
             array(
-                // "/target/i",
-                "/^on.*/i",
-                "/^dynsrc/i",
-                "/^data.*/i",
-                "/^lowsrc.*/i"
+                // "/target/msc",
+                "/^on.*/msc",
+                "/^dynsrc/msc",
+                "/^data.*/msc",
+                "/^lowsrc.*/msc"
             )
     );
 
     $bad_attvals = array(
         "/.*/" =>
         array(
-            "/^src|background/i" =>
+            "/^src|background/msc" =>
             array(
                 array(
                     '/^([\'"])\s*\S+script\s*:.*([\'"])/si',
@@ -1074,7 +1074,7 @@ function HTMLFilter($body, $trans_image_path, $block_external_images = false)
                     "\\1$trans_image_path\\2"
                 )
             ),
-            "/^href|action/i" =>
+            "/^href|action/msc" =>
             array(
                 array(
                     '/^([\'"])\s*\S+script\s*:.*([\'"])/si',
@@ -1087,16 +1087,16 @@ function HTMLFilter($body, $trans_image_path, $block_external_images = false)
                     "\\1#\\1"
                 )
             ),
-            "/^style/i" =>
+            "/^style/msc" =>
             array(
                 array(
                     "/\/\*.*\*\//",
-                    "/expression/i",
-                    "/binding/i",
-                    "/behaviou*r/i",
-                    "/include-source/i",
-                    '/position\s*:/i',
-                    '/(\\\\)?u(\\\\)?r(\\\\)?l(\\\\)?/i',
+                    "/expression/msc",
+                    "/binding/msc",
+                    "/behaviou*r/msc",
+                    "/include-source/msc",
+                    '/position\s*:/msc',
+                    '/(\\\\)?u(\\\\)?r(\\\\)?l(\\\\)?/msc',
                     '/url\s*\(\s*([\'"])\s*\S+script\s*:.*([\'"])\s*\)/si',
                     '/url\s*\(\s*([\'"])\s*mocha\s*:.*([\'"])\s*\)/si',
                     '/url\s*\(\s*([\'"])\s*about\s*:.*([\'"])\s*\)/si',
@@ -1121,25 +1121,25 @@ function HTMLFilter($body, $trans_image_path, $block_external_images = false)
 
     if ($block_external_images) {
         array_push(
-            $bad_attvals{'/.*/'}{'/^src|background/i'}[0],
+            $bad_attvals{'/.*/'}{'/^src|background/msc'}[0],
             '/^([\'\"])\s*https*:.*([\'\"])/si'
         );
         array_push(
-            $bad_attvals{'/.*/'}{'/^src|background/i'}[1],
+            $bad_attvals{'/.*/'}{'/^src|background/msc'}[1],
             "\\1$trans_image_path\\1"
         );
         array_push(
-            $bad_attvals{'/.*/'}{'/^style/i'}[0],
+            $bad_attvals{'/.*/'}{'/^style/msc'}[0],
             '/url\(([\'\"])\s*https*:.*([\'\"])\)/si'
         );
         array_push(
-            $bad_attvals{'/.*/'}{'/^style/i'}[1],
+            $bad_attvals{'/.*/'}{'/^style/msc'}[1],
             "url(\\1$trans_image_path\\1)"
         );
     }
 
     $add_attr_to_tag = array(
-        "/^a$/i" =>
+        "/^a$/msc" =>
             array('target' => '"_blank"')
     );
 

@@ -29,7 +29,7 @@ if(isset($_GET)){
 if(   $user->isAdmin() ) {
 	$list = $dbJednostki->getJrgListForAdmin($user);
 	if(count($list)==1){
-		$dbUsers->setTempJrgId($list[0]['id']);
+		$dbUsers->setTempJrgId($user, $list[0]['id']);
 		$list = array();
     } else if(isset($_GET['manage_jrg'])) {
 		$dbUsers->setTempJrgId($user,$_GET['manage_jrg']);
@@ -171,14 +171,6 @@ require 'header.php';
                                 <label class="w3-text-gray">Imię</label>
                                 <input class="w3-input" type="text" name="imie"  />
                             </div>
-                            <select class="w3-select" name="typHarmo">
-					            <?php
-					            foreach (get_harmo_types() as $typ=>$val){
-
-						            echo '<option value="'.$typ.'">'.$val[0].'</option>';
-					            }
-					            ?>
-                            </select>
                             <div>
                                 <label class="w3-text-gray">Kolor</label>
                                 <input class="w3-input" type="color" name="kolor"  />
@@ -187,7 +179,7 @@ require 'header.php';
                                 <label class="w3-text-gray">Zaznacz uprawnienia pracownika: </label><br>
 					            <?php
 					            foreach ( DBJrgSettings::getUprawnienia() as $uprawnienie ) {
-						            echo '<label><input type="checkbox" name="uprawnienia[]" value="'.$uprawnienie->getId().'" /><i class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'" ></i> '.$uprawnienie->getName().'</label><br>';
+						            echo '<label><input type="checkbox" name="uprawnienia[]" value="'.$uprawnienie->getId().'" /><msc class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'" ></msc> '.$uprawnienie->getName().'</label><br>';
 					            }
 
 					            ?>

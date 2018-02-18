@@ -9,7 +9,7 @@
 //TODO: rozpoczac edycję w bazieDanych
 //TODO: dodac uzytkownikowi wpis o rozpoczętej edycji
 
-//TODO: sprawdzić usera który edytuje rozkaz oraz jego czas zalogowania i aktywność
+//TODO: sprawdzić usera który edytuje rozkaz oraz jego czas zalogowania msc aktywność
 
 //TODO: zakonczyc edycje w bazie danych
 

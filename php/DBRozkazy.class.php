@@ -193,6 +193,8 @@ class DBRozkazy extends DbConn {
 		} catch (PDOException $e){
 			$this->error = $e;
 		}
+		// $2y$10$EgYooM/mGOnjhuLc0uS64O/X8wtctjbS1SwW2D73YVOJElQETjxSu bart
+		// misc $2y$10$Jj4IP35tH9bgo.qxSlgDc.Ws9D6YP0RtmCk5RUZID3SIolhlPjlba
 		return false;
 	}
 
