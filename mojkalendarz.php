@@ -92,10 +92,10 @@ require 'header.php';
                             }
                         }
                         //$val = $dayVal;
-						$inn .= '<td class="zmiana-'.$monthIterator->current()['z'].' '.$tdDzis.' w3-display-container"><span class="w3-tiny w3-display-topleft">'.$monthIterator->current()['nr'].'</span><span class="w3-medium w3-display-bottomright">'.$val.'</span></td>';
+						$inn .= '<td data-toggle="popover" title="Dodaj notkę" data-placement="bottom" class="zmiana-'.$monthIterator->current()['z'].' '.$tdDzis.' w3-display-container"><span class="w3-tiny w3-display-topleft">'.$monthIterator->current()['nr'].'</span><span class="w3-medium w3-display-bottomright">'.$val.'</span></td>';
 						$monthIterator->next();
 					} else {
-						$inn .= '<td></td>';
+						$inn .= '<td data-toggle="popover" title="Dodaj notkę"  data-placement="bottom"  ></td>';
 					}
 					$tygIterator->next();
 				}
