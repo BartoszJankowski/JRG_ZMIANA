@@ -64,7 +64,7 @@ if(isset($_POST['log_in'])){
                            <?php else : ?>
                         
                         <div class="nav-item p-2 login__icon">
-                            <a class="nav-link" href="<?php echo $base_url; ?>">
+                            <a class="nav-link" href="<?php echo $base_url; ?>/login.php">
                                 <i class="fas fa-home nav__ico"></i>+
                                     <p class="font-weight-light">Dodaj jednostkę</p></a>
                                         <div class="register__box">
