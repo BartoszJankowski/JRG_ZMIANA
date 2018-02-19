@@ -48,7 +48,7 @@ foreach ( $strazacy as $strazak){
 	}
 }
 
-if(isset($_POST['saveGraf'])){
+if(isset($_POST['saveGraf']) && $user->isChef()){
 	$daneDoZapisu = array();
 	foreach ($_POST as $str_id=>$harmoChangesTab){
 		if(is_numeric($str_id)){
@@ -57,6 +57,7 @@ if(isset($_POST['saveGraf'])){
 				$daneDoZapisu[$str_id] = array( 'harmonogram' =>$harmonogramy[$str_id], 'exists' =>true);
 			} else {
 				$harmonogram = new Harmonogram($localDateTime->getYear());
+				$harmonogram->genHarmoForStrazak($dbStrazacy->getStrazak($str_id),get_harmo_types()[0]);
 				$harmonogram->putGrafChanges($localDateTime->getMonth(),$harmoChangesTab);
 				$daneDoZapisu[$str_id] = array( 'harmonogram' =>$harmonogram, 'exists' =>false); ;
 			}
@@ -81,7 +82,10 @@ require 'header.php';
 		</form>
 
 		<?php
-			$grafik->printMiesiac($strazacy);
+            if($user->isChef() || $user->isAdmin())
+			    $grafik->printMiesiac($strazacy);
+            else
+                $grafik->printMiesiacForUser($user, $strazacy);
 		?>
 
 		<div class="w3-conteiner w3-row w3-row-padding w3-margin">

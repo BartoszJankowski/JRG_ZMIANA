@@ -46,6 +46,17 @@ class Grafik {
 		echo '</table><div class="w3-margin-top"><button class="w3-button w3-border w3-light-grey " type="submit" name="saveGraf"  ><msc class="fa fa-fw fa-save"></msc> Zapisz grafik</button></div></form>';
 	}
 
+	public function printMiesiacForUser(User $user, array $strazacy){
+		$this->user = $user;
+		echo '<form action="" method="post" class="w3-center"><table  class="w3-table-all w3-hoverable w3-xsmall table-grafik" >';
+		echo $this->printHeader();
+		foreach ($strazacy as $strazak){
+			echo $this->strazakCroppedLine($strazak);
+		}
+		echo '</table><div class="w3-margin-top"><button class="w3-button w3-border w3-light-grey " type="submit" name="saveGraf"  ><msc class="fa fa-fw fa-save"></msc> Zapisz grafik</button></div></form>';
+
+	}
+
 	private function printHeader():string {
 		$resultString = '<th>Nr</th><th>Strażak</th>';
 		foreach ($this->dni as $nr => $dzienTyg){
@@ -57,8 +68,36 @@ class Grafik {
 	private function strazakLine(Strazak $strazak) : string {
 		$resultString = '<td>'.$strazak->getNrPorz().'.</td><td>'.$strazak->toString().'</td>';
 		foreach ($this->dni as $nr => $dzienTyg){
-			$val = $strazak->getHarmonogram() !=null ? $strazak->getHarmonogram()->getDayVal($this->msc, $nr) : "";
-			$resultString .= '<td class="scale"><select name="'.$strazak->getStrazakId().'['.($nr).']" class="w3-select my-own-select" >'.$this->getSelectOptions($val).'</select></td>';
+			$val = '';
+			$notka = '';
+			if($strazak->getHarmonogram()!=null ){
+				$val = $strazak->getHarmonogram()->getDayVal($this->msc, $nr);
+				$val2 = $strazak->getHarmonogram()->getDayVal2($this->msc, $nr);
+				if($val2){
+					$notka = '<span class="w3-display-topright w3-small" data-toggle="tooltip" data-placement="top" title="'.$val2.'"><i class="fas fa-comment-alt "  ></i></span>';
+				}
+			}
+			$resultString .= '<td class="scale w3-display-container">'.$notka.'<select name="'.$strazak->getStrazakId().'['.($nr).']" class="w3-select my-own-select" >'.$this->getSelectOptions($val).'</select></td>';
+		}
+		return  '<tr>'.$resultString.'</tr>';
+	}
+
+	private function strazakCroppedLine(Strazak $strazak) : string {
+		$resultString = '<td>'.$strazak->getNrPorz().'.</td><td>'.$strazak->toString().'</td>';
+		foreach ($this->dni as $nr => $dzienTyg){
+			$val = '';
+			$notka = '';
+			if($strazak->getHarmonogram()!=null ){
+				$val = $strazak->getHarmonogram()->getDayVal($this->msc, $nr);
+				if($strazak->getStrazakId() === $this->user->getStrazak()->getStrazakId()){
+					$val2 = $strazak->getHarmonogram()->getDayVal2($this->msc, $nr);
+					if($val2){
+						$notka = '<span class="w3-display-topright w3-small" data-toggle="tooltip" data-placement="top" title="'.$val2.'"><i class="fas fa-comment-alt "  ></i></span>';
+					}
+				}
+
+			}
+			$resultString .= '<td class="scale w3-display-container">'.$notka.$val.'</td>';
 		}
 		return  '<tr>'.$resultString.'</tr>';
 	}

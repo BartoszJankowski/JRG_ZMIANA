@@ -17,18 +17,15 @@ $proceedTime = round(microtime(true) - $timeStart,3);
 	        <button class="w3-button w3-gray w3-right" id="print" title="Drukuj"><i class="fa fa-print w3-large" aria-hidden="true"></i></button>
 		</div>
 	</footer>
-	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
-	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-    <script src="/js/jquery.validate.min.js"></script>
-	<script type="text/javascript" src="js/scripts.js?ver=<?php echo time() ?>"></script>
+
 
 <script>
 
     $(function () {
-        $('[data-toggle="tooltip"]').tooltip();
+
         $('button[data-toggle="popover"]').popover({content:createSelect});
         $('.table-calendar td[data-toggle="popover"]').popover({content:addInfo});
+        $('[data-toggle="tooltip"]').tooltip();
 
     });
 
