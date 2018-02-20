@@ -17,19 +17,24 @@ $proceedTime = round(microtime(true) - $timeStart,3);
 	        <button class="w3-button w3-gray w3-right" id="print" title="Drukuj"><i class="fa fa-print w3-large" aria-hidden="true"></i></button>
 		</div>
 	</footer>
+<<<<<<< HEAD
 	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
 	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
 <!--     <script src="/js/jquery.validate.min.js"></script> -->
     <script type="text/javascript" src="ajax.js"></script>
 	<script type="text/javascript" src="js/scripts.js?ver=<?php echo time() ?>"></script>
+=======
+
+>>>>>>> 88783c9e7cf04034db0ae351bed81cb8b257a2db
 
 <script>
 
     $(function () {
-        $('[data-toggle="tooltip"]').tooltip();
+
         $('button[data-toggle="popover"]').popover({content:createSelect});
-        $('.table-calendar td[data-toggle="popover"]').popover({content:addInfo});
+        $('td[data-toggle="popover"]').popover({content:addInfo});
+        $('[data-toggle="tooltip"]').tooltip();
 
     });
 
@@ -46,7 +51,6 @@ $proceedTime = round(microtime(true) - $timeStart,3);
     }
 
     function addInfo(){
-        console.log();
 
         return '<form action="" method="post">' +
             '<input type="hidden" name="data" value="'+$(this).attr("data-jrg")+'">' +

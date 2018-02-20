@@ -38,6 +38,21 @@ if(isset($_GET)){
 	}
 }
 
+if(isset($_POST['addUserInfo'])){
+	$dataPost = new LocalDateTime($_POST['data']);
+	$harmonogram = $dbharmo->getHarmo($user->getStrazak(), $localDateTime->getYear());
+	if($harmonogram->setV2($dataPost,$_POST['info'] )){
+		if($dbharmo->changeHarmo($localDateTime->getYear(),$user->getStrazak()->getStrazakId(),$harmonogram)){
+			header('Location: '.$_SERVER['HTTP_REFERER']);
+			exit;
+		} else {
+			$info = $dbharmo->getError();
+		}
+	} else {
+		$info = 'Błąd dodania.';
+	}
+}
+
 
 $grafik = new Grafik($localDateTime->getYear(),$localDateTime->getMonth(),$user->getStrazak()->getZmiana());
 $strazacy = $dbStrazacy->getZmianaListStrazacy($user->getStrazak()->getJrgId(),$user->getStrazak()->getZmiana());
@@ -48,7 +63,7 @@ foreach ( $strazacy as $strazak){
 	}
 }
 
-if(isset($_POST['saveGraf'])){
+if(isset($_POST['saveGraf']) && $user->isChef()){
 	$daneDoZapisu = array();
 	foreach ($_POST as $str_id=>$harmoChangesTab){
 		if(is_numeric($str_id)){
@@ -57,6 +72,7 @@ if(isset($_POST['saveGraf'])){
 				$daneDoZapisu[$str_id] = array( 'harmonogram' =>$harmonogramy[$str_id], 'exists' =>true);
 			} else {
 				$harmonogram = new Harmonogram($localDateTime->getYear());
+				$harmonogram->genHarmoForStrazak($dbStrazacy->getStrazak($str_id),'110');
 				$harmonogram->putGrafChanges($localDateTime->getMonth(),$harmoChangesTab);
 				$daneDoZapisu[$str_id] = array( 'harmonogram' =>$harmonogram, 'exists' =>false); ;
 			}
@@ -66,6 +82,7 @@ if(isset($_POST['saveGraf'])){
 	header('Location: '.$_SERVER['HTTP_REFERER']);
 	exit;
 }
+
 
 
 $title = "Grafik";
@@ -81,7 +98,10 @@ require 'header.php';
 		</form>
 
 		<?php
-			$grafik->printMiesiac($strazacy);
+            if($user->isChef() || $user->isAdmin())
+			    $grafik->printMiesiac($strazacy);
+            else
+                $grafik->printMiesiacForUser($user, $strazacy);
 		?>
 
 		<div class="w3-conteiner w3-row w3-row-padding w3-margin">

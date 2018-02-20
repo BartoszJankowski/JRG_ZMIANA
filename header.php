@@ -24,6 +24,7 @@ function isActivePage($nazwa){global $t, $$t; echo $$nazwa;}
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
             <link rel="stylesheet" type="text/css" href="css/main.css" />
+            <link rel="stylesheet" type="text/css" href="css/style.css?ver=<?php echo time(); ?>" />
             <link rel="stylesheet" type="text/css" href="css/maine.css?ver=1.1" />
                 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" /> 
                     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&amp;subset=latin-ext" rel="stylesheet">
@@ -31,6 +32,11 @@ function isActivePage($nazwa){global $t, $$t; echo $$nazwa;}
     <style>
         <?php  echo $style; ?>
     </style>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    <script src="/js/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="js/scripts.js?ver=<?php echo time() ?>"></script>
 </head>
 
 <body >
@@ -69,11 +75,7 @@ function isActivePage($nazwa){global $t, $$t; echo $$nazwa;}
                                                     <i class="fas fa-newspaper nav__ico"></i>
                                                         <p class="font-weight-light">Grafik</p></a>
                                             </div>
-                                                <div class="nav-item p-2 <?php isActivePage('harmonogramsluzb') ?>">
-                                                    <a href="harmonogramsluzb.php" class="nav-link  <?php isActivePage('harmonogramsluzb') ?> ">
-                                                        <i class="fas fa-history nav__ico"></i>
-                                                            <p class="font-weight-light">Harmonogram</p></a>
-                                                </div>
+
                                                     <div  class="nav-item p-2 <?php isActivePage('rozkazpodglad') ?>">
                                                         <a href="rozkazpodglad.php"  class="nav-link  <?php isActivePage('rozkazpodglad') ?> ">
                                                             <i class="fas fa-list-alt nav__ico"></i>
@@ -86,22 +88,40 @@ function isActivePage($nazwa){global $t, $$t; echo $$nazwa;}
                                                         </div>
                                                         
                                             <?php endif; ?>
+                            <div  class="nav-item p-2 <?php isActivePage('mojkalendarz') ?>">
+                                <a  href="mojkalendarz.php"  class="nav-link  <?php isActivePage('mojkalendarz') ?> ">
+                                    <i class="fas fa-calendar-alt nav__ico" aria-hidden="true"></i>
+                                    <p class="font-weight-light">Kalendarz</P></a>
+                            </div>
+                            <div class="nav-item p-2 <?php isActivePage('grafiksluzb') ?>">
+                                <a href="grafiksluzb.php" class="nav-link <?php isActivePage('grafiksluzb') ?> ">
+                                    <i class="fas fa-newspaper nav__ico"></i>
+                                    <p class="font-weight-light">Grafik</p></a>
+                            </div>
+                            <div  class="nav-item p-2 <?php isActivePage('rozkazpodglad') ?>">
+                                <a href="rozkazpodglad.php"  class="nav-link  <?php isActivePage('rozkazpodglad') ?> ">
+                                    <i class="fas fa-list-alt nav__ico"></i>
+                                    <p class="font-weight-light">Rozkaz</p></a>
+                            </div>
 
-                                                            <div  class="nav-item p-2 <?php isActivePage('mojkalendarz') ?>">
-                                                                <a  href="mojkalendarz.php"  class="nav-link  <?php isActivePage('mojkalendarz') ?> ">
-                                                                    <i class="fas fa-calendar-alt nav__ico" aria-hidden="true"></i>
-                                                                        <p class="font-weight-light">Kalendarz</P></a>
-                                                            </div>
-                                                                <div  class="nav-item p-2 <?php isActivePage('ustawienia') ?>">
-                                                                    <a  href="ustawienia.php"  class="nav-link  <?php isActivePage('ustawienia') ?> ">
-                                                                        <i class="fas fa-cog nav__ico"></i>
-                                                                            <p class="font-weight-light">Ustawienia</p></a>
-                                                                </div>
-                                                                     <div class="nav-item p-2 logout__icon">
-                                                                        <a href="logout.php?logout=1" class="nav-link ">
-                                                                            <i class="fas fa-sign-out-alt nav__ico"></i>
-                                                                              <p class="font-weight-light">Wyloguj się</p></a>
-                                                                    </div>
+                            <div class="nav-item p-2 <?php isActivePage('harmonogramsluzb') ?>">
+                                <a href="harmonogramsluzb.php" class="nav-link  <?php isActivePage('harmonogramsluzb') ?> ">
+                                    <i class="fas fa-history nav__ico"></i>
+                                    <p class="font-weight-light">Harmonogram</p></a>
+                            </div>
+                            <div  class="nav-item p-2 <?php isActivePage('ustawienia') ?>">
+                                <a  href="ustawienia.php"  class="nav-link  <?php isActivePage('ustawienia') ?> ">
+                                    <i class="fas fa-cog nav__ico"></i>
+                                    <p class="font-weight-light">Ustawienia</p></a>
+                            </div>
+
+                            <div class="nav-item p-2 logout__icon">
+                                <a href="logout.php?logout=1" class="nav-link ">
+                                    <i class="fas fa-sign-out-alt nav__ico"></i>
+                                    <p class="font-weight-light">Wyloguj się</p></a>
+                            </div>
+
+
                     </div>
                 </div>
     </nav>

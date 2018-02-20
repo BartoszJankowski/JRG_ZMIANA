@@ -37,10 +37,12 @@ if($user->getStrazak()){
 	    $dataPost = new LocalDateTime($_POST['data']);
 		if($harmonogram->setV2($dataPost,$_POST['info'] )){
 			if($dbHarmo->changeHarmo($czas->getYear(),$user->getStrazak()->getStrazakId(),$harmonogram)){
-			   // echo 'zapisano';
+			   $info = 'Zapisano poprawnie:) ';
             } else {
 			    $info = $dbHarmo->getError();
             }
+        } else {
+			$info = 'Błąd dodania.';
         }
     }
 } else {
@@ -80,6 +82,9 @@ require 'header.php';
 
 
 	<?php
+        if(!empty($info)){
+            echo $info;
+        }
 
 		for($msc=1; $msc <= 12 ;$msc++){
 			if( $msc % 4 == 1){
@@ -129,7 +134,7 @@ require 'header.php';
 	?>
 	</div>
 	<div class="w3-padding w3-center w3-row" style="width: 300px;"><div class="w3-third w3-padding-small"><div class="zmiana-1">I</div></div><div class="w3-third w3-padding-small"><div class="zmiana-2">II</div></div><div class="w3-third w3-padding-small"><div class="zmiana-3">III</div></div></div>
-	<?php else: echo $info ; endif; ?>   <!-- dodałem na początku przed ? php ; nie odpalało kalendarza na serwerze lokalnym  -->
+	<?php else: echo $info; endif; ?>   <!-- dodałem na początku przed ? php ; nie odpalało kalendarza na serwerze lokalnym  -->
 </main>
 <?php
 

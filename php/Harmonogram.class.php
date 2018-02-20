@@ -95,6 +95,15 @@ class Harmonogram {
 		echo '<tr>'.$header.'</tr>';
 	}
 
+	public function printHarmoHeaderForUser(){
+		$header = '<th>Miesiąc</th>';
+		for($i=1;$i<=31; $i++)
+				$header .= '<th class="w3-center">'.$i.'</th>';
+		echo '<tr>'.$header.'</tr>';
+	}
+
+
+
 	/**
 	 * Wiersz harmonogramu strazaka
 	 * @param Strazak $strazak
@@ -117,6 +126,19 @@ class Harmonogram {
 		}
 
 		echo '<tr>'.$inner.'</tr>';
+	}
+
+
+	public function printMonthharmoRow(int $month){
+
+		$inner = '<td>'.get_moth_name($month).'</td>';
+		foreach ($this->miesiace[$month] as $nrDnia =>$dzien){
+			$color = get_harmo_val($dzien['v'])['col'];
+			$inner .= '<td title=" '.($nrDnia+1).' '.get_moth_name($month).' '.$this->rok.' " data-placement="top"  class="w3-center  tdHarmCell" style="background-color: '.$color.'">
+								<div class="harmoCell ">'.$dzien['h'].'</div>
+						</td>';
+		}
+		echo '<tr >'.$inner.'</tr>';
 	}
 
 
@@ -210,5 +232,9 @@ class Harmonogram {
 
 	public function getHarmoType(){
 		return $this->typ;
+	}
+
+	public function isHarmoSet() :bool {
+		return !empty($this->miesiace);
 	}
 }
