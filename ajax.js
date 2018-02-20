@@ -1,6 +1,6 @@
 
 $(document).ready(function() {
-		alert('załadowane kurwa ! ! ! ! !');
+		// alert('załadowane kurwa ! ! ! ! !');
 	
 	// $("#login-form").validate({
 	// 	rules:
