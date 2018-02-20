@@ -90,7 +90,7 @@ if(isset($_POST['log_in'])){
 <main>
 
     <div class="col-lg-3 col-sm-6 col-xs-6 login">
-        <?php
+    <?php
          if(isset($_POST['log_in'])){
          if(!$dbUsers->login($_POST['login'],$_POST['password']))
          {
@@ -101,21 +101,30 @@ if(isset($_POST['log_in'])){
              exit;
          }
       }
-     ?>
-    <form method="post" action="">
+     ?> 
+    <form id="login_form" method="post" action="" class="form">
+
+        <div id="error">
+            
+        </div>
+
       <h2>Zaloguj się</h2>
+
           <?php
           echo $infoAdd;
           ?>
+        
+
+
       <div class="form-group">
         <label for="exampleInputEmail1">Login / email</label>
-          <input type="email" name="login" value="<?php echo $_POST['email'] ?>" class="form-control" required />
+          <input id="login" type="login" name="login" value="<?php echo $_POST['login'] ?>" class="form-control" required />
       </div>
         <div class="form-group">
           <label for="exampleInputPassword1">Hasło</label>
-            <input type="password" name="password" value="" class="form-control" required />
+            <input id="password" type="password" name="password" value="" class="form-control" required />
         </div>
-        <button type="submit" name="log_in" class="btn btn-danger btn-lg btn-block btn__login__submit">Zaloguj</button>
+        <button id="log_in" type="submit" name="log_in" class="btn btn-danger btn-lg btn-block btn__login__submit">Zaloguj</button>
 <!--   </form> -->
             <div class="w3-container">
                 <a class="w3-left" href="register.php" target="_self">Rejestracja</a>

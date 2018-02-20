@@ -104,7 +104,7 @@ $res = $jednostki->getJrgList();
                                 <h2>Rejestracja</h2>
                                     <form method="post" action="" class="form-group addJrg__form" id="formRegister">
 
-                                        <label  class="text-secondary">Email*</label>
+                                        <label class="text-secondary">Email*</label>
                                             <input type="email" name="login" value="<?php echo $_POST['email'] ?>" class="form-control" required />
 
                                                 <label class="text-secondary">Hasło*</label>
@@ -132,7 +132,7 @@ $res = $jednostki->getJrgList();
                                                                                     </select>
 
                                             <p class="info__required">* dane wymagane do rejestracji użytkownika</p>
-                                        <button type="submit" name="register" class="btn btn-danger btn-lg btn-block btn_register_submit">Zarejestruj</button>
+                                        <button id="add" type="submit" name="register" class="btn btn-danger btn-lg btn-block btn_register_submit">Zarejestruj</button>
                                 </form>
                             </div>
 
