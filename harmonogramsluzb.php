@@ -32,6 +32,9 @@ if(isset($_GET)){
 	$_GET = test_input($_GET);
 	if(isset($_GET['month'],$_GET['year']))
 	    $localDateTime = new LocalDateTime($_GET['year'].'-'.$_GET['month'].'-1');
+	elseif(isset($_GET['year']))
+		$localDateTime = new LocalDateTime($_GET['year'].'-1-1');
+
 	if(isset($_GET['mscAction'])){
 	    if($_GET['mscAction'] > 0){
 		    $localDateTime->add(new DateInterval('P'.$_GET['mscAction'].'M'));
@@ -46,64 +49,69 @@ if(isset($_GET)){
 $month= $localDateTime->getMonth() ;
 $year = $localDateTime->getYear() ;
 
-$harmo = new Harmonogram($year);
-$harmo->genHarmonogram();
 
-$strazacy = $dbStrazacy->getZmianaListStrazacy($user->getJrgId(),$user->getStrazak()->getZmiana());
-$harmonogramy = $dbharmo->getJrgharmos($user->getJrgId(),$year );
 
-if(isset($_GET['createHarmo'])){
-	$harmonogram = new Harmonogram($year);
-	foreach ($strazacy as $strazak){
-	    if( $strazak->getStrazakId() == $_GET['createHarmo'] ){
-		    $harmonogram->genHarmoForStrazak($strazak, $_GET['typ']);
-		    $dbharmo->saveHarmonogram($user->getJrgId(),$year,$strazak->getStrazakId(),$harmonogram);
-		    $harmonogramy[$strazak->getStrazakId()] = $harmonogram;
-		}
-    }
-} 
-elseif(isset($_POST['editHarmoType'])){
-    $idStr = $_POST['editHarmoType'];
-    if(is_numeric($idStr)){
-        if(array_key_exists($idStr, $harmonogramy)){
-	        foreach ($strazacy as $strazak){
-		        if( $strazak->getStrazakId() == $idStr ){
-			        $harmonogramy[$idStr]->changeHarmoType($strazak, $_POST['typ']);
-			        $dbharmo->changeHarmo($year,$idStr,$harmonogramy[$idStr]);
-		        }
-	        }
+if($user->isChef()){
+	$harmo = new Harmonogram($year);
+	$harmo->genHarmonogram();
+	$strazacy = $dbStrazacy->getZmianaListStrazacy($user->getJrgId(),$user->getStrazak()->getZmiana());
+	$harmonogramy = $dbharmo->getJrgharmos($user->getJrgId(),$year );
 
-        }
-    }
-}
-
-if(isset($_POST['harmoVal'])){
-	$daneDoZapisu = array();
-	foreach ($_POST as $nr=>$harmoChanges){
-		if(is_numeric($nr)){
-			if(array_key_exists($nr, $harmonogramy)){
-				$harmonogramy[$nr]->putChanges($_POST['month'],$harmoChanges,  $_POST['harmoVal']);
-				$daneDoZapisu[$nr] = array('harmonogram'=>$harmonogramy[$nr],'exists'=>true);
+	if(isset($_GET['createHarmo'])){
+		$harmonogram = new Harmonogram($year);
+		foreach ($strazacy as $strazak){
+			if( $strazak->getStrazakId() == $_GET['createHarmo'] ){
+				$harmonogram->genHarmoForStrazak($strazak, $_GET['typ']);
+				$dbharmo->saveHarmonogram($user->getJrgId(),$year,$strazak->getStrazakId(),$harmonogram);
+				$harmonogramy[$strazak->getStrazakId()] = $harmonogram;
 			}
 		}
 	}
-	$dbharmo->saveHarmos($user->getStrazak()->getJrgId(),$year,$daneDoZapisu);
-	header('Location: '.$_SERVER['HTTP_REFERER']);
-	exit;
-} else {
-	foreach ( $strazacy as $strazak ){
-		if(array_key_exists($strazak->getStrazakId(), $harmonogramy)){
-			$strazak->setHarmonogram( $harmonogramy[$strazak->getStrazakId()] );
-		} else {
-		    $harm = new Harmonogram($year);
-		   // $harm->genHarmoForStrazak($strazak);
-			$strazak->setHarmonogram( $harm );
-        }
+    elseif(isset($_POST['editHarmoType'])){
+		$idStr = $_POST['editHarmoType'];
+		if(is_numeric($idStr)){
+			if(array_key_exists($idStr, $harmonogramy)){
+				foreach ($strazacy as $strazak){
+					if( $strazak->getStrazakId() == $idStr ){
+						$harmonogramy[$idStr]->changeHarmoType($strazak, $_POST['typ']);
+						$dbharmo->changeHarmo($year,$idStr,$harmonogramy[$idStr]);
+					}
+				}
+
+			}
+		}
 	}
+
+	if(isset($_POST['harmoVal'])){
+		$daneDoZapisu = array();
+		foreach ($_POST as $nr=>$harmoChanges){
+			if(is_numeric($nr)){
+				if(array_key_exists($nr, $harmonogramy)){
+					$harmonogramy[$nr]->putChanges($_POST['month'],$harmoChanges,  $_POST['harmoVal']);
+					$daneDoZapisu[$nr] = array('harmonogram'=>$harmonogramy[$nr],'exists'=>true);
+				}
+			}
+		}
+		$dbharmo->saveHarmos($user->getStrazak()->getJrgId(),$year,$daneDoZapisu);
+		header('Location: '.$_SERVER['HTTP_REFERER']);
+		exit;
+	} else {
+		foreach ( $strazacy as $strazak ){
+			if(array_key_exists($strazak->getStrazakId(), $harmonogramy)){
+				$strazak->setHarmonogram( $harmonogramy[$strazak->getStrazakId()] );
+			} else {
+				$harm = new Harmonogram($year);
+				// $harm->genHarmoForStrazak($strazak);
+				$strazak->setHarmonogram( $harm );
+			}
+		}
+	}
+} else {
+    $harmo = $dbharmo->getHarmo($user->getStrazak(),$year);
 }
 
 $style ='
-td:nth-of-type(2) {
+.table-harmo-admin td:nth-of-type(2) {
     min-width:200px;
 }
 .harmoCell input {
@@ -118,8 +126,28 @@ require 'header.php';
 ?>
 <main class="" xmlns="http://www.w3.org/1999/html">
     <form action="" method="get">
+        <?php if($user->isChef()) : ?>
         <input type="hidden" name="month" value="<?php echo $month?>"> <input type="hidden" name="year" value="<?php echo $year ?>">
-        <h1 class="w3-center"><button name="mscAction" value="-1" type="submit" class="w3-button w3-xlarge"><i class="fa fa-fw fa-chevron-left"></i></button><span style="width: 25%;display: inline-block"><?php echo get_moth_name($month).' '.$year; ?></span><button name="mscAction" value="1" type="submit" class="w3-button w3-xlarge"><i class="fa fa-fw fa-chevron-right"></i></button></h1>
+        <h1 class="w3-center">
+            <button name="mscAction" value="-1" type="submit" class="w3-button w3-xlarge">
+                <i class="fa fa-fw fa-chevron-left"></i>
+            </button>
+            <span style="width: 25%;display: inline-block"><?php echo get_moth_name($month).' '.$year; ?></span>
+            <button name="mscAction" value="1" type="submit" class="w3-button w3-xlarge">
+                <i class="fa fa-fw fa-chevron-right"></i>
+            </button>
+        </h1>
+        <?php else: ?>
+            <h1 class="w3-center">
+                <button name="year" value="<?php echo ($year-1);?>" type="submit" class="w3-button w3-xlarge">
+                    <i class="fa fa-fw fa-chevron-left"></i>
+                </button>
+                <span style="width: 25%;display: inline-block"><?php echo $year; ?></span>
+                <button name="year" value="<?php echo ($year+1);?>" type="submit" class="w3-button w3-xlarge">
+                    <i class="fa fa-fw fa-chevron-right"></i>
+                </button>
+            </h1>
+        <?php endif; ?>
     </form>
 
     <div class="w3-conteiner w3-row w3-row-padding w3-margin">
@@ -129,21 +157,24 @@ require 'header.php';
         }
         ?>
     </div>
+	<?php if($user->isChef()) : ?>
 	<form action="" method="post">
-        <div class="w3-row">
 
-            <select class="w3-select w3-border w3-col l3 w3-margin harmoValSelect" name="harmoVal">
-				<?php
+            <div class="w3-row">
 
-				foreach (get_harmo_values() as $val=>$tab){
-					echo '<option class="'.$tab['col'].'" value="'.$val.'">'.$tab['n'].'</option>';
-				}
-				echo '<option class="" value="">Usuń</option>';
-				?>
-            </select>
+                <select class="w3-select w3-border w3-col l3 w3-margin harmoValSelect" name="harmoVal">
+                    <?php
 
-        </div>
-		<table class="w3-table-all w3-hoverable w3-small">
+                    foreach (get_harmo_values() as $val=>$tab){
+                        echo '<option class="'.$tab['col'].'" value="'.$val.'">'.$tab['n'].'</option>';
+                    }
+                    echo '<option class="" value="">Usuń</option>';
+                    ?>
+                </select>
+
+            </div>
+
+		<table class="w3-table-all w3-hoverable w3-small table-harmo-admin">
 		<?php
 		echo '<input type="hidden" name="year" value="'.$year.'"/>';
 		echo '<input type="hidden" name="month" value="'.$month.'"/>';
@@ -159,6 +190,23 @@ require 'header.php';
 
 
 	</form>
+	<?php else : ?>
+    <div class="w3-conteiner w3-padding">
+	    <?php if($harmo->isHarmoSet()) : ?>
+        <table class="w3-table-all w3-hoverable w3-small">
+		    <?php
+	            $harmo->printHarmoHeaderForUser();
+	            for($i=1;$i<=12;$i++){
+		            $harmo->printMonthharmoRow($i);
+	            }
+		    ?>
+        </table>
+        <?php else: ?>
+            <h2 class="w3-margin-top w3-center">Harmonogram na wybrany rok nie został utworzony.</h2>
+        <?php endif; ?>
+    </div>
+
+    <?php endif; ?>
 </main>
 
 

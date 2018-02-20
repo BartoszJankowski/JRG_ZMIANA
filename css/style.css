@@ -107,3 +107,6 @@ table.table-calendar tr:first-child td {
 
 .no-margin {
     margin: 2px; }
+.tdHarmCell:last-of-type {
+   border-right: 1px solid #9d9d9d;
+}

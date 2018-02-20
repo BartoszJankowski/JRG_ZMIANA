@@ -24,7 +24,7 @@ $proceedTime = round(microtime(true) - $timeStart,3);
     $(function () {
 
         $('button[data-toggle="popover"]').popover({content:createSelect});
-        $('.table-calendar td[data-toggle="popover"]').popover({content:addInfo});
+        $('td[data-toggle="popover"]').popover({content:addInfo});
         $('[data-toggle="tooltip"]').tooltip();
 
     });
@@ -42,7 +42,6 @@ $proceedTime = round(microtime(true) - $timeStart,3);
     }
 
     function addInfo(){
-        console.log();
 
         return '<form action="" method="post">' +
             '<input type="hidden" name="data" value="'+$(this).attr("data-jrg")+'">' +

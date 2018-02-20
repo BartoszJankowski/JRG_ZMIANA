@@ -38,6 +38,21 @@ if(isset($_GET)){
 	}
 }
 
+if(isset($_POST['addUserInfo'])){
+	$dataPost = new LocalDateTime($_POST['data']);
+	$harmonogram = $dbharmo->getHarmo($user->getStrazak(), $localDateTime->getYear());
+	if($harmonogram->setV2($dataPost,$_POST['info'] )){
+		if($dbharmo->changeHarmo($localDateTime->getYear(),$user->getStrazak()->getStrazakId(),$harmonogram)){
+			header('Location: '.$_SERVER['HTTP_REFERER']);
+			exit;
+		} else {
+			$info = $dbharmo->getError();
+		}
+	} else {
+		$info = 'Błąd dodania.';
+	}
+}
+
 
 $grafik = new Grafik($localDateTime->getYear(),$localDateTime->getMonth(),$user->getStrazak()->getZmiana());
 $strazacy = $dbStrazacy->getZmianaListStrazacy($user->getStrazak()->getJrgId(),$user->getStrazak()->getZmiana());
@@ -57,7 +72,7 @@ if(isset($_POST['saveGraf']) && $user->isChef()){
 				$daneDoZapisu[$str_id] = array( 'harmonogram' =>$harmonogramy[$str_id], 'exists' =>true);
 			} else {
 				$harmonogram = new Harmonogram($localDateTime->getYear());
-				$harmonogram->genHarmoForStrazak($dbStrazacy->getStrazak($str_id),get_harmo_types()[0]);
+				$harmonogram->genHarmoForStrazak($dbStrazacy->getStrazak($str_id),'110');
 				$harmonogram->putGrafChanges($localDateTime->getMonth(),$harmoChangesTab);
 				$daneDoZapisu[$str_id] = array( 'harmonogram' =>$harmonogram, 'exists' =>false); ;
 			}
@@ -67,6 +82,7 @@ if(isset($_POST['saveGraf']) && $user->isChef()){
 	header('Location: '.$_SERVER['HTTP_REFERER']);
 	exit;
 }
+
 
 
 $title = "Grafik";

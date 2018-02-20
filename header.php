@@ -75,11 +75,7 @@ function isActivePage($nazwa){global $t, $$t; echo $$nazwa;}
                                                     <i class="fas fa-newspaper nav__ico"></i>
                                                         <p class="font-weight-light">Grafik</p></a>
                                             </div>
-                                                <div class="nav-item p-2 <?php isActivePage('harmonogramsluzb') ?>">
-                                                    <a href="harmonogramsluzb.php" class="nav-link  <?php isActivePage('harmonogramsluzb') ?> ">
-                                                        <i class="fas fa-history nav__ico"></i>
-                                                            <p class="font-weight-light">Harmonogram</p></a>
-                                                </div>
+
                                                     <div  class="nav-item p-2 <?php isActivePage('rozkazpodglad') ?>">
                                                         <a href="rozkazpodglad.php"  class="nav-link  <?php isActivePage('rozkazpodglad') ?> ">
                                                             <i class="fas fa-list-alt nav__ico"></i>
@@ -92,6 +88,11 @@ function isActivePage($nazwa){global $t, $$t; echo $$nazwa;}
                                                         </div>
                                                         
                                             <?php endif; ?>
+                            <div  class="nav-item p-2 <?php isActivePage('mojkalendarz') ?>">
+                                <a  href="mojkalendarz.php"  class="nav-link  <?php isActivePage('mojkalendarz') ?> ">
+                                    <i class="fas fa-calendar-alt nav__ico" aria-hidden="true"></i>
+                                    <p class="font-weight-light">Kalendarz</P></a>
+                            </div>
                             <div class="nav-item p-2 <?php isActivePage('grafiksluzb') ?>">
                                 <a href="grafiksluzb.php" class="nav-link <?php isActivePage('grafiksluzb') ?> ">
                                     <i class="fas fa-newspaper nav__ico"></i>
@@ -102,16 +103,18 @@ function isActivePage($nazwa){global $t, $$t; echo $$nazwa;}
                                     <i class="fas fa-list-alt nav__ico"></i>
                                     <p class="font-weight-light">Rozkaz</p></a>
                             </div>
-                            <div  class="nav-item p-2 <?php isActivePage('mojkalendarz') ?>">
-                                <a  href="mojkalendarz.php"  class="nav-link  <?php isActivePage('mojkalendarz') ?> ">
-                                    <i class="fas fa-calendar-alt nav__ico" aria-hidden="true"></i>
-                                    <p class="font-weight-light">Kalendarz</P></a>
+
+                            <div class="nav-item p-2 <?php isActivePage('harmonogramsluzb') ?>">
+                                <a href="harmonogramsluzb.php" class="nav-link  <?php isActivePage('harmonogramsluzb') ?> ">
+                                    <i class="fas fa-history nav__ico"></i>
+                                    <p class="font-weight-light">Harmonogram</p></a>
                             </div>
                             <div  class="nav-item p-2 <?php isActivePage('ustawienia') ?>">
                                 <a  href="ustawienia.php"  class="nav-link  <?php isActivePage('ustawienia') ?> ">
                                     <i class="fas fa-cog nav__ico"></i>
                                     <p class="font-weight-light">Ustawienia</p></a>
                             </div>
+
                             <div class="nav-item p-2 logout__icon">
                                 <a href="logout.php?logout=1" class="nav-link ">
                                     <i class="fas fa-sign-out-alt nav__ico"></i>
