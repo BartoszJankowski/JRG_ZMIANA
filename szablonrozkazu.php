@@ -34,6 +34,7 @@ if(isset($_GET)){
 	$_GET = test_input($_GET);
 }
 
+Szablon::$isEditing = true;
 
 if(isset($_GET['start'])){
 	$szablon = new Szablon($user->getJrgId());
@@ -202,6 +203,7 @@ $title = "Szablon rozkazu";
 require 'header.php';
 ?>
 <main>
+    <script type="text/javascript" src="js/szablonrozkazu.js?ver=<?php echo time() ?>"></script>
     <?php
         echo $info;
         ?>
@@ -248,8 +250,6 @@ require 'header.php';
                     </div>
                 </li>
             </ul>
-
-
         </form>
     </div>
 
@@ -258,7 +258,7 @@ require 'header.php';
 
 		?>
         <div class="w3-container">
-            <div class="w3-container w3-twothird w3-border">
+            <div id="szablon_container" class="w3-container w3-twothird w3-border " data-toggle="popover" data-html="true" data-placement="top"  >
                 <?php
                     foreach ($szablon->getObiektyHtml() as $obiekt){
                         if($obiekt instanceof HtmlObj){

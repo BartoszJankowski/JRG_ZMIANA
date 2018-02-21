@@ -5,6 +5,10 @@
 #settings {
     display: none; }
 
+.no-display {
+    display: none;
+}
+
 th.Nd, th.Sob {
     background-color: #c8c8c8; }
 
@@ -109,4 +113,20 @@ table.table-calendar tr:first-child td {
     margin: 2px; }
 .tdHarmCell:last-of-type {
    border-right: 1px solid #9d9d9d;
+}
+
+#szablon_container {
+    min-height:150px;
+    background-color: rgba(0,0,0,0.1);
+}
+.highlight-element {
+    border:2px solid rgba(0,255,0,0.2) !important;
+}
+
+.newEmptyElement {
+
+}
+
+.radio-btn:checked ~ span {
+    background-color:rgba(0,0,0,0.5);
 }

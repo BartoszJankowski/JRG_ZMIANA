@@ -17,6 +17,7 @@ class Szablon {
 	protected $obiekty = array();
 
 	public static $currentHtmlId = 0;
+	public static $isEditing = false;
 
 	public function __construct(int $jrg_id) {
 		$this->jrg_id = $jrg_id;
@@ -240,7 +241,10 @@ abstract class HtmlObj {
 	}
 
 	protected function getHtmlTag($class, $attr, $content){
-		return  '<'.$this->n . ' ' . $attr . ' ' . $class . ' >' . $content . '</' . $this->n . '>';
+		if(Szablon::$isEditing){
+			$popover = 'data-toggle="popover" data-html="true"';
+		}
+		return  '<'.$this->n . ' ' . $attr . ' ' . $class . ' '.$popover.' >' . $content . '</' . $this->n . '>';
 	}
 
 	public function print() {
