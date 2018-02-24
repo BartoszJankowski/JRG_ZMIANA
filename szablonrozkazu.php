@@ -258,50 +258,56 @@ require 'header.php';
 
 		?>
         <div class="w3-container">
-            <div id="szablon_container" class="w3-container w3-twothird w3-border " data-toggle="popover" data-html="true" data-placement="top"  >
-                <?php
-                    foreach ($szablon->getObiektyHtml() as $obiekt){
-                        if($obiekt instanceof HtmlObj){
-	                        $obiekt->print();
-                        }
-                    }
 
-                ?>
+            <div class="w3-col" style="width: 50px;">
+                <button class="w3-xxlarge" onclick="animateLeftBar(this)">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="w3-border" style="display: none">
+                    <div>
+                        <h4>Stałe: </h4>
+                        <span class="jrg_const szablon_element">nr_jrg</span>
+                        <span class="jrg_const szablon_element">miasto</span>
+                    </div>
+                    <div>
+                        <h4>Zmienne: </h4>
+                        <span class="jrg_var szablon_element">data</span>
+                        <span class="jrg_var szablon_element">dzien</span>
+                        <span class="jrg_var szablon_element">msc</span>
+                        <span class="jrg_var szablon_element">rok</span>
+                        <span class="jrg_var szablon_element">nr_rozkazu</span>
+                        <span class="jrg_var szablon_element">nr_zmiany</span>
+                    </div>
+                    <div>
+                        <h4>Zmienne listy: </h4>
+                        <span class="jrg_list szablon_element">strażacy na zmianie</span>
+                        <span class="jrg_list szablon_element">dostępni strażacy</span>
+                        <span class="jrg_list szablon_element">strażacy wg. zmiennej z harmonogramu/grafiku</span>
+                        <span class="jrg_list szablon_element">strażacy na dyżurze (aktualny dzień)</span>
+                        <span class="jrg_list szablon_element">strażacy na dyżurze (następny dzień)</span>
+                    </div>
+                    <div>
+                        <h4>Obiekty: </h4>
+                        <span class="jrg_obj szablon_element">Sekcja</span>
+                        <span class="jrg_obj szablon_element">Nagłówek</span>
+                        <span class="jrg_obj szablon_element">Pole tekstowe</span>
+                        <span class="jrg_obj szablon_element">Lista rozwijana</span>
+                    </div>
+                </div>
+
+            </div>
+            <div id="szablon_container" class="w3-container w3-rest w3-border " data-toggle="popover" data-html="true" data-placement="top"  >
+		        <?php
+		        foreach ($szablon->getObiektyHtml() as $obiekt){
+			        if($obiekt instanceof HtmlObj){
+				        $obiekt->print();
+			        }
+		        }
+
+		        ?>
 
 
             </div>
-            <div class="w3-container w3-third w3-border">
-                <div>
-                    <h4>Stałe: </h4>
-                    <span class="jrg_const szablon_element">nr_jrg</span>
-                    <span class="jrg_const szablon_element">miasto</span>
-                </div>
-                <div>
-                    <h4>Zmienne: </h4>
-                    <span class="jrg_var szablon_element">data</span>
-                    <span class="jrg_var szablon_element">dzien</span>
-                    <span class="jrg_var szablon_element">msc</span>
-                    <span class="jrg_var szablon_element">rok</span>
-                    <span class="jrg_var szablon_element">nr_rozkazu</span>
-                    <span class="jrg_var szablon_element">nr_zmiany</span>
-                </div>
-                <div>
-                    <h4>Zmienne listy: </h4>
-                    <span class="jrg_list szablon_element">strażacy na zmianie</span>
-                    <span class="jrg_list szablon_element">dostępni strażacy</span>
-                    <span class="jrg_list szablon_element">strażacy wg. zmiennej z harmonogramu/grafiku</span>
-                    <span class="jrg_list szablon_element">strażacy na dyżurze (aktualny dzień)</span>
-                    <span class="jrg_list szablon_element">strażacy na dyżurze (następny dzień)</span>
-                </div>
-                <div>
-                    <h4>Obiekty: </h4>
-                    <span class="jrg_obj szablon_element">Sekcja</span>
-                    <span class="jrg_obj szablon_element">Nagłówek</span>
-                    <span class="jrg_obj szablon_element">Pole tekstowe</span>
-                    <span class="jrg_obj szablon_element">Lista rozwijana</span>
-                </div>
-            </div>
-
         </div>
 
 	<?php endif; ?>

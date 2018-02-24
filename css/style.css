@@ -119,14 +119,56 @@ table.table-calendar tr:first-child td {
     min-height:150px;
     background-color: rgba(0,0,0,0.1);
 }
+#szablon_container *:hover {
+    outline:2px dotted rgba(0,0,0,0.2);
+    outline-offset: -1px;
+}
 .highlight-element {
-    border:2px solid rgba(0,255,0,0.2) !important;
+    outline:4px dashed rgba(0,255,0,0.2) !important;
+    outline-offset: -2px !important;
 }
 
 .newEmptyElement {
+    position: relative;
+    padding:1px 4px;
+    min-height:6px;
+    min-width:6px;
+    box-sizing: border-box;
+    outline:1px dashed rgba(0,0,0,0.1);
 
 }
 
+.newEmptyElement::after {
+    /*
+    font-family: "Font Awesome 5 Free";
+    content: "\f044";
+    position:relative;
+    left:99%;
+    box-sizing: border-box;
+    */
+}
 .radio-btn:checked ~ span {
     background-color:rgba(0,0,0,0.5);
+}
+
+.stale-btn {
+  background-color:#c0a16b;
+}
+.zmienne-btn {
+    background-color:#5cb85c;
+}
+.no-wrap {
+    white-space: nowrap;
+}
+
+.popover {
+    max-width:none !important; ;
+}
+.close-span {
+    position: absolute;
+    top:0;
+    right:0;
+    z-index:5;
+    padding:5px;
+    display: inline-block;
 }
