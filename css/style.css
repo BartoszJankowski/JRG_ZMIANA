@@ -103,11 +103,7 @@ table.table-calendar tr:first-child td {
 .jrg_obj {
     background-color: #1e7e34; }
 
-.align-right {
-    text-align: right; }
 
-.align-left {
-    text-align: left; }
 
 .no-margin {
     margin: 2px; }
@@ -117,6 +113,7 @@ table.table-calendar tr:first-child td {
 
 #szablon_container {
     min-height:150px;
+    padding-bottom:16px;
     background-color: rgba(0,0,0,0.1);
 }
 #szablon_container *:hover {
@@ -130,30 +127,27 @@ table.table-calendar tr:first-child td {
 
 .newEmptyElement {
     position: relative;
-    padding:1px 4px;
     min-height:6px;
     min-width:6px;
     box-sizing: border-box;
     outline:1px dashed rgba(0,0,0,0.1);
-
+    padding:0 4px 8px 4px;
+}
+.newEmptyElement:empty{
+    padding:6px;
 }
 
-.newEmptyElement::after {
-    /*
-    font-family: "Font Awesome 5 Free";
-    content: "\f044";
-    position:relative;
-    left:99%;
-    box-sizing: border-box;
-    */
-}
 .radio-btn:checked ~ span {
     background-color:rgba(0,0,0,0.5);
 }
 
-.stale-btn {
-  background-color:#c0a16b;
+.listy-btn {
+  background-color:#5bc0de;
+    display:initial;
+    margin:2px;
+    padding:2px;
 }
+
 .zmienne-btn {
     background-color:#5cb85c;
 }
@@ -172,3 +166,20 @@ table.table-calendar tr:first-child td {
     padding:5px;
     display: inline-block;
 }
+.backlight-element {
+    background-color:rgba(0,0,0,0.3) !important;
+}
+
+/*
+klasy szablonu / rozkazu
+ */
+
+.max-width {
+    display: block;
+   width:100% !important;
+}
+.align-right {
+    text-align: right; }
+
+.align-left {
+    text-align: left; }

@@ -55,8 +55,12 @@ if(isset($_GET['start'])){
     $szablony = $dbRozkazy->getSzablony($user->getAdminJrgId());
 }
 
-/*
+if(isset($_POST['save'])){
+    print_r(json_decode(str_replace('&quot;','"',$_POST['save']),true ));
+    die;
+}
 
+/*
 try {
     if(class_exists("HtmlObj", false)){
 	    $miejscowoscIdata = new Sekcja();
@@ -197,12 +201,10 @@ try {
 
 */
 
-
-
 $title = "Szablon rozkazu";
 require 'header.php';
 ?>
-<main>
+<main class="w3-container">
     <script type="text/javascript" src="js/szablonrozkazu.js?ver=<?php echo time() ?>"></script>
     <?php
         echo $info;
@@ -257,46 +259,72 @@ require 'header.php';
 		echo '<p>Edycja szablonu '.$szablon->getDataSzablonu().'/'.$szablon->getId().'</p>';
 
 		?>
-        <div class="w3-container">
+        <div class="w3-row" style="margin-bottom:80px;">
 
             <div class="w3-col" style="width: 50px;">
-                <button class="w3-xxlarge" onclick="animateLeftBar(this)">
+                <button class="w3-xlarge" onclick="animateBar(this)">
                     <i class="fas fa-bars"></i>
                 </button>
-                <div class="w3-border" style="display: none">
+                <div class="w3-border w3-container" style="display: none">
                     <div>
-                        <h4>Stałe: </h4>
-                        <span class="jrg_const szablon_element">nr_jrg</span>
-                        <span class="jrg_const szablon_element">miasto</span>
+                        <h4>Obiekty: </h4>
+                        <b>Sekcja</b>
+                        <p>
+                            Pojemnik dla innych obiektów, domyślnie grupuje się jako wiersz ale może tez posłużyć jako kolumna w innej sekcji.
+                        </p>
+                        <b>Nagłówek</b>
+                        <p>
+                            Wykorzystywany jako nagłówek rozkazu lub punkt rozkazu. Jego wielkośc można zmienic w edycji. Domyślnie zajmuje całą dostepną szerokość (podobnie jak sekcja).
+                        </p>
+                        <b>Text</b>
+                        <p>
+                          Zwykły tekst, domyslnie nie jest stylizowany. Domyslnie zajmuje taką szerokośc jak jego zawartość.
+                        </p>
+                        <b>Pole tekstowe</b>
+                        <p>
+                            Podstawowe pole zawierające wprowadzoną wartość w szablonie - zawartość pola może być edytowana w trakcie tworzenia rozkazu.
+                        </p>
+                        <b>Pole wyboru</b>
+                        <p>
+                           Lista rozwijana z elementami listy zdefinowanymi wg. wybranej dostępnej listy. (np. lista strażaków na jrg, na zmianie itd.)
+                        </p>
                     </div>
                     <div>
                         <h4>Zmienne: </h4>
-                        <span class="jrg_var szablon_element">data</span>
-                        <span class="jrg_var szablon_element">dzien</span>
-                        <span class="jrg_var szablon_element">msc</span>
-                        <span class="jrg_var szablon_element">rok</span>
-                        <span class="jrg_var szablon_element">nr_rozkazu</span>
-                        <span class="jrg_var szablon_element">nr_zmiany</span>
+                        <p>
+                            Zmienne dostępne dla obiektów typu Nagłówek i Tekst. Ich wartość jest zmienna w wyświetlanym rozkazie w zależności od dnia, zmiany i jrg.
+                        </p>
+                        <span class="jrg_var szablon_element" data-toggle="tooltip" title="Nr jrg">[$nr_jrg]</span>
+                        <span class="jrg_var szablon_element" data-toggle="tooltip" title="Miasto">[$miasto]</span>
+                        <span class="jrg_var szablon_element" data-toggle="tooltip" title="Nr rozkazu liczony od nr 1 dla 1 stycznia danego roku">[$nr_rozkazu]</span>
+                        <span class="jrg_var szablon_element" data-toggle="tooltip" title="Nr zmiany wypadającej w datę rozkazu">[$nr_zmiany]</span>
+                        <span class="jrg_var szablon_element" data-toggle="tooltip" title="Data dla której pisany jest rozkaz dzienny ( wg tej daty liczony jest nr rozkazu oraz nr zmiany)">[$data_rozkazu]</span>
+                        <span class="jrg_var szablon_element" data-toggle="tooltip" title="Data utworzenia lub edycji rozkazu">[$data_edycji]</span>
+                        <span class="jrg_var szablon_element" data-toggle="tooltip" title="Rok względem daty rozkazu">[$rok]</span>
+                        <span class="jrg_var szablon_element" data-toggle="tooltip" title="Miesiąc z roku względem daty rozkazu.">[$msc]</span>
+                        <span class="jrg_var szablon_element" data-toggle="tooltip" title="Dzień w miesiącu względem daty rozkazu.">[$dzien]</span>
                     </div>
                     <div>
-                        <h4>Zmienne listy: </h4>
+                        <h4>Listy:  </h4>
+                        <p>
+                           Listy wystepują jako zmienne względem grafiku, harmonogramu, dnia, zmiany i jrg. Moga byc ustawione w polu wyboru jako domyślne wartości oraz w kolumnie tabeli.
+                        </p>
                         <span class="jrg_list szablon_element">strażacy na zmianie</span>
                         <span class="jrg_list szablon_element">dostępni strażacy</span>
                         <span class="jrg_list szablon_element">strażacy wg. zmiennej z harmonogramu/grafiku</span>
                         <span class="jrg_list szablon_element">strażacy na dyżurze (aktualny dzień)</span>
                         <span class="jrg_list szablon_element">strażacy na dyżurze (następny dzień)</span>
                     </div>
-                    <div>
-                        <h4>Obiekty: </h4>
-                        <span class="jrg_obj szablon_element">Sekcja</span>
-                        <span class="jrg_obj szablon_element">Nagłówek</span>
-                        <span class="jrg_obj szablon_element">Pole tekstowe</span>
-                        <span class="jrg_obj szablon_element">Lista rozwijana</span>
-                    </div>
                 </div>
+            </div>
+            <div class="w3-col w3-right" style="width: 50px;">
+                <button class="w3-xlarge w3-right" onclick="animateBar(this)" >
+                    <i class="fas fa-sitemap"></i>
+                </button>
+                <div id="szablon_tree" class="w3-border w3-container" style="display: none;clear: both"></div>
 
             </div>
-            <div id="szablon_container" class="w3-container w3-rest w3-border " data-toggle="popover" data-html="true" data-placement="top"  >
+            <div id="szablon_container" class="w3-rest w3-border " data-toggle="popover" data-html="true" data-placement="top"  >
 		        <?php
 		        foreach ($szablon->getObiektyHtml() as $obiekt){
 			        if($obiekt instanceof HtmlObj){
@@ -308,8 +336,11 @@ require 'header.php';
 
 
             </div>
-        </div>
 
+        </div>
+        <div>
+            <button onclick="szablon.save()">Zapisz</button>
+        </div>
 	<?php endif; ?>
 </main>
 <?php
