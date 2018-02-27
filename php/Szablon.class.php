@@ -382,7 +382,7 @@ class Input extends HtmlObj implements ValueAdapter {
 	}
 
 	public function setVal( $value ) {
-
+		$this->value = $value;
 	}
 }
 

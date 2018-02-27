@@ -56,8 +56,59 @@ if(isset($_GET['start'])){
 }
 
 if(isset($_POST['save'])){
-    print_r(json_decode(str_replace('&quot;','"',$_POST['save']),true ));
+    $obiekty = json_decode(str_replace('&quot;','"',$_POST['save']),true );
+	$szablon = new Szablon($user->getAdminJrgId());
+    foreach ($obiekty as $nr=>$obiekt){
+        $szablon->addObjects(createHtmlObj($obiekt));
+    }
+    print_r();
     die;
+}
+
+function createHtmlObj($obiektArray) : HtmlObj{
+    $name = $obiektArray['name'];
+    $htmlObj = null;
+    switch ($name){
+        case 'DIV':
+	        $htmlObj = new Sekcja($obiektArray['class']);
+	        //$htmlObj->setVariable()
+	        foreach($obiektArray['content'] as $obiekt){
+                $htmlObj->putContent(createHtmlObj($obiekt));
+            }
+            break;
+        case 'H2':
+	        $htmlObj = new Naglowek(2);
+	        $htmlObj->addClass($obiektArray['class']);
+	        $htmlObj->putContent($obiektArray['content']);
+            break;
+        case 'SPAN':
+	        $htmlObj = new Text($obiektArray['content']);
+	        $htmlObj->addClass($obiektArray['class']);
+            break;
+        case 'INPUT':
+            $htmlObj = new Input('text','brakName');
+	        $htmlObj->addClass($obiektArray['class']);
+	        $htmlObj->setVal($obiektArray['value']);
+	        //TODO: attrybut
+            break;
+        case 'SELECT':
+            $htmlObj = new Select('wybor');
+	        $htmlObj->addClass($obiektArray['class']);
+	        $htmlObj->setList($obiektArray['attr']);
+            break;
+        case 'UL':
+	        $htmlObj = new Lista();
+	        $htmlObj->addClass($obiektArray['class']);
+	        $htmlObj->setList($obiektArray['attr']);
+            break;
+        case 'TABLE':
+	        $htmlObj = new Table();
+
+            break;
+        default:
+	        $htmlObj = new Text("");
+    }
+    return $htmlObj;
 }
 
 /*
@@ -130,7 +181,7 @@ try {
 	    $tabGba->addCell('Kierowca',0);
 	    $tabGba->addCell('Ratownik',0);
 	    $tabGba->addCell('Ratownik',0);
-	    $tabGba->addCol(new Col('GBA 2,5/20',4),2);
+	    $tabGba->dodajKolumne(new Col('GBA 2,5/20',4),2);
 	    $tabGba->addCell((new Select('gba'))->setList('available_firemans'), 1);
 	    $tabGba->addCell((new Select('gba'))->setList('available_firemans'), 1);
 	    $tabGba->addCell((new Select('gba'))->setList('available_firemans'), 1);
@@ -139,7 +190,7 @@ try {
 	    $gcba = new Table(2, 3);
 	    $gcba->addStyle('vertical-align','top');
 	    $gcba->addClass('w3-table-all','table-grafik');
-	    $gcba->addCol(new Col('GCBA 5/40',3), 2);
+	    $gcba->dodajKolumne(new Col('GCBA 5/40',3), 2);
 	    $gcba->addCell('D-ca',0);
 	    $gcba->addCell('Kierowca',0);
 	    $gcba->addCell('Ratownik',0);
@@ -150,7 +201,7 @@ try {
 	    $scd = new Table(2, 3);
 	    $scd->addStyle('vertical-align','top');
 	    $scd->addClass('w3-table-all','table-grafik');
-	    $scd->addCol(new Col('SCD 40',3),2);
+	    $scd->dodajKolumne(new Col('SCD 40',3),2);
 	    $scd->addCell('D-ca',0);
 	    $scd->addCell('Kierowca',0);
 	    $scd->addCell('Ratownik',0);
@@ -172,10 +223,10 @@ try {
 	    $pkt4 = new Sekcja();
 	    $pkt4->putContent((new Naglowek(2))->putContent("Pkt 4. Nieobecni: "));
 	        $tabNieobecni = (new Table())->addStyle('vertical-align','top')->addClass('w3-table-all');;
-	        $tabNieobecni->addCol((new Col('Urlop',5))->setList('harmo_fireman_Ud','harmo_fireman_Uw','harmo_fireman_O'), 1);
-	    $tabNieobecni->addCol((new Col('Wolne',5))->setList('graf_fireman_Ws'), 2);
-	    $tabNieobecni->addCol((new Col('Delegacja',5))->setList('harmo_fireman_D'), 3);
-	    $tabNieobecni->addCol((new Col('Chorzy',5))->setList('harmo_fireman_Ch'), 4);
+	        $tabNieobecni->dodajKolumne((new Col('Urlop',5))->setList('harmo_fireman_Ud','harmo_fireman_Uw','harmo_fireman_O'), 1);
+	    $tabNieobecni->dodajKolumne((new Col('Wolne',5))->setList('graf_fireman_Ws'), 2);
+	    $tabNieobecni->dodajKolumne((new Col('Delegacja',5))->setList('harmo_fireman_D'), 3);
+	    $tabNieobecni->dodajKolumne((new Col('Chorzy',5))->setList('harmo_fireman_Ch'), 4);
 	    $pkt4->putContent($tabNieobecni);
 
 	    $pkt5 = new Sekcja('w3-margin','align-right');

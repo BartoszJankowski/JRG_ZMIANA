@@ -52,17 +52,17 @@ var htmlObj = {
                 inner = this.getCheckBoxLists();
                 break;
             case 'TABLE':
-                inner = '<p>Dodaj kolumnę</p><div><input type="text" value=""><button onclick="htmlObj.addCol($(this).prev().val())"><i class="fas fa-columns"></i></button></div>';
+                inner = '<p>Dodaj kolumnę</p><div><input type="text" value=""><button onclick="htmlObj.dodajKolumne($(this).prev().val())"><i class="fas fa-columns"></i></button></div>';
                 break;
             case 'TH':
-                inner = '<p>Nagłówek: </p><input class="w3-input w3-border" oninput="htmlObj.updateContent(this)" value="'+this.element.text()+'" />'+this.getCheckBoxLists()+'<div><button onclick="htmlObj.dodajWiersz()"><i class="fas fa-plus"></i> Dodaj wiersz</button> </div>';
+                inner = '<p>Nagłówek: </p><input class="w3-input w3-border" oninput="htmlObj.updateContent(this)" value="'+this.element.text()+'" />'+this.getCheckBoxLists()+'<div><button onclick="htmlObj.dodajWiersz()"><i class="fas fa-plus"></i> Dodaj wiersz</button><button onclick="htmlObj.usunKolumne()" >Usuń kolumnę</button></div>';
                 break;
             case 'TD':
-                inner = '<div><button onclick="htmlObj.dodajWiersz()"><i class="fas fa-plus"></i> Dodaj wiersz</button> </div>';
+                inner = '<div><p>Dodaj nowy element</p>'+this.getSelectElementy()+'<button onclick="htmlObj.addNewElement($(this).prev())"><i class="fas fa-plus-square"></i></button></div><div><button onclick="htmlObj.dodajWiersz()"><i class="fas fa-plus"></i> Dodaj wiersz</button><button onclick="htmlObj.usunWiersz()" > <i class="fas fa-minus"></i> Usuń wiersz</button></div>';
                 break;
         }
 
-        if(obj.id !== 'szablon_container')
+        if(obj.id !== 'szablon_container' && name!=='TD' && name!=='TH')
             inner += '<div><button title="Usuń element" onclick="htmlObj.delete()"><i class="far fa-trash-alt"></i>Usuń element</button></div>';
 
 
@@ -102,6 +102,10 @@ var htmlObj = {
      * @param select
      */
     addNewElement : function(select){
+        if(select.val() === 'table' && this.element.parents('table').length>0){
+            alert('Nie mozna zagnieżdżać tabeli.');
+            return;
+        }
         var nowyElement = $('<'+select.val()+'>');
         nowyElement.attr({'data-toggle':'popover','data-html':'true','data-placement':'top','id':'temp-'+this.tempId++});
         nowyElement.addClass('newEmptyElement');
@@ -114,7 +118,7 @@ var htmlObj = {
     /**
      * Tworzy i dodaje wiersz ->kolumnę tabeli
      */
-    addCol : function(nazwaKol){
+    dodajKolumne : function(nazwaKol){
         var firstRow = this.element.find('tr:first-of-type');
         var cols = this.element.find('th');
         var nowyElement = $('<th>');
@@ -132,15 +136,35 @@ var htmlObj = {
         }
         this.element.find('tr:gt(0)').each(function () {
             var td = $('<td>');
-            td.attr({'data-col':i,'data-toggle':'popover','data-html':'true','data-placement':'top','id':'temp-'+htmlObj.tempId++});
+            td.attr({'data-col':cols.length,'data-toggle':'popover','data-html':'true','data-placement':'top','id':'temp-'+htmlObj.tempId++});
             td.addClass('newEmptyElement');
             setPopoverFunctions(td);
             $(this).append(td);
         });
         buildSzablonTree();
     },
+    usunKolumne : function(){
+        this.closePopover();
+        var nrCol = this.element.attr('data-col');
+        var table = this.element.parent().parent();
+        table.find('[data-col='+nrCol+']').each(function () {
+            logD(this);
+            $(this).remove();
+        });
+        var cols = table.find('th');
+
+        //iteracja po weirszach i zmiana nr kolumn
+        table.find('tr').each(function () {
+            var i = 0;
+            $(this).find('[data-col]').each(function () {
+                $(this).attr('data-col',i++);
+            });
+        });
+        buildSzablonTree();
+
+    },
     dodajWiersz : function(){
-        var table = this.element.parent().parent()
+        var table = this.element.parent().parent();
         var cols = table.find('th');
         var tr = $('<tr>');
         for(i =0; i<cols.length; i++){
@@ -151,6 +175,12 @@ var htmlObj = {
             tr.append(td);
         }
         table.append(tr);
+        buildSzablonTree();
+    },
+    usunWiersz : function(){
+        var tr = $(this.element).parent();
+        this.closePopover();
+        tr.remove();
         buildSzablonTree();
     },
 
@@ -339,18 +369,72 @@ function buildSzablonTree(){
 }
 
 function getChildrenUlList(parent) {
+    if(parent.get(0).nodeName === 'TABLE'){
+        return getChildrenUlForTable(parent);
+    }
     var div = $('<DIV>');
-    var link = $('<SPAN>').addClass('w3-btn w3-padding-small').text(convertNodeName(parent.get(0).nodeName)).hover(function () {
-        parent.toggleClass('backlight-element');
-    }).click(function () {
-        htmlObj.closePopover();
-        parent.addClass("highlight-element").popover('show');
-    });
+    var link = $('<SPAN>')
+        .addClass('w3-btn w3-padding-small')
+        .text(convertNodeName(parent.get(0).nodeName))
+        .hover(function () {
+            parent.toggleClass('backlight-element');
+        })
+        .click(function () {
+            htmlObj.closePopover();
+            parent.addClass("highlight-element").popover('show');
+        });
     var ul = $('<UL>');
 
     parent.children().each(function(){
         ul.append($('<LI>').html(getChildrenUlList($(this)) ) );//'<li>'+getChildrenUlList($(this))+'</li>');
     });
+    div.append(link).append(ul);
+    return div;
+}
+
+function getChildrenUlForTable(table){
+
+    var colsNum = table.find('tr:first-of-type th').length;
+    var div = $("<DIV>");
+    var link = $('<SPAN>')
+        .addClass('w3-btn w3-padding-small')
+        .text(convertNodeName(table.get(0).nodeName))
+        .hover(function () {
+            table.toggleClass('backlight-element');
+        })
+        .click(function () {
+            htmlObj.closePopover();
+            table.addClass("highlight-element").popover('show');
+        });
+    var fin = $("<UL>");
+    for(var x =0; x < colsNum; x++){
+        var th = table.find('th[data-col='+x+']');
+        var tds = table.find('td[data-col='+x+']');
+        fin.append(getCol(th, tds));
+    }
+    div.append(link).append(fin);
+    return div;
+}
+
+function getCol(th, tds){
+    var div = $('<LI>');
+    var link = $('<SPAN>')
+        .addClass('w3-btn w3-padding-small')
+        .text('Kolumna ('+th.text()+')')
+        .hover(function () {
+            th.toggleClass('backlight-element');
+        })
+        .click(function () {
+            htmlObj.closePopover();
+            th.addClass("highlight-element").popover('show');
+        });
+
+    var ul = $('<UL>');
+
+    tds.each(function(){
+        ul.append($('<LI>').html(getChildrenUlList($(this)) ) );//'<li>'+getChildrenUlList($(this))+'</li>');
+    });
+
     div.append(link).append(ul);
     return div;
 }
@@ -376,6 +460,8 @@ function convertNodeName(nodeName){
             return 'Lista';
         case 'TABLE':
             return 'Tabela';
+        case 'TD':
+            return 'Komórka';
         default:
             return nodeName;
     }
@@ -396,14 +482,19 @@ var szablon = {
     traverseRootTree : function(root){
         var obiekt = {
             'name':$(root).get(0).nodeName,
+            'value':null,
             'class':this.getClasses($(root)),
             'attr':this.getAttrs($(root)),
-            'id':$(root).attr('id'),
-            'content':null
+           /* 'id':$(root).attr('id'), */
+            'content':[]
         };
 
         if(obiekt.name === 'SPAN' || obiekt.name === 'H2'){
             obiekt.content = $(root).text();
+        } else if(obiekt.name==='INPUT'){
+            obiekt.value = $(root).val();
+        } else if(obiekt.name === 'TABLE'){
+            obiekt.content = szablon.traverseTableTree($(root));
         } else {
             obiekt.content = [];
             $(root).children().each(function(index,element){
@@ -411,6 +502,25 @@ var szablon = {
             });
         }
         return obiekt;
+    },
+    traverseTableTree : function (jQTable){
+        var kolumny = [];
+        var colsTh = jQTable.find('th');
+        for(var i=0; i<colsTh.length; i++){
+            var naglowekTh = colsTh.get(i);
+            var obiekt = {'name':'col',
+                'value':$(naglowekTh).text(),
+                'class':szablon.getClasses($(naglowekTh)),
+                'attr':szablon.getAttrs($(naglowekTh)),
+                'id':$(naglowekTh).attr('id'),
+                'content':[]
+            };
+            jQTable.find('td[data-col='+i+']').each(function () {
+                obiekt.content.push(szablon.traverseRootTree(this));
+            });
+            kolumny.push(obiekt);
+        }
+        return kolumny;
     },
     getClasses : function (jQNode) {
         var temp = [];
@@ -435,7 +545,7 @@ var szablon = {
         this.create();
         $.ajax({
             type:'POST',
-            data:{save:JSON.stringify(szablon.obiekty)},
+            data:{obiekty:JSON.stringify(szablon.obiekty)},
             url:'szablonrozkazu.php',
             success : function (response) {
                 logD(response);
