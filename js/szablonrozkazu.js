@@ -10,6 +10,10 @@ var klasyDoPominiencia = ['highlight-element','newEmptyElement'];
 
 $(function () {
     setPopoverFunctions($("#szablon_container"));
+    $("#szablon_container *").not('tr').each(function () {
+        setPopoverFunctions($(this));
+    });
+    buildSzablonTree();
 });
 
 function setPopoverFunctions(jQrElement){
@@ -24,8 +28,8 @@ var htmlObj = {
     tempId : 0,
     element : null,
     elementyHtml : {div:'Sekcja',h2:'Nagłówek',span:'Tekst',input:'Pole tekstowe',select:'Pole wyboru',ul:'Lista',table:'Tabela'},
-    zmienne : ['[$miasto]','[$data_rozkazu]','[$nr_jrg]','[$data_edycji]','[$nr_rozkazu]','[$rok]','[$miesiac]','[$dzien]'],
-    listy : ['[@list-Ud]','[@list-Uw]'],
+    zmienne : zmienne,
+    listy : listyVar,
 
     popoverAddObj : function(obj){
 
@@ -71,7 +75,7 @@ var htmlObj = {
                         '<div class="col">' +
                             '<h5>Stylizacja</h5>' + htmlObj.getStyles(name) +
                         '</div>' +
-                        '<div class="col"><h5>Zawartość</h5><div  class="no-wrap">'+inner+'</div></div>' +
+                        '<div class="col"><h5>Zawartość</h5><div  class="">'+inner+'</div></div>' +
                     '</div>'+
                 '</div>';
     },
@@ -109,6 +113,12 @@ var htmlObj = {
         var nowyElement = $('<'+select.val()+'>');
         nowyElement.attr({'data-toggle':'popover','data-html':'true','data-placement':'top','id':'temp-'+this.tempId++});
         nowyElement.addClass('newEmptyElement');
+        if(select.val() === 'div'){
+            nowyElement.addClass('w3-row');
+        } else if(select.val() === 'table'){
+            nowyElement.addClass('szablonTable');
+            nowyElement.addClass('w3-border');
+        }
         setPopoverFunctions(nowyElement);
         this.element.append(nowyElement);
         this.closePopover();
@@ -143,6 +153,7 @@ var htmlObj = {
         });
         buildSzablonTree();
     },
+
     usunKolumne : function(){
         this.closePopover();
         var nrCol = this.element.attr('data-col');
@@ -163,6 +174,7 @@ var htmlObj = {
         buildSzablonTree();
 
     },
+
     dodajWiersz : function(){
         var table = this.element.parent().parent();
         var cols = table.find('th');
@@ -177,6 +189,7 @@ var htmlObj = {
         table.append(tr);
         buildSzablonTree();
     },
+
     usunWiersz : function(){
         var tr = $(this.element).parent();
         this.closePopover();
@@ -219,7 +232,7 @@ var htmlObj = {
     getButtonsVars : function () {
         var inner = '<div>Zmienne: ';
         for(x in this.zmienne){
-            inner += '<button onclick="htmlObj.setInTextareaContent(this)" class="zmienne-btn" >'+this.zmienne[x]+'</button>';
+            inner += '<button onclick="htmlObj.setInTextareaContent(this)" class="zmienne-btn" >'+this.zmienne[x]['id']+'</button>';
         }
         return inner+'</div>';
     },
@@ -232,10 +245,10 @@ var htmlObj = {
         var checkboxes = '<div>Listy: ';
         for(x in this.listy){
             var check = '';
-            if(this.checkListAttr(this.listy[x])){
+            if(this.checkListAttr(this.listy[x]['id'])){
                 check = 'checked';
             }
-            checkboxes += '<label class="listy-btn" ><input '+check+' onchange="htmlObj.changeElementListAttr(this)" class="w3-check" type="checkbox" name="listy" value="'+this.listy[x]+'" />'+this.listy[x]+' </label>';
+            checkboxes += '<label class="listy-btn" ><input '+check+' onchange="htmlObj.changeElementListAttr(this)" class="w3-check" type="checkbox" name="listy" value="'+this.listy[x]['id']+'" /><span class="no-wrap">'+this.listy[x]['name']+' </span></label>';
         }
         return checkboxes+'</div>';
     },
@@ -260,18 +273,78 @@ var htmlObj = {
         }
 
         var style =
-            '<label><input name="align" type="radio" class="no-display radio-btn" value="align-left" onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-align-left "></i></span></label>' +
-            '<label><input name="align" type="radio" class="no-display radio-btn" value="w3-center" onchange="htmlObj.toggleRadioInput(this)"  /><span class="w3-btn w3-border"><i class="fas fa-align-center"></i></span></label>' +
-            '<label><input name="align" type="radio" class="no-display radio-btn" value="align-right" onchange="htmlObj.toggleRadioInput(this)"  /><span class="w3-btn w3-border"><i class="fas fa-align-right"></i></span></label>' ;
-        if(nodeName === 'DIV')
-            style += '<label><input name="layout" type="radio" class="no-display radio-btn" value="w3-row" onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-arrows-alt-h"></i></span></label>' +
-                '<label><input name="layout" type="radio" class="no-display radio-btn" value="w3-col" onchange="htmlObj.toggleRadioInput(this)"  /><span class="w3-btn w3-border"><i class="fas fa-arrows-alt-v"></i></span></label>';
+            '<label><input name="align" type="radio" class="no-display radio-btn" value="align-left" '+this.getCheckedString("align-left")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-align-left "></i></span></label>' +
+            '<label><input name="align" type="radio" class="no-display radio-btn" value="w3-center" '+this.getCheckedString("w3-center")+' onchange="htmlObj.toggleRadioInput(this)"  /><span class="w3-btn w3-border"><i class="fas fa-align-center"></i></span></label>' +
+            '<label><input name="align" type="radio" class="no-display radio-btn" value="align-right" '+this.getCheckedString("align-right")+' onchange="htmlObj.toggleRadioInput(this)"  /><span class="w3-btn w3-border"><i class="fas fa-align-right"></i></span></label>' +
+            '<label><input name="border" type="checkbox" class="no-display radio-btn " value="w3-border" '+this.getCheckedString("w3-border")+' onchange="htmlObj.toggleClassValue(\'w3-border\')" /><span class="w3-btn w3-border"><i class="far fa-square"></i></label>' +
+            '<label><input name="padding" type="checkbox" class="no-display radio-btn " value="padding" '+this.getCheckedString("padding")+' onchange="htmlObj.toggleClassValue(\'padding\')" /><span class="w3-btn w3-border"><i class="fas fa-expand"></i></label>';
 
 
-        if(nodeName === 'SPAN' || nodeName === 'H2')
-            style +=  '<span class="w3-btn w3-border" onclick="htmlObj.toggleClassValue(\'max-width\')"><i class="fas fa-text-width"></i></span>';
+        if(nodeName === 'DIV'){
+            //kolumna lub wiersz
+            style += '<label><input name="layout" type="radio" class="no-display radio-btn" value="w3-row" onchange="htmlObj.toggleRadioInput(this);htmlObj.toggleInputs(this,true,\'colSize\');" '+this.getCheckedString("w3-row")+' /><span class="w3-btn w3-border"><i class="fas fa-arrows-alt-h"></i></span></label>' +
+                '<label><input name="layout" type="radio" class="no-display radio-btn" value="w3-col" onchange="htmlObj.toggleRadioInput(this);htmlObj.toggleInputs(this,false,\'colSize\')" '+this.getCheckedString("w3-col")+' /><span class="w3-btn w3-border"><i class="fas fa-arrows-alt-v"></i></span></label>';
+            //szerokosc kolumny
+            var disable = this.getCheckedString('w3-col') ? '' : 'disabled';
+            style += '<div><label><input '+disable+' name="colSize" type="radio" class="no-display radio-btn " value="s2" '+this.getCheckedString("s2")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 1/6</label>' +
+                '<label><input '+disable+'  name="colSize" type="radio" class="no-display radio-btn " value="s3" '+this.getCheckedString("s3")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 1/4</label>' +
+            '<label><input  '+disable+' name="colSize" type="radio" class="no-display radio-btn " value="s4" '+this.getCheckedString("s4")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 1/3</label>'+
+            '<label><input  '+disable+' name="colSize" type="radio" class="no-display radio-btn " value="s6" '+this.getCheckedString("s6")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 1/2</label></div> '+
+            '<div><label><input '+disable+'  name="colSize" type="radio" class="no-display radio-btn " value="s8" '+this.getCheckedString("s8")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 2/3</label>'+
+                '<label><input '+disable+'  name="colSize" type="radio" class="no-display radio-btn " value="s10" '+this.getCheckedString("s10")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 5/6</label>' +
+            '<label><input  '+disable+' name="colSize" type="radio" class="no-display radio-btn " value="s12" '+this.getCheckedString("s12")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 100%</label></div>';
+
+
+        } else {
+
+            style += '<div>' +
+                '<label class="tiny-size"><input name="fontSize" type="radio" class="no-display radio-btn " value="tiny-size" '+this.getCheckedString("tiny-size")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-font"></i></span></label>' +
+                '<label class="smaller-size"><input name="fontSize" type="radio" class="no-display radio-btn " value="smaller-size" '+this.getCheckedString("smaller-size")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas  fa-font "></i></span></label>' +
+                '<label class="normal-size"><input name="fontSize" type="radio" class="no-display radio-btn " value="normal-size" '+this.getCheckedString("normal-size")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas  fa-font "></i></span></label>' +
+                '<label class="bigger-size"><input name="fontSize" type="radio" class="no-display radio-btn" value="bigger-size" '+this.getCheckedString("bigger-size")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas  fa-font "></i></span></label>' +
+                '<label class="jumbo-size"><input name="fontSize" type="radio" class="no-display radio-btn " value="jumbo-size" '+this.getCheckedString("jumbo-size")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas  fa-font "></i></span></label>' +
+                '</div>';
+            if(nodeName === 'TABLE'){
+                style += '<div><label><input '+disable+' name="colSize" type="radio" class="no-display radio-btn " value="t0" '+this.getCheckedString("t0")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> auto</label>' +
+                '<div><label><input '+disable+' name="colSize" type="radio" class="no-display radio-btn " value="t2" '+this.getCheckedString("t2")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 1/6</label>' +
+                    '<label><input '+disable+'  name="colSize" type="radio" class="no-display radio-btn " value="t3" '+this.getCheckedString("t3")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 1/4</label>' +
+                    '<label><input  '+disable+' name="colSize" type="radio" class="no-display radio-btn " value="t4" '+this.getCheckedString("t4")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 1/3</label>'+
+                    '<label><input  '+disable+' name="colSize" type="radio" class="no-display radio-btn " value="t6" '+this.getCheckedString("t6")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 1/2</label></div> '+
+                    '<div><label><input '+disable+'  name="colSize" type="radio" class="no-display radio-btn " value="t8" '+this.getCheckedString("t8")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 2/3</label>'+
+                    '<label><input '+disable+'  name="colSize" type="radio" class="no-display radio-btn " value="t10" '+this.getCheckedString("t10")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 5/6</label>' +
+                    '<label><input  '+disable+' name="colSize" type="radio" class="no-display radio-btn " value="t12" '+this.getCheckedString("t12")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 100%</label></div>';
+
+            } else {
+                style += '<label><input name="width" type="radio" class="no-display radio-btn " value="max-width" '+this.getCheckedString("max-width")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-angle-left"></i> <i class="fas fa-angle-right"></i></span></label>' +
+                    '<label><input name="width" type="radio" class="no-display radio-btn " value="auto-width" '+this.getCheckedString("auto-width")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-angle-right"></i> <i class="fas fa-angle-left"></i></span></label>';
+            }
+
+
+        }
+
+
 
         return '<div class="no-wrap">'+style+'</div>';
+    },
+
+    toggleInputs : function(input,bool, nameAttr){
+        if(input.checked){
+            $('input[name='+nameAttr+']').each(function () {
+                this.disabled = bool;
+            })
+        }
+    },
+
+    /**
+     * Sprawdza czy podana klasa istnieje w obiekcie
+     * @param className
+     * @returns {string}
+     */
+    getCheckedString : function(className){
+        if(this.element.hasClass(className)){
+            return 'checked';
+        }
+        return false;
     },
 
     /**
@@ -359,7 +432,7 @@ function animateBar(btn) {
 
 function buildSzablonTree(){
 
-    var llista = $('<ul>');
+    var llista = $('<ul class="no-wrap">');
     $("#szablon_container").children().each(function(){
         llista.append($('<li>').html(getChildrenUlList($(this))) );
     });
@@ -373,6 +446,26 @@ function getChildrenUlList(parent) {
         return getChildrenUlForTable(parent);
     }
     var div = $('<DIV>');
+    var btnUp = $('<BUTTON class="w3-btn w3-padding-small">').html('<i class="fas fa-chevron-up"></i>').click(function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        var prev = parent.prev();
+        if(prev.length>0){
+            parent.detach().insertBefore(prev);
+        }
+        parent.toggleClass('backlight-element');
+        buildSzablonTree();
+    });
+    var btnDown = $('<BUTTON class="w3-btn w3-padding-small">').html('<i class="fas fa-chevron-down"></i>').click(function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        var next = parent.next();
+        if(next.length>0){
+            parent.detach().insertAfter(next);
+        }
+        parent.toggleClass('backlight-element');
+        buildSzablonTree();
+    });
     var link = $('<SPAN>')
         .addClass('w3-btn w3-padding-small')
         .text(convertNodeName(parent.get(0).nodeName))
@@ -383,6 +476,9 @@ function getChildrenUlList(parent) {
             htmlObj.closePopover();
             parent.addClass("highlight-element").popover('show');
         });
+    if(parent.siblings().length>0)
+        link.append(btnUp).append(btnDown);
+
     var ul = $('<UL>');
 
     parent.children().each(function(){
@@ -524,12 +620,12 @@ var szablon = {
     },
     getClasses : function (jQNode) {
         var temp = [];
-        var klasy = jQNode.attr("class").split(" ");
-        for(x in klasy){
-            if(klasyDoPominiencia.indexOf(klasy[x])<0){
-                temp.push(klasy[x]);
+        var klasy = jQNode.get(0).className.split(" ");
+            for(x in klasy){
+                if(klasyDoPominiencia.indexOf(klasy[x])<0){
+                    temp.push(klasy[x]);
+                }
             }
-        }
         return temp;
     },
     getAttrs : function(jQNode){
@@ -541,14 +637,32 @@ var szablon = {
         }
         return node;
     },
-    save : function (){
+    save : function (btn){
         this.create();
+        var idR = $('#szablon_container').attr('rozkaz-id');
+        var act = $('#szablon_active').get(0).checked ? 1:0;
         $.ajax({
             type:'POST',
-            data:{obiekty:JSON.stringify(szablon.obiekty)},
+            data:{save:JSON.stringify(szablon.obiekty),id:idR,active:act},
             url:'szablonrozkazu.php',
+            beforeSend : function(xhr){
+               btn.disabled = true;
+                $(btn).html('<i class="w3-spin fas fa-spinner"></i> Wysyłanie...');
+            },
             success : function (response) {
+                if(response.result){
+                    $("<div class='w3-panel w3-green w3-card-4'>Poprawnie zapisano szablon.</div>").insertBefore(btn).fadeOut(2500);
+                } else {
+                    $("<div class='w3-panel w3-red w3-card-4'>Podczas zapisu wystapił bład: "+response.error+"</div>").insertBefore(btn).fadeOut(5000);
+                }
                 logD(response);
+            },
+            error : function () {
+
+            },
+            complete : function (xhr, status) {
+                $(btn).html('<i class="far fa-save"></i> Zapisz');
+                btn.disabled = false;
             }
         });
     }

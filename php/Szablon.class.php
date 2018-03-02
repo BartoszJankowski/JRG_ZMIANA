@@ -141,12 +141,19 @@ abstract class HtmlObj {
 	}
 
 
-	public function addClass(string ...$class) : HtmlObj{
-		for ($i = 0; $i<count($class); $i++){
-			if(!in_array($class[$i], $this->c)){
-				$this->c[] = $class[$i];
+	public function addClass( $class) : HtmlObj{
+		if(is_array($class)){
+			for ($i = 0; $i<count($class); $i++){
+				if(!in_array($class[$i], $this->c)){
+					$this->c[] = $class[$i];
+				}
+			}
+		} else if(is_string($class)){
+			if(!in_array($class, $this->c)){
+				$this->c[] = $class;
 			}
 		}
+
 
 		return $this;
 	}
@@ -190,6 +197,9 @@ abstract class HtmlObj {
 	}
 
 	protected  function getContent() {
+		if(Szablon::$isEditing){
+			$this->addClass('newEmptyElement');
+		}
 		$content = '';
 		if( $this->cnt instanceof HtmlObj){
 			$content = $this->cnt->getHtml();
@@ -242,7 +252,7 @@ abstract class HtmlObj {
 
 	protected function getHtmlTag($class, $attr, $content){
 		if(Szablon::$isEditing){
-			$popover = 'data-toggle="popover" data-html="true"';
+			$popover = 'data-toggle="popover" data-html="true" data-placement="top" ';
 		}
 		return  '<'.$this->n . ' ' . $attr . ' ' . $class . ' '.$popover.' >' . $content . '</' . $this->n . '>';
 	}
@@ -251,39 +261,20 @@ abstract class HtmlObj {
 		echo $this->getHtml();
 	}
 
-	public function setConstant(string $name) : HtmlObj{
-		$this->addClass('jrg_const');
-		$this->addClass('szablon_element');
-		if(strlen($name)>1){
-			$this->addAttr('data-jrg', 'constant-'.$name);
-		} else {
-			throw new UserErrors("Nazwa stałej musi zawierać więcej niz 1 znak");
-		}
-		return $this;
-	}
-
-	public function setVariable(string $name) : HtmlObj{
-		$this->addClass('jrg_var');
-		$this->addClass('szablon_element');
-		if(strlen($name)>1){
-			$this->addAttr('data-jrg', 'variable-'.$name );
-		} else {
-			throw new UserErrors("Nazwa zmiennej musi zawierać więcej niz 1 znak");
-		}
-		return $this;
-	}
-
-	public function setList(string ...$names) : HtmlObj{
-		$this->addClass('jrg_list');
-		$this->addClass('szablon_element');
+	public function setList($names) : HtmlObj{
+		//$this->addClass('jrg_list');
+		//$this->addClass('szablon_element');
 		$wartosc = '';
-		foreach ($names as $name){
-			$wartosc .= $name.' ';
+		if(is_array($names)){
+			foreach ($names as $name){
+				$wartosc .= $name.' ';
+			}
+		} else if(is_string($names)) {
+			$wartosc = $names;
 		}
+
 		if(strlen($wartosc)>1){
-			$this->addAttr('data-jrg', 'list-'.$wartosc );
-		} else {
-			throw new UserErrors("Nazwa listy musi zawierać więcej niz 1 znak");
+			$this->addAttr('data-jrg', $wartosc );
 		}
 		return $this;
 	}
@@ -314,14 +305,13 @@ abstract class HtmlObj {
 }
 
 class Sekcja extends HtmlObj {
-	public function __construct(string ...$klasy) {
+	public function __construct( $klasy) {
 		parent::__construct();
 		$this->n   = 'div';
 		$this->cnt = array();
 
-		for($i =0; $i<count($klasy); $i++){
-			$this->addClass($klasy[$i]);
-		}
+		$this->addClass($klasy);
+
 	}
 
 
@@ -335,7 +325,7 @@ class Sekcja extends HtmlObj {
 	}
 }
 
-class Naglowek extends HtmlObj {
+class Naglowek extends HtmlObj  implements TextType  {
 
 	public function __construct(int $nr) {
 		parent::__construct();
@@ -360,6 +350,12 @@ class Naglowek extends HtmlObj {
 		}
 		return $this;
 	}
+
+	public function changeContent( array $zmienne, array $values ) {
+		foreach ($zmienne as $var){
+			$this->cnt = str_replace($var,$values[$var],$this->cnt );
+		}
+	}
 }
 
 class Input extends HtmlObj implements ValueAdapter {
@@ -373,7 +369,14 @@ class Input extends HtmlObj implements ValueAdapter {
 	}
 
 	protected function getHtmlTag( $class, $attr, $content ) {
-		return '<'.$this->n . ' ' . $attr . ' ' . $class . ' />';
+		if(Szablon::$isEditing){
+			$popover = 'data-toggle="popover" data-html="true" data-placement="top" ';
+		}
+		$val = 'value=""';
+		if(isset($this->value)){
+			$val = 'value="'.$this->value.'"';
+		}
+		return '<'.$this->n . ' ' . $attr . ' ' . $class . ' '.$popover.' '.$val.' />';
 	}
 
 	public function putContent( $content ) : HtmlObj {
@@ -403,6 +406,10 @@ class Select extends HtmlObj implements ListAdapter,ValueAdapter {
 
 
 	protected function getContent() {
+		if(Szablon::$isEditing){
+			$this->addClass('newEmptyElement');
+			return '';
+		}
 		$res = '<option disabled '.(isset($this->value) ? "":"selected").' >&nbsp;</option>';
 		foreach ($this->cnt as $cont){
 			if(isset($this->value) && $this->value === $cont['value'] ){
@@ -416,7 +423,10 @@ class Select extends HtmlObj implements ListAdapter,ValueAdapter {
 	}
 
 	protected function getHtmlTag( $class, $attr, $content ) {
-		return  '<'.$this->n . ' ' . $attr . ' ' . $class . ' value="'.( isset($this->value) ? $this->value : '' ).'" >' . $content . '</' . $this->n . '>';
+		if(Szablon::$isEditing){
+			$popover = 'data-toggle="popover" data-html="true" data-placement="top" ';
+		}
+		return  '<'.$this->n . ' ' . $attr . ' ' . $class . ' value="'.( isset($this->value) ? $this->value : '' ).'" '. $popover.' >' . $content . '</' . $this->n . '>';
 	}
 
 
@@ -432,7 +442,7 @@ class Select extends HtmlObj implements ListAdapter,ValueAdapter {
 	}
 }
 
-class Text extends HtmlObj {
+class Text extends HtmlObj  implements TextType  {
 
 
 	public function __construct(string $content = '') {
@@ -450,6 +460,14 @@ class Text extends HtmlObj {
 			throw new UserErrors("Nie można dodać obiektu innego niz String do tego elementu.");
 		}
 		return $this;
+	}
+
+	public function changeContent( array $zmienne, array $values ) {
+
+
+		foreach ($zmienne as $var){
+			$this->cnt = str_replace($var,$values[$var],$this->cnt );
+		}
 	}
 }
 
@@ -483,7 +501,7 @@ class Variable extends HtmlObj implements ValueAdapter {
 	}
 }
 
-class Paragraf extends HtmlObj {
+class Paragraf extends HtmlObj implements TextType {
 
 
 	public function __construct(string $content = null) {
@@ -502,6 +520,12 @@ class Paragraf extends HtmlObj {
 		}
 		return $this;
 	}
+
+	public function changeContent( array $zmienne, array $values ) {
+		foreach ($zmienne as $var){
+			$this->cnt = str_replace($var,$values[$var],$this->cnt );
+		}
+	}
 }
 
 class Lista extends HtmlObj implements ListAdapter {
@@ -518,6 +542,9 @@ class Lista extends HtmlObj implements ListAdapter {
 	}
 
 	protected function getContent() {
+		if(Szablon::$isEditing){
+			$this->addClass('newEmptyElement');
+		}
 		$res = '';
 		foreach ($this->cnt as $cont){
 			if($cont instanceof HtmlObj)
@@ -553,9 +580,12 @@ class Col extends HtmlObj implements ListAdapter {
 		$this->n = $naem;
 	}
 
-	public function getNameTd(){
-
-		return '<td '.$this->getClasses().' '.$this->getAttributes().' >'.$this->n.'</td>';
+	public function getNameTh($nr){
+		if(Szablon::$isEditing){
+			$popover = 'data-toggle="popover" data-html="true" data-placement="top" ';
+			$this->addClass('newEmptyElement');
+		}
+		return '<th data-col="'.$nr.'" '.$this->getClasses().' '.$this->getAttributes().' '.$popover.' >'.$this->n.'</th>';
 	}
 
 	public function setListContent( array $lista ) {
@@ -565,14 +595,15 @@ class Col extends HtmlObj implements ListAdapter {
 		}
 	}
 
-	public function getRowVal(int $row){
+	public function getRowVal(int $row,$col){
+		if(Szablon::$isEditing){
+			$popover = 'data-toggle="popover" data-html="true" data-placement="top" ';
+			$this->addClass('newEmptyElement');
+		}
 		if(array_key_exists($row, $this->cnt)){
-			if($this->cnt[$row] instanceof HtmlObj)
-				return '<td>'.$this->cnt[$row]->getHtml().'</td>';
-			else
-				return '<td>'.$this->cnt[$row].'</td>';
+			return $this->cnt[$row]->getHtml();
 		} else if($row < $this->r){
-			return '<td></td>';
+			return '<td data-col="'.$col.'"  '.$this->getClasses().' '.$popover.'></td>';
 		} else {
 			return false;
 		}
@@ -587,6 +618,36 @@ class Col extends HtmlObj implements ListAdapter {
 		throw new UserErrors('Ten obiekt nie zwraca zwartości. Może byc wywołany tylko z klasy Table.');
 	}
 
+}
+
+class TD extends HtmlObj{
+
+	public function __construct() {
+		parent::__construct();
+		$this->cnt  = array();
+		$this->n = 'td';
+
+	}
+
+	public function setColumn($nrCol) : HtmlObj{
+		$this->col = $nrCol;
+		return $this;
+	}
+
+	public function putContent( $content ): HtmlObj {
+		if($content instanceof HtmlObj){
+			$this->cnt[] = $content;
+		}
+		return $this;
+	}
+
+	public function getHtmlTag( $class, $attr, $content ) {
+		if(Szablon::$isEditing){
+			$popover = 'data-toggle="popover" data-html="true" data-placement="top" ';
+			$this->addClass('newEmptyElement');
+		}
+		return '<td data-col="'.$this->col.'"  '.$this->getClasses().' '.$popover.'>'.$content.'</td>';
+	}
 }
 
 class Table extends HtmlObj{
@@ -612,13 +673,16 @@ class Table extends HtmlObj{
 	}
 
 	protected function getContent() : string {
+		if(Szablon::$isEditing){
+			$this->addClass('newEmptyElement');
+		}
 		/**
 		 * NAGLOWEK
 		 */
 		$content = '<tr>';
-		foreach ($this->cnt as $col){
+		foreach ($this->cnt as $nr=> $col){
 			if($col instanceof Col){
-				$content .= $col->getNameTd();
+				$content .= $col->getNameTh($nr);
 			}
 		}
 		$content .= '</tr>';
@@ -631,9 +695,9 @@ class Table extends HtmlObj{
 
 			$content .= '<tr>';
 			$kontynuuj = false;
-			foreach ($this->cnt as $col){
+			foreach ($this->cnt as $nr=> $col){
 				if($col instanceof Col){
-					$val = $col->getRowVal($a);
+					$val = $col->getRowVal($a, $nr);
 					if($val){
 						$kontynuuj = true;
 						$content.= $val;
@@ -657,7 +721,8 @@ class Table extends HtmlObj{
 			$this->cnt[] = $col;
 	}
 
-	public function addCell($value,int $kolumn) : HtmlObj{
+	public function addCell(TD $value,int $kolumn) : HtmlObj{
+		$value->setColumn($kolumn);
 		if(array_key_exists($kolumn, $this->cnt)){
 			$this->cnt[$kolumn]->putContent($value);
 		} else {
@@ -677,3 +742,8 @@ interface ListAdapter {
 interface ValueAdapter {
 	public function setVal($value);
 }
+
+interface TextType {
+
+	public function changeContent(array $zmienne, array $values);
+};

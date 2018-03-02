@@ -29,7 +29,7 @@ $output = array('result'=>false,'action'=>null,'error'=>null,'errorMsg'=>null);
 
 try {
 	$output['action'] = $_POST['action'];
-
+// logowanie, wylogowanie, tworzenie ejdnostki, rejestracja usersa
 	switch ($_POST['action']){
 		case 'log_in':
 			if($dbUsers->login($_POST['login'],$_POST['password'])) {
@@ -46,7 +46,9 @@ try {
 	$output['errorMsg'] = $user_errors->getMessage();
 }
 
+
 header("Content-Type: application/json; charset=UTF-8");
 echo json_encode($output);
+die;
 
 ?>

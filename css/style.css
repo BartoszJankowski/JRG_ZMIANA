@@ -114,7 +114,7 @@ table.table-calendar tr:first-child td {
 #szablon_container {
     min-height:150px;
     padding-bottom:16px;
-    background-color: rgba(0,0,0,0.1);
+    background-color: white;
 }
 #szablon_container *:hover {
     outline:2px dotted rgba(0,0,0,0.2);
@@ -143,7 +143,7 @@ table.table-calendar tr:first-child td {
 
 .listy-btn {
   background-color:#5bc0de;
-    display:initial;
+    display:inline-block;
     margin:2px;
     padding:2px;
 }
@@ -169,17 +169,83 @@ table.table-calendar tr:first-child td {
 .backlight-element {
     background-color:rgba(0,0,0,0.3) !important;
 }
+#szablon_tree {
+    padding-right:25px;
+    font-size:75%;
+    overflow: scroll;
+    height:400px;
+    resize: vertical;
+}
+ul.no-wrap * {
+    white-space: nowrap;
+}
+ul.newEmptyElement::after{
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 300%;
+    content: "\f03a";
 
+}
 /*
 klasy szablonu / rozkazu
  */
 
-.max-width {
+span.max-width, input.max-width, select.max-width, h2.max-width {
     display: block;
    width:100% !important;
 }
+
+table.szablonTable {
+    border-collapse: collapse;
+    margin:auto auto;
+}
+.podglad-rozkazu input, .podglad-rozkazu select {
+    border:none;
+    background-color: transparent;
+}
+table.w3-border, table.w3-border th, table.w3-border td {
+    border: 1px solid #9A9A9A !important;
+}
+
+table.t2 { width: 18%;}
+table.t3 { width: 25%;}
+table.t4 { width: 33%;}
+table.t6 { width: 50%;}
+table.t8 { width: 66%;}
+table.t10 { width: 82%;}
+table.t12 { width: 100%;}
+
+.auto-width {}
 .align-right {
     text-align: right; }
 
 .align-left {
     text-align: left; }
+
+.tiny-size {
+    font-size: 50%;
+}
+.smaller-size {
+    font-size: 75%;
+}
+.normal-size {}
+
+.bigger-size {
+    font-size: 150%;
+}
+.jumbo-size {
+    font-size: 200%;
+}
+div.w3-col:empty:before {
+    content: "\a0";
+}
+.padding {
+    padding:16px !important;
+}
+
+/*
+STYLIZACJA ELEMENTOW SZABLONU
+ */
+.w3-row span, .w3-row input, .w3-row select {
+    vertical-align: middle;
+}
