@@ -4,8 +4,6 @@
 *
 * */
 
-//TODO: drzewko obiektów html rozzkazu
-
 var klasyDoPominiencia = ['highlight-element','newEmptyElement'];
 
 $(function () {
@@ -21,7 +19,11 @@ function setPopoverFunctions(jQrElement){
         event.stopPropagation();
         htmlObj.closePopover();
         $(this).addClass("highlight-element").popover('show');
+        $('label[data-toggle="tooltip"]').tooltip({trigger:'hover',placement:'top'});
+
+
     }).popover({content:function(){return htmlObj.popoverAddObj(this)},trigger:'manual'});
+
 }
 
 var htmlObj = {
@@ -273,50 +275,50 @@ var htmlObj = {
         }
 
         var style =
-            '<label><input name="align" type="radio" class="no-display radio-btn" value="align-left" '+this.getCheckedString("align-left")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-align-left "></i></span></label>' +
-            '<label><input name="align" type="radio" class="no-display radio-btn" value="w3-center" '+this.getCheckedString("w3-center")+' onchange="htmlObj.toggleRadioInput(this)"  /><span class="w3-btn w3-border"><i class="fas fa-align-center"></i></span></label>' +
-            '<label><input name="align" type="radio" class="no-display radio-btn" value="align-right" '+this.getCheckedString("align-right")+' onchange="htmlObj.toggleRadioInput(this)"  /><span class="w3-btn w3-border"><i class="fas fa-align-right"></i></span></label>' +
-            '<label><input name="border" type="checkbox" class="no-display radio-btn " value="w3-border" '+this.getCheckedString("w3-border")+' onchange="htmlObj.toggleClassValue(\'w3-border\')" /><span class="w3-btn w3-border"><i class="far fa-square"></i></label>' +
-            '<label><input name="padding" type="checkbox" class="no-display radio-btn " value="padding" '+this.getCheckedString("padding")+' onchange="htmlObj.toggleClassValue(\'padding\')" /><span class="w3-btn w3-border"><i class="fas fa-expand"></i></label>';
+            '<label data-toggle="tooltip"  title="Wyrównaj do lewej" ><input name="align" type="radio" class="no-display radio-btn" value="align-left" '+this.getCheckedString("align-left")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-align-left "></i></span></label>' +
+            '<label data-toggle="tooltip"  title="Wyśrodkuj" ><input name="align" type="radio" class="no-display radio-btn" value="w3-center" '+this.getCheckedString("w3-center")+' onchange="htmlObj.toggleRadioInput(this)"  /><span class="w3-btn w3-border"><i class="fas fa-align-center"></i></span></label>' +
+            '<label data-toggle="tooltip"  title="Wyrównaj do prawej" ><input name="align" type="radio" class="no-display radio-btn" value="align-right" '+this.getCheckedString("align-right")+' onchange="htmlObj.toggleRadioInput(this)"  /><span class="w3-btn w3-border"><i class="fas fa-align-right"></i></span></label>' +
+            '<label  data-toggle="tooltip"  title="Dodaj obramowanie" ><input name="border" type="checkbox" class="no-display radio-btn " value="w3-border" '+this.getCheckedString("w3-border")+' onchange="htmlObj.toggleClassValue(\'w3-border\')" /><span class="w3-btn w3-border"><i class="far fa-square"></i></label>' +
+            '<label  data-toggle="tooltip"  title="Dodaj margines" ><input name="padding" type="checkbox" class="no-display radio-btn " value="padding" '+this.getCheckedString("padding")+' onchange="htmlObj.toggleClassValue(\'padding\')" /><span class="w3-btn w3-border"><i class="fas fa-expand"></i></label>';
 
 
         if(nodeName === 'DIV'){
             //kolumna lub wiersz
-            style += '<label><input name="layout" type="radio" class="no-display radio-btn" value="w3-row" onchange="htmlObj.toggleRadioInput(this);htmlObj.toggleInputs(this,true,\'colSize\');" '+this.getCheckedString("w3-row")+' /><span class="w3-btn w3-border"><i class="fas fa-arrows-alt-h"></i></span></label>' +
-                '<label><input name="layout" type="radio" class="no-display radio-btn" value="w3-col" onchange="htmlObj.toggleRadioInput(this);htmlObj.toggleInputs(this,false,\'colSize\')" '+this.getCheckedString("w3-col")+' /><span class="w3-btn w3-border"><i class="fas fa-arrows-alt-v"></i></span></label>';
+            style += '<label  data-toggle="tooltip"  title="Wiersz" ><input name="layout" type="radio" class="no-display radio-btn" value="w3-row" onchange="htmlObj.toggleRadioInput(this);htmlObj.toggleInputs(this,true,\'colSize\');" '+this.getCheckedString("w3-row")+' /><span class="w3-btn w3-border"><i class="fas fa-arrows-alt-h"></i></span></label>' +
+                '<label  data-toggle="tooltip"  title="Kolumna" ><input name="layout" type="radio" class="no-display radio-btn" value="w3-col" onchange="htmlObj.toggleRadioInput(this);htmlObj.toggleInputs(this,false,\'colSize\')" '+this.getCheckedString("w3-col")+' /><span class="w3-btn w3-border"><i class="fas fa-arrows-alt-v"></i></span></label>';
             //szerokosc kolumny
             var disable = this.getCheckedString('w3-col') ? '' : 'disabled';
-            style += '<div><label><input '+disable+' name="colSize" type="radio" class="no-display radio-btn " value="s2" '+this.getCheckedString("s2")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 1/6</label>' +
-                '<label><input '+disable+'  name="colSize" type="radio" class="no-display radio-btn " value="s3" '+this.getCheckedString("s3")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 1/4</label>' +
-            '<label><input  '+disable+' name="colSize" type="radio" class="no-display radio-btn " value="s4" '+this.getCheckedString("s4")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 1/3</label>'+
-            '<label><input  '+disable+' name="colSize" type="radio" class="no-display radio-btn " value="s6" '+this.getCheckedString("s6")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 1/2</label></div> '+
-            '<div><label><input '+disable+'  name="colSize" type="radio" class="no-display radio-btn " value="s8" '+this.getCheckedString("s8")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 2/3</label>'+
-                '<label><input '+disable+'  name="colSize" type="radio" class="no-display radio-btn " value="s10" '+this.getCheckedString("s10")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 5/6</label>' +
-            '<label><input  '+disable+' name="colSize" type="radio" class="no-display radio-btn " value="s12" '+this.getCheckedString("s12")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 100%</label></div>';
+            style += '<div><label  data-toggle="tooltip"  title="Szerokość kolumny" ><input '+disable+' name="colSize" type="radio" class="no-display radio-btn " value="s2" '+this.getCheckedString("s2")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 1/6</label>' +
+                '<label  data-toggle="tooltip"  title="Szerokość kolumny"><input '+disable+'  name="colSize" type="radio" class="no-display radio-btn " value="s3" '+this.getCheckedString("s3")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 1/4</label>' +
+            '<label  data-toggle="tooltip"  title="Szerokość kolumny"><input  '+disable+' name="colSize" type="radio" class="no-display radio-btn " value="s4" '+this.getCheckedString("s4")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 1/3</label>'+
+            '<label  data-toggle="tooltip"  title="Szerokość kolumny"><input  '+disable+' name="colSize" type="radio" class="no-display radio-btn " value="s6" '+this.getCheckedString("s6")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 1/2</label></div> '+
+            '<div><label  data-toggle="tooltip"  title="Szerokość kolumny"><input '+disable+'  name="colSize" type="radio" class="no-display radio-btn " value="s8" '+this.getCheckedString("s8")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 2/3</label>'+
+                '<label  data-toggle="tooltip"  title="Szerokość kolumny"><input '+disable+'  name="colSize" type="radio" class="no-display radio-btn " value="s10" '+this.getCheckedString("s10")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 5/6</label>' +
+            '<label  data-toggle="tooltip"  title="Szerokość kolumny"><input  '+disable+' name="colSize" type="radio" class="no-display radio-btn " value="s12" '+this.getCheckedString("s12")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 100%</label></div>';
 
 
         } else {
 
             style += '<div>' +
-                '<label class="tiny-size"><input name="fontSize" type="radio" class="no-display radio-btn " value="tiny-size" '+this.getCheckedString("tiny-size")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-font"></i></span></label>' +
-                '<label class="smaller-size"><input name="fontSize" type="radio" class="no-display radio-btn " value="smaller-size" '+this.getCheckedString("smaller-size")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas  fa-font "></i></span></label>' +
-                '<label class="normal-size"><input name="fontSize" type="radio" class="no-display radio-btn " value="normal-size" '+this.getCheckedString("normal-size")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas  fa-font "></i></span></label>' +
-                '<label class="bigger-size"><input name="fontSize" type="radio" class="no-display radio-btn" value="bigger-size" '+this.getCheckedString("bigger-size")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas  fa-font "></i></span></label>' +
-                '<label class="jumbo-size"><input name="fontSize" type="radio" class="no-display radio-btn " value="jumbo-size" '+this.getCheckedString("jumbo-size")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas  fa-font "></i></span></label>' +
+                '<label class="tiny-size"  data-toggle="tooltip"  title="Rozmiar czcionki: 50%"><input name="fontSize" type="radio" class="no-display radio-btn " value="tiny-size" '+this.getCheckedString("tiny-size")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-font"></i></span></label>' +
+                '<label class="smaller-size" data-toggle="tooltip"  title="Rozmiar czcionki: 75%"><input name="fontSize" type="radio" class="no-display radio-btn " value="smaller-size" '+this.getCheckedString("smaller-size")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas  fa-font "></i></span></label>' +
+                '<label class="normal-size" data-toggle="tooltip"  title="Rozmiar czcionki: domyślny"><input name="fontSize" type="radio" class="no-display radio-btn " value="normal-size" '+this.getCheckedString("normal-size")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas  fa-font "></i></span></label>' +
+                '<label class="bigger-size" data-toggle="tooltip"  title="Rozmiar czcionki: 150%"><input name="fontSize" type="radio" class="no-display radio-btn" value="bigger-size" '+this.getCheckedString("bigger-size")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas  fa-font "></i></span></label>' +
+                '<label class="jumbo-size"  data-toggle="tooltip"  title="Rozmiar czcionki: 200%"><input name="fontSize" type="radio" class="no-display radio-btn " value="jumbo-size" '+this.getCheckedString("jumbo-size")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas  fa-font "></i></span></label>' +
                 '</div>';
             if(nodeName === 'TABLE'){
-                style += '<div><label><input '+disable+' name="colSize" type="radio" class="no-display radio-btn " value="t0" '+this.getCheckedString("t0")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> auto</label>' +
-                '<div><label><input '+disable+' name="colSize" type="radio" class="no-display radio-btn " value="t2" '+this.getCheckedString("t2")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 1/6</label>' +
-                    '<label><input '+disable+'  name="colSize" type="radio" class="no-display radio-btn " value="t3" '+this.getCheckedString("t3")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 1/4</label>' +
-                    '<label><input  '+disable+' name="colSize" type="radio" class="no-display radio-btn " value="t4" '+this.getCheckedString("t4")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 1/3</label>'+
-                    '<label><input  '+disable+' name="colSize" type="radio" class="no-display radio-btn " value="t6" '+this.getCheckedString("t6")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 1/2</label></div> '+
-                    '<div><label><input '+disable+'  name="colSize" type="radio" class="no-display radio-btn " value="t8" '+this.getCheckedString("t8")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 2/3</label>'+
-                    '<label><input '+disable+'  name="colSize" type="radio" class="no-display radio-btn " value="t10" '+this.getCheckedString("t10")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 5/6</label>' +
-                    '<label><input  '+disable+' name="colSize" type="radio" class="no-display radio-btn " value="t12" '+this.getCheckedString("t12")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 100%</label></div>';
+                style += '<div><label  data-toggle="tooltip"  title="Automatyczna szerokość"><input '+disable+' name="colSize" type="radio" class="no-display radio-btn " value="t0" '+this.getCheckedString("t0")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> auto</label>' +
+                '<div><label data-toggle="tooltip"  title="Szerokość tabeli: 18%"><input '+disable+' name="colSize" type="radio" class="no-display radio-btn " value="t2" '+this.getCheckedString("t2")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 1/6</label>' +
+                    '<label  data-toggle="tooltip"  title="Szerokość tabeli: 25%"><input '+disable+'  name="colSize" type="radio" class="no-display radio-btn " value="t3" '+this.getCheckedString("t3")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 1/4</label>' +
+                    '<label data-toggle="tooltip"  title="Szerokość tabeli: 33%"><input  '+disable+' name="colSize" type="radio" class="no-display radio-btn " value="t4" '+this.getCheckedString("t4")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 1/3</label>'+
+                    '<label data-toggle="tooltip"  title="Szerokość tabeli: 50%"><input  '+disable+' name="colSize" type="radio" class="no-display radio-btn " value="t6" '+this.getCheckedString("t6")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 1/2</label></div> '+
+                    '<div><label data-toggle="tooltip"  title="Szerokość tabeli: 66%"><input '+disable+'  name="colSize" type="radio" class="no-display radio-btn " value="t8" '+this.getCheckedString("t8")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 2/3</label>'+
+                    '<label  data-toggle="tooltip"  title="Szerokość tabeli: 82%"><input '+disable+'  name="colSize" type="radio" class="no-display radio-btn " value="t10" '+this.getCheckedString("t10")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 5/6</label>' +
+                    '<label  data-toggle="tooltip"  title="maksymalna szerokość"><input  '+disable+' name="colSize" type="radio" class="no-display radio-btn " value="t12" '+this.getCheckedString("t12")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-th"></i> 100%</label></div>';
 
             } else {
-                style += '<label><input name="width" type="radio" class="no-display radio-btn " value="max-width" '+this.getCheckedString("max-width")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-angle-left"></i> <i class="fas fa-angle-right"></i></span></label>' +
-                    '<label><input name="width" type="radio" class="no-display radio-btn " value="auto-width" '+this.getCheckedString("auto-width")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-angle-right"></i> <i class="fas fa-angle-left"></i></span></label>';
+                style += '<label  data-toggle="tooltip"  title="Rozszerz obiekt"><input name="width" type="radio" class="no-display radio-btn " value="max-width" '+this.getCheckedString("max-width")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-angle-left"></i> <i class="fas fa-angle-right"></i></span></label>' +
+                    '<label  data-toggle="tooltip"  title="Automatyczna szerokość"><input name="width" type="radio" class="no-display radio-btn " value="auto-width" '+this.getCheckedString("auto-width")+' onchange="htmlObj.toggleRadioInput(this)" /><span class="w3-btn w3-border"><i class="fas fa-angle-right"></i> <i class="fas fa-angle-left"></i></span></label>';
             }
 
 

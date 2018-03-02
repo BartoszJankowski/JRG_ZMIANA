@@ -70,17 +70,7 @@ function isActivePage($nazwa){global $t, $$t; echo $$nazwa;}
                                                 <i class="fas fa-users nav__ico"></i>
                                                     <p class="font-weight-light">Zarządzaj zmianą</p></a>
                                         </div>
-                                            <div class="nav-item p-2 <?php isActivePage('grafiksluzb') ?>">
-                                            	<a href="grafiksluzb.php" class="nav-link <?php isActivePage('grafiksluzb') ?> ">
-                                                    <i class="fas fa-newspaper nav__ico"></i>
-                                                        <p class="font-weight-light">Grafik</p></a>
-                                            </div>
 
-                                                    <div  class="nav-item p-2 <?php isActivePage('rozkazpodglad') ?>">
-                                                        <a href="rozkazpodglad.php"  class="nav-link  <?php isActivePage('rozkazpodglad') ?> ">
-                                                            <i class="fas fa-list-alt nav__ico"></i>
-                                                                <p class="font-weight-light">Rozkaz</p></a>
-                                                    </div>
                                                         <div  class="nav-item p-2 <?php isActivePage('homeduties') ?>">
                                                             <a href="homeduties.php"  class="nav-link <?php isActivePage('homeduties') ?> ">
                                                                 <i class="fas fa-bed nav__ico"></i>

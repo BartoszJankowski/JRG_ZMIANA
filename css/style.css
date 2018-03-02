@@ -1,6 +1,9 @@
 /**
 *Styl BJ. tylko do stylizacji tymczasowej
  */
+main {
+    margin-bottom:80px;
+}
 
 #settings {
     display: none; }

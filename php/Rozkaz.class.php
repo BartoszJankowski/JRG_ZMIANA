@@ -84,7 +84,7 @@ class Rozkaz {
 					if(!empty(get_harmo_val($dayVal))) {
 						$this->dane['list']['@harmo_'.$dayVal][] = array('value'=>$strazak->getStrazakId(),'key'=>$strazak->toString());
 					} else if(!empty(get_graf_val($dayVal))) {
-						$this->dane['list']['@graf_'.$dayVal][] = array('value'=>$strazak->getStrazakId(),'key'=>$strazak->toString());
+						$this->dane['list']['@grafik_'.$dayVal][] = array('value'=>$strazak->getStrazakId(),'key'=>$strazak->toString());
 					} else{
 						$this->dane['list']['@zmiana_free_str'][] = array('value'=>$strazak->getStrazakId(),'key'=>$strazak->toString());
 					}

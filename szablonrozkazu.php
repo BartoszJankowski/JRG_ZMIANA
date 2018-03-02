@@ -102,7 +102,6 @@ function createHtmlObj($obiektArray) : HtmlObj{
     switch ($name){
         case 'DIV':
 	        $htmlObj = new Sekcja($obiektArray['class']);
-	        //$htmlObj->setVariable()
 	        foreach($obiektArray['content'] as $obiekt){
                 $htmlObj->putContent(createHtmlObj($obiekt));
             }
@@ -143,9 +142,10 @@ function createHtmlObj($obiektArray) : HtmlObj{
 	        $htmlObj = new Table();
 	        $htmlObj->addClass($obiektArray['class']);
 	        foreach($obiektArray['content'] as $nrCol =>$col){
-		        $htmlObj->addCol(new Col($col['value'], $nrCol));
+	            $kolumna = new Col($col['value'], $nrCol);
+		        $kolumna->setList($col['attr']);
+		        $htmlObj->addCol($kolumna);
 		        foreach ($col['content'] as $td){
-
 			        $htmlObj->addCell(createHtmlObj($td),$nrCol );
                 }
 
@@ -157,158 +157,7 @@ function createHtmlObj($obiektArray) : HtmlObj{
     return $htmlObj;
 }
 
-/*
- *
- * $gcba = new Table(2, 3);
-	    $gcba->addStyle('vertical-align','top');
-	    $gcba->addClass('w3-table-all','table-grafik');
-	    $gcba->dodajKolumne(new Col('GCBA 5/40',3), 2);
-	    $gcba->addCell('D-ca',0);
-	    $gcba->addCell('Kierowca',0);
-	    $gcba->addCell('Ratownik',0);
-	    $gcba->addCell((new Select('gcba'))->setList('available_firemans'), 1);
-	    $gcba->addCell((new Select('gcba'))->setList('available_firemans'), 1);
-	    $gcba->addCell((new Select('gcba'))->setList('available_firemans'), 1);
 
-try {
-    if(class_exists("HtmlObj", false)){
-	    $miejscowoscIdata = new Sekcja();
-	    $miejscowoscIdata->addClass("align-right");
-	    $miejscowoscIdata->putContent((new Variable('miasto'))->setConstant('miasto'));
-	    $miejscowoscIdata->putContent(new Text(', dnia '));
-	    $miejscowoscIdata->putContent((new Variable('data'))->setConstant('data'));
-	    $miejscowoscIdata->putContent(new Text('r.'));
-
-	    $naglowek = new Sekcja();
-	    $naglowek->addClass('w3-center');
-	    $h1 = new Naglowek(2);
-	    $h1->addClass("no-margin");
-	    $h1->putContent(new Text("ROZKAZ DZIENNY NR "));
-	    $h1->putContent((new Variable('nr rozkazu'))->setVariable('nr_rozkazu'));
-	    $h1->putContent(new Text("/"));
-	    $h1->putContent((new Variable('rok'))->setVariable('rok'));
-	    $h4 = new Naglowek(4);
-	    $h4->addClass("no-margin");
-	    $h4->putContent(new Text('Dowódcy JRG nr '));
-	    $h4->putContent((new Variable('nr jrg'))->setConstant('nr_jrg'));
-	    $h4->putContent(new Text(' na dzień '));
-	    $h4->putContent((new Variable('data'))->setVariable('data'));
-	    $h4->putContent(new Text('r.'));
-	    $naglowek->putContent($h1);
-	    $naglowek->putContent($h4);
-
-	    $pkt1 = new Sekcja();
-	    $pkt1->putContent((new Naglowek(2))->putContent("Pkt 1. Służba: "));
-	    $pkt1Inn = new Sekcja();
-	    $pkt1Inn->addClass("align-right");
-
-	    $pkt1Inn->putContent(
-		    (new Sekcja())
-			    ->putContent(new Text("Zmiana służbowa: zmiana "))
-			    ->putContent((new Variable('nr zmiany'))->setVariable('nr_zmiany'))
-	    );
-	    $pkt1Inn->putContent(
-		    (new Sekcja())
-			    ->putContent(new Text("D-ca zmiany służbowej: - "))
-			    ->putContent( (new Select('szefzmiany'))->setList('available_firemans') )
-	    );
-	    $pkt1Inn->putContent(
-		    (new Sekcja())
-			    ->putContent(new Text("Dyspozytor PA: - "))
-			    ->putContent((new Select('dyspozytor'))->setList('available_firemans'))
-	    );
-	    $pkt1Inn->putContent(
-		    (new Sekcja())
-			    ->putContent(new Text("Podoficer dyżurny: - "))
-			    ->putContent((new Select('podoficer'))->setList('available_firemans'))
-	    );
-	    $pkt1Inn->putContent(
-		    (new Sekcja())
-			    ->putContent(new Text("Pomocnik podoficera: - "))
-			    ->putContent((new Select('pomocnik'))->setList('available_firemans'))
-	    );
-	    $pkt1->putContent($pkt1Inn);
-
-	    $pkt2 = new Sekcja('w3-row');
-	    $pkt2->putContent((new Naglowek(2))->putContent("Pkt 2. Obsada: "));
-	    $tabGba  = new Table(2, 4);
-	    $tabGba->addClass('w3-table-all','table-grafik');
-	    $tabGba->addStyle('vertical-align','top');
-
-	    $tabGba->addCell('D-ca',0);
-	    $tabGba->addCell('Kierowca',0);
-	    $tabGba->addCell('Ratownik',0);
-	    $tabGba->addCell('Ratownik',0);
-	    $tabGba->dodajKolumne(new Col('GBA 2,5/20',4),2);
-	    $tabGba->addCell((new Select('gba'))->setList('available_firemans'), 1);
-	    $tabGba->addCell((new Select('gba'))->setList('available_firemans'), 1);
-	    $tabGba->addCell((new Select('gba'))->setList('available_firemans'), 1);
-	    $tabGba->addCell((new Select('gba'))->setList('available_firemans'), 1);
-
-	    $gcba = new Table(2, 3);
-	    $gcba->addStyle('vertical-align','top');
-	    $gcba->addClass('w3-table-all','table-grafik');
-	    $gcba->dodajKolumne(new Col('GCBA 5/40',3), 2);
-	    $gcba->addCell('D-ca',0);
-	    $gcba->addCell('Kierowca',0);
-	    $gcba->addCell('Ratownik',0);
-	    $gcba->addCell((new Select('gcba'))->setList('available_firemans'), 1);
-	    $gcba->addCell((new Select('gcba'))->setList('available_firemans'), 1);
-	    $gcba->addCell((new Select('gcba'))->setList('available_firemans'), 1);
-
-	    $scd = new Table(2, 3);
-	    $scd->addStyle('vertical-align','top');
-	    $scd->addClass('w3-table-all','table-grafik');
-	    $scd->dodajKolumne(new Col('SCD 40',3),2);
-	    $scd->addCell('D-ca',0);
-	    $scd->addCell('Kierowca',0);
-	    $scd->addCell('Ratownik',0);
-	    $scd->addCell((new Select('scd'))->setList('available_firemans'), 1);
-	    $scd->addCell((new Select('scd'))->setList('available_firemans'), 1);
-	    $scd->addCell((new Select('scd'))->setList('available_firemans'), 1);
-
-	    $pkt2->putContent( (new Sekcja('w3-third'))->putContent($tabGba));
-	    $pkt2->putContent((new Sekcja('w3-third'))->putContent($gcba));
-	    $pkt2->putContent((new Sekcja('w3-third'))->putContent($scd));
-
-	    $pkt3 = new Sekcja();
-	    $pkt3->putContent((new Naglowek(2))->putContent("Pkt 3. Dyżur domowy: "));
-	    $pkt3->putContent(
-	            (new Sekcja())
-                    ->putContent((new Lista())->addClass('w3-padding')->setList('harmo_fireman_Dd'))
-        );
-
-	    $pkt4 = new Sekcja();
-	    $pkt4->putContent((new Naglowek(2))->putContent("Pkt 4. Nieobecni: "));
-	        $tabNieobecni = (new Table())->addStyle('vertical-align','top')->addClass('w3-table-all');;
-	        $tabNieobecni->dodajKolumne((new Col('Urlop',5))->setList('harmo_fireman_Ud','harmo_fireman_Uw','harmo_fireman_O'), 1);
-	    $tabNieobecni->dodajKolumne((new Col('Wolne',5))->setList('graf_fireman_Ws'), 2);
-	    $tabNieobecni->dodajKolumne((new Col('Delegacja',5))->setList('harmo_fireman_D'), 3);
-	    $tabNieobecni->dodajKolumne((new Col('Chorzy',5))->setList('harmo_fireman_Ch'), 4);
-	    $pkt4->putContent($tabNieobecni);
-
-	    $pkt5 = new Sekcja('w3-margin','align-right');
-	    $pkt5->putContent((new Sekcja('w3-container','w3-border','w3-padding','w3-margin-top'))->addStyle('display','inline-block')->putContent(new Text('Podpis d-cy Jrg'))->putContent((new Sekcja())->addStyle('width','100px')->addStyle('height','50px')) );
-
-
-	    $szablon->addObjects($miejscowoscIdata, $naglowek, $pkt1, $pkt2, $pkt3, $pkt4, $pkt5);
-        $szablon->setFinished(true);
-
-	    if($dbRozkazy->saveSzablon($user->getStrazak()->getJrgId(),$szablon)) {
-
-	        echo 'Poprawnie zapisano szablon.';
-
-        }
-
-    }
-
-
-} catch (UserErrors $e){
-    echo $e->getMessage();
-}
-
-
-*/
 
 $title = "Szablon rozkazu";
 require 'header.php';

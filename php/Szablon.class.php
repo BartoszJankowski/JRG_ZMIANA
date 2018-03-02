@@ -131,7 +131,7 @@ abstract class HtmlObj {
 	}
 
 	private function isInputType(){
-		return ($this instanceof Input || $this instanceof Select || $this instanceof Variable);
+		return ($this instanceof Input || $this instanceof Select );
 	}
 	/**
 	 * @return mixed
@@ -471,36 +471,6 @@ class Text extends HtmlObj  implements TextType  {
 	}
 }
 
-class Variable extends HtmlObj implements ValueAdapter {
-
-	public function __construct( string $name) {
-		parent::__construct();
-		$this->n = 'input';
-		$this->addAttr('type','hidden');
-		$this->addAttr('name',$this->i);
-		$this->cnt = $name;
-
-	}
-
-	protected function getHtmlTag( $class, $attr, $content ) {
-		return '<label '.$class.'><'.$this->n . ' ' . $attr . ' value="'.$content.'" />'.$content.'</label>';
-	}
-
-
-	public function putContent( $content ) : HtmlObj{
-		if(is_string($content)){
-			$this->cnt = $content;
-		} else {
-			throw new UserErrors("Nie można dodać obiektu innego niz String do tego elementu.");
-		}
-		return $this;
-	}
-
-	public function setVal( $value ) {
-		$this->cnt = $value;
-	}
-}
-
 class Paragraf extends HtmlObj implements TextType {
 
 
@@ -591,7 +561,7 @@ class Col extends HtmlObj implements ListAdapter {
 	public function setListContent( array $lista ) {
 
 		foreach ($lista as $el){
-			$this->cnt[] = $el['key'];
+			$this->cnt[] =  (new TD())->putContent(new Text($el['key']));
 		}
 	}
 
@@ -744,6 +714,5 @@ interface ValueAdapter {
 }
 
 interface TextType {
-
 	public function changeContent(array $zmienne, array $values);
 };
