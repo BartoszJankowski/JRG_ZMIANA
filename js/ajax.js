@@ -1,4 +1,4 @@
-/**
+/*
  * Zmienna która odpowiada za to czy w konsoli sa wypisywane zdarzenia z f.kcji LogD
  * @type {boolean}
  */
@@ -42,53 +42,51 @@ function submitForm() {
 	$.ajax({
 		/*  [url: 'callback.php'],  poniewaz w ajaxSetup zdefiniowalismy juz url tutaj nie musimy tego robic, chyba ze chcemy go zmienic poprzez nadpisanie */
 		type: 'POST',
-		/* [dataType: 'json'], => jest to prawidłowe podejscie , ale na chwilę obecna\nie ograniczajmy się, dodatkowo jak juz bedziemy wiedziec ze tylko w ten sposób serwer nam odpowiada to zdefinujemy tą wartośc w ajaxSetup   */
+		/*dataType: 'json', /*=> jest to prawidłowe podejscie , ale na chwilę obecna\nie ograniczajmy się, dodatkowo jak juz bedziemy wiedziec ze tylko w ten sposób serwer 
+										nam odpowiada to zdefinujemy tą wartośc w ajaxSetup   */
 		data: postData, /* obiekt przygotowany przez funkcję czytającą formularz - nic juz nie trzeba z nim robic */
 
-		// Sand to Mariusz był :)
-		beforeSand: function() {
-			$("#error").fadeOut();
-			$('#log_in').html('<span class="glyphicon-transfer"></span> &nbsp; piaskowanie ...');
-				},
         beforeSend : function() {
             $("#error").fadeOut();
-            $('#log_in').html('<span class="glyphicon-transfer"></span> &nbsp; sending ...');
+            $('#log_in').html('<span class="glyphicon-transfer"></span> &nbsp; Logowanie ...');
         },
 		//ta funkcja ma 3 parametry - wykorzystaj je
 		// success(result,status,xhr)	A function to be run when the request succeeds
 		success : function(response)
 		{
+
+			
 			/*
 			w js warto sprawdzać wartości przy uzyciu '==='
 			==	equal to
 			===	equal value and equal type
 			w ponizszej sytuacji powinno działać poprawnie
-			ale sprawy sie komplikuja jak sprawdzamy liczby i typy boolean
+			ale sprawy sie komplikuja jak sprawdzamy liczby i typy boolean */
 
-			if(response==='ok'){
+			if(response.result){
 
-			tutaj więcej: https://www.w3schools.com/js/js_mistakes.asp
+			/*tutaj więcej: https://www.w3schools.com/js/js_mistakes.asp
 
 			ta funkcja w domysle zwraca wartosc udaną - czyli otrzymała odpowiedx z serwera
-			aby teraz sprawdzić co pokazac uzytkownikowi nalezy odczytac odpowiedź
-			if(response){
+			aby teraz sprawdzić co pokazac uzytkownikowi nalezy odczytac odpowiedź*/
+				// if(response){
 
-				 $('#log_in').html('<img src="btn-ajax-loader.gif" /> &nbsp; Signin In ...');
-				 /*? jaki jest/był zamysł poniższego kodu ? juz pomijam fakt ze wypadało by napisac do tego oddzielna funkcję, to czemu czekac 40 sekund???
-            setTimeout(' window.location.href = "../main.php"; ', 40000);
-			}
-				else{
-					$('#error').fadeIn(1000, function() {
+				 $('#log_in').html('<img src="img/btn-ajax-loader.gif" /> &nbsp; Logowanie ...');
+	
+				 // ? jaki jest/był zamysł poniższego kodu ? juz pomijam fakt ze wypadało by napisac do tego oddzielna funkcję, to czemu czekac 40 sekund???
+            	setTimeout('window.location.href = "../main.php"; ');
+				}
+					else{
+						$('#error').fadeIn(1000, function() {
 
-						$('#error').html('<div class="alert alert-danger"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp; '+response+' !</div>');
+							$('#error').html('<div class="alert alert-danger"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp; '+response.errorMsg+' !</div>');
 
-							$('#log_in').html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Sign In');
+								$('#log_in').html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Zaloguj się');
 
 					});
 				}
-
-	>>>>	ZATEM:
-			 */
+	// >>>>	ZATEM:
+			 
 
 			var jsonResponse = null;
             //kazdorazowo wystwietlmy sobie odpowiedź zawsze zeby poprawnie napisac .js pod odpowiedź
@@ -104,7 +102,6 @@ function submitForm() {
 				}
                // jsonResponse = JSON.parse(response);
 
-
 			} catch(e){
 				//musimy obsłuzyc błąd niepoprawnego odczytywania odpowiedzi itp który moze sie pojawić gdy
 				// np. serwer php oprócz odpowiedzi json wyslie jakis inny string
@@ -112,8 +109,10 @@ function submitForm() {
 			}
 		}
 	  });	
+
 	return false;
 }
+
 
 /**
  * Funkcja przegląda formularz i zapisuje dane z formularza do żądania AJAX [name]=value

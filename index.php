@@ -42,8 +42,8 @@ if(isset($_POST['log_in'])){
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-    <script type="text/javascript" src="js/ajax.js?ver=<?php echo time() ?>""></script>
-    <script type="text/javascript" src="js/scripts.js?ver=<?php echo time() ?>"></script>
+<!--     <script type="text/javascript" src="js/ajax.js?ver=<?php echo time() ?>""></script>
+    <script type="text/javascript" src="js/scripts.js?ver=<?php echo time() ?>"></script> -->
 </head>
 
 <body>
@@ -107,8 +107,8 @@ if(isset($_POST['log_in'])){
          }
       }
      ?> 
-    <form id="login_form" method="post" action="" class="form">
-
+    <form id="login_form" name="" method="post" action="" class="form">
+      <input type="hidden" name="action" value="log_in" />
         <div id="error">
             
         </div>
@@ -120,22 +120,21 @@ if(isset($_POST['log_in'])){
           ?>
         
 
-
       <div class="form-group">
         <label for="exampleInputEmail1">Login / email</label>
-          <input id="login" type="login" name="login" value="<?php echo $_POST['login'] ?>" class="form-control" required />
+          <input id="login" type="login" name="login" value="" class="form-control" required />
       </div>
         <div class="form-group">
           <label for="exampleInputPassword1">Hasło</label>
             <input id="password" type="password" name="password" value="" class="form-control" required />
         </div>
-        <button id="log_in" type="submit" name="log_in" class="btn btn-danger btn-lg btn-block btn__login__submit">Zaloguj</button>
-<!--   </form> -->
+        <input id="log_in" type="submit" name="log_in" action="" class="btn btn-danger btn-lg btn-block btn__login__submit">Zaloguj</input>
+  </form>
             <div class="w3-container">
                 <a class="w3-left" href="register.php" target="_self">Rejestracja</a>
                 <a class="w3-right" href="reset.php" target="_self">Zapomniałeś hasła?</a>
             </div>
-        </form>
+<!--         </form> -->
     </div>
 </main>
 <?php
