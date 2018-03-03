@@ -8,7 +8,7 @@
 
 class DyzuryDomowe {
 
-	const LP_POL = 5;
+	public static $LP_POL = 5;
 	const MAX_DD = 3;
 
 
@@ -116,11 +116,12 @@ class DyzuryDomowe {
 							$pozycja_DD = $this->getPozycjaDD($data);
 							if($pozycja_DD){
 								$pozycja_DD->clear();
-								foreach ($listaStrId as $id_str=>$name){
+								foreach ($listaStrId as $id_str){
 									if(array_key_exists($id_str, $this->strazacyIn)){
 										$pozycja_DD->addStr($this->strazacyIn[$id_str]['strDD']);
 									} else {
-										$pozycja_DD->addStr((new StrazakDD())->setIdName($id_str,$name));
+										//TODO: mozliwe usuniecie strazaka po edycji dyzurów domowych
+									//	$pozycja_DD->addStr((new StrazakDD())->setIdName($id_str,$name));
 									}
 								}
 							}
@@ -146,9 +147,10 @@ class DyzuryDomowe {
 	public function printDyzuryDiff(){
 		$inn= '';
 		foreach ($this->dyzury as $pozycja_DD){
-			$inn .= '<td>'.($pozycja_DD->dd+1).'</td>';
+			$inn .= '<th>'.($pozycja_DD->dd+1).'</th>';
 		}
-		$firstRow = '<tr><td>Upr.</td><td>Strażak</td>'.$inn.'</tr>';
+		$inn .= '<th>Suma[h]</th>';
+		$firstRow = '<tr><th>Upr.</th><th>Strażak</th>'.$inn.'</tr>';
 
 		foreach ($this->strazacyIn as $id=>$tab){
 			$uprI = '';
@@ -159,15 +161,31 @@ class DyzuryDomowe {
 			$row = '<tr><td>'.$uprI.'</td><td>'.$tab['strDD']->getname().'</td>';
 			foreach ($this->dyzury as $pozycja_DD){
 				if($pozycja_DD->checkIfExists($id)){
-					$row.= '<td width="50">D</td>';
+					$row.= '<td width="50"><label class="label_dyzur_grafik_check"><input class="dyzur_grafik_check" type="checkbox" name="dyzury['.$pozycja_DD->data.'][]" value="'.$id.'" checked/><span>D</span></label></td>';
 				} else {
-					$row.= '<td width="50"></td>';
+					$row.= '<td width="50"><label class="label_dyzur_grafik_check"><input class="dyzur_grafik_check" type="checkbox" name="dyzury['.$pozycja_DD->data.'][]" value="'.$id.'" /><span>D</span></label></td>';
 				}
 			}
+			$row .= '<td class="sumaH">0</td>';
 			$row .= '</tr>';
 			$firstRow .= $row;
 		}
-		echo '<table class="w3-table-all table-grafik" >'.$firstRow.'</table>';
+		$suma = '<td></td><th>Suma:</th>';
+		for ($i=0; $i<count($this->dyzury);$i++){
+			$suma .= '<td>0</td>';
+		}
+		$firstRow .= '<tr class="w3-center">'.$suma.'</tr>';
+
+		foreach (DBJrgSettings::getUprawnienia() as $uprawnienie){
+			$suma = '<td><i class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'" ></i></td><th>'.$uprawnienie->getName().'</th>';
+			for ($i=0; $i<count($this->dyzury);$i++){
+				$suma .= '<td>0</td>';
+			}
+			$firstRow .= '<tr class="w3-center">'.$suma.'</tr>';
+		}
+
+		echo '<input type="hidden" name="id" value="'.$this->id.'">';
+		echo '<table id="dyzury_grafik" class="w3-table-all table-grafik" >'.$firstRow.'</table>';
 	}
 
 	public function setStrazacy(array $strazacy){
@@ -194,6 +212,25 @@ class DyzuryDomowe {
 		echo $res;
 	}
 
+	public function getStrazacyDropdownMenu($selectStrId = null){
+		$inner = '';
+
+		foreach ($this->strazacyIn as $strId=>$tab){
+			$uprI = '';
+			$selected = '';
+			foreach ($tab['str']->getUprawnienia() as $id){
+				$uprawnienie = DBJrgSettings::getUprawnienie($id);
+				$uprI .= '<msc class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'"></msc>';
+			}
+			if($selectStrId!=null && $selectStrId == $strId){
+				$selected = 'w3-pale-blue';
+			}
+			$inner .= '<a class="dropdown-item '.$selected.'" data-strid="'.$strId.'" href="#">'.$tab['strDD']->getName().' <span class="w3-right">'.$uprI.'</span></a>';
+		}
+
+		return '<div class="dropdown-menu">'.$inner.'</div>';
+	}
+
 	//zwraza strazaka z listyy $strazacyIn
 	public function getStrazakIn($str_id) : Strazak{
 		if(array_key_exists($str_id,$this->strazacyIn)){
@@ -216,6 +253,7 @@ class DyzuryDomowe {
 	}
 
 	public function autoUzupelnienie($dane){
+		self::$LP_POL = $dane['maxDD'];
 		//$min = min($dane['range']);
 		//$max = max($dane['range']);
 		$uprWymagane = is_array($dane['wymagane']) ? $dane['wymagane'] : array() ;
@@ -248,7 +286,7 @@ class DyzuryDomowe {
 				//sprawdzenie wszystkich dni
 				foreach ($this->dyzury as $pozycja_DD){
 					if($tabCount[$strId]<DyzuryDomowe::MAX_DD){
-						if($pozycja_DD->getLp()<DyzuryDomowe::LP_POL && !$pozycja_DD->checkIfExists($strId)){
+						if($pozycja_DD->getLp()<DyzuryDomowe::$LP_POL && !$pozycja_DD->checkIfExists($strId)){
 							if(!$this->czyStrazakMaUrlop($this->harmonogramy[$strId]->getDayVal($pozycja_DD->mm,$pozycja_DD->dd))){
 								$pozycja_DD->addStr($tab['strDD']);
 								$tabCount[$strId]++;
@@ -273,7 +311,7 @@ class DyzuryDomowe {
 				//TODO: wybrac najlepszego strazaka z najlepszym dopasowaniem
 				foreach ($this->strazacyIn as $id=>$tab){
 					//jesli ten dzien nie jest juz pelny
-					if($pozycja_DD->getLp()<DyzuryDomowe::LP_POL){
+					if($pozycja_DD->getLp()<DyzuryDomowe::$LP_POL){
 						//jesli w tym dniu niema jeszcze tego strazaka
 						if(!$pozycja_DD->checkIfExists($id)){
 							//czy strazak nie przkroczyl jeszcze 72h
@@ -323,7 +361,7 @@ class DyzuryDomowe {
 					//sprawdzenie wartosci nastepnego dnia - czy to wolna służba
 					if($nextDayVal !== false && $nextDayVal === 'Ws'){
 						//kontynuowac tylko kiedy dzien nie jest pełny jeszcze
-						if($pozDD->getLp()<DyzuryDomowe::LP_POL){
+						if($pozDD->getLp()<DyzuryDomowe::$LP_POL){
 							//sprawdzic czy strazak nie jest juz przypadkiem dodany
 							if(!$pozDD->checkIfExists($str_id)){
 								//sprawdzic czy strazak nie przekroczył juz 72h dd
@@ -405,7 +443,7 @@ class PozycjaDD {
 
 	private function printDzienRows(DyzuryDomowe $dyzury_domowe){
 		$res ='';
-		for($i = 0; $i<DyzuryDomowe::LP_POL; $i++){
+		for($i = 0; $i<DyzuryDomowe::$LP_POL; $i++){
 			if(array_key_exists($i, $this->strazacy)){
 				$uprI = '';
 				$idStr = $this->strazacy[$i]->getId();
@@ -415,9 +453,9 @@ class PozycjaDD {
 					$uprI .= '<msc class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'"></msc>';
 				}
 
-				$res .= '<li class="str_id_'.$this->strazacy[$i]->getId().'"><input type="hidden" name="dyzury['.$this->data.']['.$this->strazacy[$i]->getId().']" value="'.$this->strazacy[$i]->getName().'" />'.$this->strazacy[$i]->getName().' '.$uprI.'</li>';
+				$res .= '<li><button class="btn btn-outline-secondary dropdown-toggle max-width" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="min-width: 150px;"><input type="hidden" class="input_onchange" name="dyzury['.$this->data.'][]" value="'.$this->strazacy[$i]->getId().'" /><span>'.$this->strazacy[$i]->getName().' '.$uprI.'</span></button>'.$dyzury_domowe->getStrazacyDropdownMenu($this->strazacy[$i]->getId()).'</li>';
 			} else {
-				$res .= '<li><input type="hidden" name="'.$this->data.'[dyzury][]" value="-1" /><input type="text" class=""></li>';
+				$res .= '<li><button class="btn btn-outline-secondary dropdown-toggle max-width" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="min-width: 150px;"><input type="hidden" class="input_onchange" name="dyzury['.$this->data.'][]" value="-1" /><span></span></button>'.$dyzury_domowe->getStrazacyDropdownMenu().'</li>';
 			}
 		}
 		return '<ol>'.$res.'</ol>';
