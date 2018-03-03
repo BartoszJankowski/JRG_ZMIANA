@@ -23,10 +23,10 @@ $(function(){
 
 	$("#login_form").on("submit", function(){
         logD('->event onsubmit start');
-		submitForm();
+	//	submitForm();
         logD('->event onsubmit end');
 		//zawsze zwracamy FALSE aby formularz nie został wysłany - zapobiegamy zdarzeniu "onsubmit"
-		return false;
+	//	return false;
 	})
 });
 
@@ -35,7 +35,6 @@ function OnError(xhr){
 }
 
 function submitForm() {
-
 
 	var postData = getPostData('login_form');
 
@@ -108,9 +107,13 @@ function submitForm() {
 				logD(e.message)
 			}
 		}
+<<<<<<< HEAD
 	  });	
 
 	return false;
+=======
+	  });
+>>>>>>> 03332aeb5bfe045d65e17980b5af0eb7808e57d1
 }
 
 

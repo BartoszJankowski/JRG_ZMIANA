@@ -163,6 +163,9 @@ class DBRozkazy extends DbConn {
 
 	public function saveSzablon($jrg_id, Szablon $szablon) : bool{
 		try {
+			if($szablon->getFinished()){
+				$this->deactivateTemplates($jrg_id);
+			}
 			$stmt = $this->conn->prepare("UPDATE ".$this->tbl_szablony_rozkazu." SET szablon = :szablon, finished = :finished WHERE jrg_id = :jrg_id AND id = :id");
 			$stmt->bindParam(':jrg_id',$jrg_id);
 			$stmt->bindParam(':id',$szablon->getId());
@@ -174,6 +177,16 @@ class DBRozkazy extends DbConn {
 			$this->error = "DB error:".$e->getMessage();
 		}
 		return false;
+	}
+
+	private function deactivateTemplates($jrg_id){
+		try {
+			$stmt = $this->conn->prepare("UPDATE ".$this->tbl_szablony_rozkazu." SET finished = 0 WHERE jrg_id = :jrg_id");
+			$stmt->bindParam(':jrg_id',$jrg_id);
+			$stmt->execute();
+		} catch (PDOException $e){
+			$this->error = "DB error:".$e->getMessage();
+		}
 	}
 
 	public function selectRozkaz( $jrg_id, LocalDateTime $date_time ) {
@@ -221,6 +234,12 @@ class DBRozkazy extends DbConn {
 		return false;
 	}
 
+	/**
+	 * Zwraca BOOL czy dane JRG ma aktywny szablon
+	 * @param $jrg_id
+	 *
+	 * @return bool
+	 */
 	public function hasActiveTemplate($jrg_id) : bool {
 		try {
 			$stmt = $this->conn->prepare("SELECT id FROM ".$this->tbl_szablony_rozkazu." WHERE jrg_id = :jrg_id AND finished = 1");
@@ -230,6 +249,20 @@ class DBRozkazy extends DbConn {
 			if($result){
 				return true;
 			}
+		} catch (PDOException $e){
+			$this->error = "DB error:".$e->getMessage();
+		}
+		return false;
+	}
+
+	public function deleteSzablon($jrgId, Szablon $szablon) : bool {
+
+		try {
+			$stmt = $this->conn->prepare("DELETE FROM ".$this->tbl_szablony_rozkazu." WHERE jrg_id = :jrg_id AND id = :id");
+			$stmt->bindParam(':jrg_id',$jrgId);
+			$stmt->bindParam(':id',$szablon->getId());
+			$stmt->execute();
+			return true;
 		} catch (PDOException $e){
 			$this->error = "DB error:".$e->getMessage();
 		}

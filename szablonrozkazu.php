@@ -34,6 +34,7 @@ if(isset($_GET)){
 	$_GET = test_input($_GET);
 }
 
+Szablon::$isEditing = true;
 
 if(isset($_GET['start'])){
 	$szablon = new Szablon($user->getJrgId());
@@ -50,166 +51,130 @@ if(isset($_GET['start'])){
 	{
 		$szablon = false;
 	}
+} elseif(isset($_GET['delete'])){
+	//$dbJednostki->selectJrg($user->getAdminJrgId());
+	$szablony = $dbRozkazy->getSzablony($user->getAdminJrgId());
+	foreach ($szablony as $i=>$szbl){
+	    if($szbl->getId()===$_GET['delete'] ){
+	        if($szbl->getCreatedOrdersNum()>0){
+	            $info = '<h2>Nie można usunąć szablonu dla którego zostały utworzone rozkazy.</h2>';
+            } else {
+		        if($dbRozkazy->deleteSzablon($user->getAdminJrgId(), $szbl)){
+			        $info = '<h2>Poprawnie usunieto szablon.</h2>';
+			        $szablony[$i] = null;
+			        break;
+                } else {
+			        $info = '<h2>Nie udało sie usunąć szablonu </h2><p>'.$dbRozkazy->error.'</p>';
+                }
+            }
+        }
+    }
 } else {
     $szablony = $dbRozkazy->getSzablony($user->getAdminJrgId());
+
 }
 
-/*
+if(isset($_POST['save'])){
 
-try {
-    if(class_exists("HtmlObj", false)){
-	    $miejscowoscIdata = new Sekcja();
-	    $miejscowoscIdata->addClass("align-right");
-	    $miejscowoscIdata->putContent((new Variable('miasto'))->setConstant('miasto'));
-	    $miejscowoscIdata->putContent(new Text(', dnia '));
-	    $miejscowoscIdata->putContent((new Variable('data'))->setConstant('data'));
-	    $miejscowoscIdata->putContent(new Text('r.'));
-
-	    $naglowek = new Sekcja();
-	    $naglowek->addClass('w3-center');
-	    $h1 = new Naglowek(2);
-	    $h1->addClass("no-margin");
-	    $h1->putContent(new Text("ROZKAZ DZIENNY NR "));
-	    $h1->putContent((new Variable('nr rozkazu'))->setVariable('nr_rozkazu'));
-	    $h1->putContent(new Text("/"));
-	    $h1->putContent((new Variable('rok'))->setVariable('rok'));
-	    $h4 = new Naglowek(4);
-	    $h4->addClass("no-margin");
-	    $h4->putContent(new Text('Dowódcy JRG nr '));
-	    $h4->putContent((new Variable('nr jrg'))->setConstant('nr_jrg'));
-	    $h4->putContent(new Text(' na dzień '));
-	    $h4->putContent((new Variable('data'))->setVariable('data'));
-	    $h4->putContent(new Text('r.'));
-	    $naglowek->putContent($h1);
-	    $naglowek->putContent($h4);
-
-	    $pkt1 = new Sekcja();
-	    $pkt1->putContent((new Naglowek(2))->putContent("Pkt 1. Służba: "));
-	    $pkt1Inn = new Sekcja();
-	    $pkt1Inn->addClass("align-right");
-
-	    $pkt1Inn->putContent(
-		    (new Sekcja())
-			    ->putContent(new Text("Zmiana służbowa: zmiana "))
-			    ->putContent((new Variable('nr zmiany'))->setVariable('nr_zmiany'))
-	    );
-	    $pkt1Inn->putContent(
-		    (new Sekcja())
-			    ->putContent(new Text("D-ca zmiany służbowej: - "))
-			    ->putContent( (new Select('szefzmiany'))->setList('available_firemans') )
-	    );
-	    $pkt1Inn->putContent(
-		    (new Sekcja())
-			    ->putContent(new Text("Dyspozytor PA: - "))
-			    ->putContent((new Select('dyspozytor'))->setList('available_firemans'))
-	    );
-	    $pkt1Inn->putContent(
-		    (new Sekcja())
-			    ->putContent(new Text("Podoficer dyżurny: - "))
-			    ->putContent((new Select('podoficer'))->setList('available_firemans'))
-	    );
-	    $pkt1Inn->putContent(
-		    (new Sekcja())
-			    ->putContent(new Text("Pomocnik podoficera: - "))
-			    ->putContent((new Select('pomocnik'))->setList('available_firemans'))
-	    );
-	    $pkt1->putContent($pkt1Inn);
-
-	    $pkt2 = new Sekcja('w3-row');
-	    $pkt2->putContent((new Naglowek(2))->putContent("Pkt 2. Obsada: "));
-	    $tabGba  = new Table(2, 4);
-	    $tabGba->addClass('w3-table-all','table-grafik');
-	    $tabGba->addStyle('vertical-align','top');
-
-	    $tabGba->addCell('D-ca',0);
-	    $tabGba->addCell('Kierowca',0);
-	    $tabGba->addCell('Ratownik',0);
-	    $tabGba->addCell('Ratownik',0);
-	    $tabGba->addCol(new Col('GBA 2,5/20',4),2);
-	    $tabGba->addCell((new Select('gba'))->setList('available_firemans'), 1);
-	    $tabGba->addCell((new Select('gba'))->setList('available_firemans'), 1);
-	    $tabGba->addCell((new Select('gba'))->setList('available_firemans'), 1);
-	    $tabGba->addCell((new Select('gba'))->setList('available_firemans'), 1);
-
-	    $gcba = new Table(2, 3);
-	    $gcba->addStyle('vertical-align','top');
-	    $gcba->addClass('w3-table-all','table-grafik');
-	    $gcba->addCol(new Col('GCBA 5/40',3), 2);
-	    $gcba->addCell('D-ca',0);
-	    $gcba->addCell('Kierowca',0);
-	    $gcba->addCell('Ratownik',0);
-	    $gcba->addCell((new Select('gcba'))->setList('available_firemans'), 1);
-	    $gcba->addCell((new Select('gcba'))->setList('available_firemans'), 1);
-	    $gcba->addCell((new Select('gcba'))->setList('available_firemans'), 1);
-
-	    $scd = new Table(2, 3);
-	    $scd->addStyle('vertical-align','top');
-	    $scd->addClass('w3-table-all','table-grafik');
-	    $scd->addCol(new Col('SCD 40',3),2);
-	    $scd->addCell('D-ca',0);
-	    $scd->addCell('Kierowca',0);
-	    $scd->addCell('Ratownik',0);
-	    $scd->addCell((new Select('scd'))->setList('available_firemans'), 1);
-	    $scd->addCell((new Select('scd'))->setList('available_firemans'), 1);
-	    $scd->addCell((new Select('scd'))->setList('available_firemans'), 1);
-
-	    $pkt2->putContent( (new Sekcja('w3-third'))->putContent($tabGba));
-	    $pkt2->putContent((new Sekcja('w3-third'))->putContent($gcba));
-	    $pkt2->putContent((new Sekcja('w3-third'))->putContent($scd));
-
-	    $pkt3 = new Sekcja();
-	    $pkt3->putContent((new Naglowek(2))->putContent("Pkt 3. Dyżur domowy: "));
-	    $pkt3->putContent(
-	            (new Sekcja())
-                    ->putContent((new Lista())->addClass('w3-padding')->setList('harmo_fireman_Dd'))
-        );
-
-	    $pkt4 = new Sekcja();
-	    $pkt4->putContent((new Naglowek(2))->putContent("Pkt 4. Nieobecni: "));
-	        $tabNieobecni = (new Table())->addStyle('vertical-align','top')->addClass('w3-table-all');;
-	        $tabNieobecni->addCol((new Col('Urlop',5))->setList('harmo_fireman_Ud','harmo_fireman_Uw','harmo_fireman_O'), 1);
-	    $tabNieobecni->addCol((new Col('Wolne',5))->setList('graf_fireman_Ws'), 2);
-	    $tabNieobecni->addCol((new Col('Delegacja',5))->setList('harmo_fireman_D'), 3);
-	    $tabNieobecni->addCol((new Col('Chorzy',5))->setList('harmo_fireman_Ch'), 4);
-	    $pkt4->putContent($tabNieobecni);
-
-	    $pkt5 = new Sekcja('w3-margin','align-right');
-	    $pkt5->putContent((new Sekcja('w3-container','w3-border','w3-padding','w3-margin-top'))->addStyle('display','inline-block')->putContent(new Text('Podpis d-cy Jrg'))->putContent((new Sekcja())->addStyle('width','100px')->addStyle('height','50px')) );
-
-
-	    $szablon->addObjects($miejscowoscIdata, $naglowek, $pkt1, $pkt2, $pkt3, $pkt4, $pkt5);
-        $szablon->setFinished(true);
-
-	    if($dbRozkazy->saveSzablon($user->getStrazak()->getJrgId(),$szablon)) {
-
-	        echo 'Poprawnie zapisano szablon.';
-
-        }
-
+    $result = array('result'=>false);
+    $obiekty = json_decode(str_replace('&quot;','"',$_POST['save']),true );
+	$szablon = new Szablon($user->getAdminJrgId());
+	$szablon->setId($_POST['id']);
+    foreach ($obiekty as $nr=>$obiekt){
+        $szablon->addObjects(createHtmlObj($obiekt));
     }
+	$szablon->setFinished($_POST['active']);
 
-
-} catch (UserErrors $e){
-    echo $e->getMessage();
+	if($dbRozkazy->saveSzablon($user->getAdminJrgId(),$szablon)) {
+        $result['result'] = true;
+	} else {
+	    $result['error'] = $dbRozkazy->getError();
+    }
+    //print_r($obiekty);
+	header("Content-Type: application/json; charset=UTF-8");
+	echo json_encode($result);
+	die;
 }
 
+function createHtmlObj($obiektArray) : HtmlObj{
+    $name = $obiektArray['name'];
+    $htmlObj = null;
+    switch ($name){
+        case 'DIV':
+	        $htmlObj = new Sekcja($obiektArray['class']);
+	        foreach($obiektArray['content'] as $obiekt){
+                $htmlObj->putContent(createHtmlObj($obiekt));
+            }
+            break;
+        case 'H2':
+	        $htmlObj = new Naglowek(2);
+	        $htmlObj->addClass($obiektArray['class']);
+	        $htmlObj->putContent($obiektArray['content']);
+            break;
+        case 'SPAN':
+	        $htmlObj = new Text($obiektArray['content']);
+	        $htmlObj->addClass($obiektArray['class']);
+            break;
+        case 'INPUT':
+            $htmlObj = new Input('text','brakName');
+	        $htmlObj->addClass($obiektArray['class']);
+	        $htmlObj->setVal($obiektArray['value']);
+	        //TODO: attrybut
+            break;
+        case 'SELECT':
+            $htmlObj = new Select('wybor');
+	        $htmlObj->addClass($obiektArray['class']);
+	        $htmlObj->setList($obiektArray['attr']);
+            break;
+        case 'UL':
+	        $htmlObj = new Lista();
+	        $htmlObj->addClass($obiektArray['class']);
+	        $htmlObj->setList($obiektArray['attr']);
+            break;
+        case 'TD':
+            $htmlObj = new TD();
+	        $htmlObj->addClass($obiektArray['class']);
+            foreach ($obiektArray['content'] as $cnt){
+                $htmlObj->putContent(createHtmlObj($cnt));
+            }
+            break;
+        case 'TABLE':
+	        $htmlObj = new Table();
+	        $htmlObj->addClass($obiektArray['class']);
+	        foreach($obiektArray['content'] as $nrCol =>$col){
+	            $kolumna = new Col($col['value'], $nrCol);
+		        $kolumna->setList($col['attr']);
+		        $htmlObj->addCol($kolumna);
+		        foreach ($col['content'] as $td){
+			        $htmlObj->addCell(createHtmlObj($td),$nrCol );
+                }
 
-*/
+            }
+            break;
+        default:
+	        $htmlObj = new Text("");
+    }
+    return $htmlObj;
+}
 
 
 
 $title = "Szablon rozkazu";
 require 'header.php';
 ?>
-<main>
+<main class="w3-container" style="margin-bottom:100px;background-color:rgba(0,0,0,0.2)">
+	<?php
+	DBJrgSettings::printJsListValues();
+	?>
+    <script type="text/javascript" src="js/szablonrozkazu.js?ver=<?php echo time() ?>"></script>
     <?php
         echo $info;
         ?>
     <div class="w3-row" style="background-color: rgba(0,0,0,0.1)">
-        <h3>Szablony rozkazu: </h3>
-        <?php
-            if(!isset($_GET['edit'])) {
 
+        <?php
+            if(!isset($_GET['edit'])) :
+                echo '<h3>Szablony rozkazu: </h3>';
 	            foreach ($szablony as  $szbl){
 
 		            if($szbl instanceof  Szablon){
@@ -221,86 +186,102 @@ require 'header.php';
                                     <div>
                                      <form action="" method="get">
                                         <button type="submit" name="edit" value="'.$szbl->getId().'">Edytuj</button>
+                                        <button class="w3-right" type="submit" name="delete" value="'.$szbl->getId().'">Usuń</button>
                                     </form>
                                     </div>
                                </div>';
 		            }
 
 	            }
-            }
-        ?>
+         ?>
         <div class="w3-col l1 m1 s1 w3-border w3-padding w3-margin">
         <form action="" method="get">
-            <button type="submit" name="create" value="1">Utwórz nowy szablon</button>
+            <button type="submit" name="start" value="1">Utwórz nowy szablon</button>
         </form>
         </div>
-    </div>
-	<?php  if(isset($_GET['create'])) : ?>
-    <div class="w3-container">
-        <h3>Nowy szablon</h3>
-        <p>Rozpocznij tworzenie szablonu rozkazu od podstawowych ustawień nagłówka i stopki rozkazu oraz ilości sekcji.</p>
-        <form class="w3-container"  action="" method="post">
-            <ul>
-                <li>
-                    <h4>Nagłówek</h4>
-                    <div>
-                        <label><input type="checkbox" /> Adres i data</label>
-                    </div>
-                </li>
-            </ul>
-
-
-        </form>
+            <?php endif; ?>
     </div>
 
-    <?php elseif($szablon) :
+    <?php if($szablon) :
 		echo '<p>Edycja szablonu '.$szablon->getDataSzablonu().'/'.$szablon->getId().'</p>';
 
 		?>
-        <div class="w3-container">
-            <div class="w3-container w3-twothird w3-border">
-                <?php
-                    foreach ($szablon->getObiektyHtml() as $obiekt){
-                        if($obiekt instanceof HtmlObj){
-	                        $obiekt->print();
-                        }
-                    }
-
-                ?>
-
+        <div class="w3-row" >
+            <label><input class="w3-check" type="checkbox" id="szablon_active" <?php echo $szablon->getFinished()?'checked':''; ?> /> Ustaw jako aktywny</label>
+            <div class="w3-col" style="width: 50px;">
+                <button class="w3-xlarge" onclick="animateBar(this)">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="w3-border w3-container" style="display: none">
+                    <div>
+                        <h4>Obiekty: </h4>
+                        <b>Sekcja</b>
+                        <p>
+                            Pojemnik dla innych obiektów, domyślnie grupuje się jako wiersz ale może tez posłużyć jako kolumna w innej sekcji.
+                        </p>
+                        <b>Nagłówek</b>
+                        <p>
+                            Wykorzystywany jako nagłówek rozkazu lub punkt rozkazu. Jego wielkośc można zmienic w edycji. Domyślnie zajmuje całą dostepną szerokość (podobnie jak sekcja).
+                        </p>
+                        <b>Text</b>
+                        <p>
+                          Zwykły tekst, domyslnie nie jest stylizowany. Domyslnie zajmuje taką szerokośc jak jego zawartość.
+                        </p>
+                        <b>Pole tekstowe</b>
+                        <p>
+                            Podstawowe pole zawierające wprowadzoną wartość w szablonie - zawartość pola może być edytowana w trakcie tworzenia rozkazu.
+                        </p>
+                        <b>Pole wyboru</b>
+                        <p>
+                           Lista rozwijana z elementami listy zdefinowanymi wg. wybranej dostępnej listy. (np. lista strażaków na jrg, na zmianie itd.)
+                        </p>
+                    </div>
+                    <div>
+                        <h4>Zmienne: </h4>
+                        <p>
+                            Zmienne dostępne dla obiektów typu Nagłówek i Tekst. Ich wartość jest zmienna w wyświetlanym rozkazie w zależności od dnia, zmiany i jrg.
+                        </p>
+                        <?php
+                         foreach (DBJrgSettings::getZmienneRozkazu() as $zmienna){
+                             echo '  <span class="jrg_var szablon_element" data-toggle="tooltip" title="'.$zmienna['opis'].'">'.$zmienna['id'].'</span>';
+                         }
+                        ?>
+                    </div>
+                    <div>
+                        <h4>Listy:  </h4>
+                        <p>
+                           Listy wystepują jako zmienne względem grafiku, harmonogramu, dnia, zmiany i jrg. Moga byc ustawione w polu wyboru jako domyślne wartości oraz w kolumnie tabeli.
+                        </p>
+                        <?php
+                            foreach (DBJrgSettings::getListValues() as $val){
+                                echo '<span class="jrg_list szablon_element" data-toggle="tooltip" title="'.$val['name'].'" >'.$val['id'].'</span>';
+                            }
+                        ?>
+                    </div>
+                </div>
+            </div>
+            <div class="w3-col w3-right" style="width: 50px;">
+                <button class="w3-xlarge w3-right" onclick="animateBar(this)" >
+                    <i class="fas fa-sitemap"></i>
+                </button>
+                <div id="szablon_tree" class="w3-border w3-container" style="display: none;clear: both"></div>
 
             </div>
-            <div class="w3-container w3-third w3-border">
-                <div>
-                    <h4>Stałe: </h4>
-                    <span class="jrg_const szablon_element">nr_jrg</span>
-                    <span class="jrg_const szablon_element">miasto</span>
+            <div class="w3-rest">
+                <div id="szablon_container" class="w3-border w3-margin-bottom" rozkaz-id="<?php echo $_GET['edit']; ?>" data-toggle="popover" data-html="true" data-placement="top"  >
+		            <?php
+		            foreach ($szablon->getObiektyHtml() as $obiekt){
+			            if($obiekt instanceof HtmlObj){
+				            $obiekt->print();
+			            }
+		            }
+		            ?>
                 </div>
                 <div>
-                    <h4>Zmienne: </h4>
-                    <span class="jrg_var szablon_element">data</span>
-                    <span class="jrg_var szablon_element">dzien</span>
-                    <span class="jrg_var szablon_element">msc</span>
-                    <span class="jrg_var szablon_element">rok</span>
-                    <span class="jrg_var szablon_element">nr_rozkazu</span>
-                    <span class="jrg_var szablon_element">nr_zmiany</span>
-                </div>
-                <div>
-                    <h4>Zmienne listy: </h4>
-                    <span class="jrg_list szablon_element">strażacy na zmianie</span>
-                    <span class="jrg_list szablon_element">dostępni strażacy</span>
-                    <span class="jrg_list szablon_element">strażacy wg. zmiennej z harmonogramu/grafiku</span>
-                    <span class="jrg_list szablon_element">strażacy na dyżurze (aktualny dzień)</span>
-                    <span class="jrg_list szablon_element">strażacy na dyżurze (następny dzień)</span>
-                </div>
-                <div>
-                    <h4>Obiekty: </h4>
-                    <span class="jrg_obj szablon_element">Sekcja</span>
-                    <span class="jrg_obj szablon_element">Nagłówek</span>
-                    <span class="jrg_obj szablon_element">Pole tekstowe</span>
-                    <span class="jrg_obj szablon_element">Lista rozwijana</span>
+                    <button class="w3-btn w3-light-gray w3-border" onclick="szablon.save(this)"><i class="far fa-save"></i> Zapisz</button>
                 </div>
             </div>
+
 
         </div>
 

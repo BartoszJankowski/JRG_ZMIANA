@@ -10,8 +10,7 @@ class Rozkaz {
 
 	private $dane = array(
 		'szablon'=>array('id'=>null, 'hash'=>null),
-		'constant'=>array('miasto'=>null,'nr_jrg'=>null,'data'=>null),
-		'variable'=>array('data'=>null,'nr_rozkazu'=>null,'nr_zmiany'=>null),
+		'variable'=>array('$data_rozkazu'=>null,'$nr_rozkazu'=>null,'$nr_zmiany'=>null),
 		'list'=>array(),
 		'id'=>array()
 	);
@@ -27,14 +26,14 @@ class Rozkaz {
 
 	public function createDane(int $jrg_id,LocalDateTime $ltd, DBJednostki $jednostka, DbDyzuDomowy $dbDyzury = null){
 		$kalendar = new Kalendarz($ltd->getYear(), $ltd->getMonth(), $ltd->getDayOfMsc());
-		$this->dane['constant']['miasto'] = $jednostka->getSelectedCity();
-		$this->dane['constant']['nr_jrg'] = $jednostka->getSelectedJrgNr().'';
-		$this->dane['constant']['data'] = (new LocalDateTime())->getDate();
-		$this->dane['variable']['data'] = $ltd->getDate();
-		$this->dane['variable']['rok'] = $ltd->getYear().'';
-		$this->dane['variable']['msc'] = $ltd->getMonth().'';
-		$this->dane['variable']['nr_rozkazu'] = $ltd->getDayOfYearNum().'';
-		$this->dane['variable']['nr_zmiany'] = $kalendar->getCurrentZmiana().'';
+		$this->dane['variable']['[$miasto]'] = $jednostka->getSelectedCity();
+		$this->dane['variable']['[$nr_jrg]'] = $jednostka->getSelectedJrgNr().'';
+		$this->dane['variable']['[$data_edycji]'] = (new LocalDateTime())->getDate();
+		$this->dane['variable']['[$data_rozkazu]'] = $ltd->getDate();
+		$this->dane['variable']['[$rok]'] = $ltd->getYear().'';
+		$this->dane['variable']['[$msc]'] = $ltd->getMonth().'';
+		$this->dane['variable']['[$nr_rozkazu]'] = $ltd->getDayOfYearNum().'';
+		$this->dane['variable']['[$nr_zmiany]'] = $kalendar->getCurrentZmiana().'';
 
 		if($dbDyzury!=null){
 			try{
@@ -48,7 +47,7 @@ class Rozkaz {
 
 			foreach ($ddomowe as $dyzuryDomowe){
 				foreach ($dyzuryDomowe->listaStrZDyzuru($ltd->getDayOfMsc()-1) as $name){
-					$this->dane['list']['harmo_fireman_Dd'][] = array('value'=>'','key'=>$name);
+					$this->dane['list']['@Dd'][] = array('value'=>'','key'=>$name);
 				}
 			}
 		}
@@ -77,17 +76,18 @@ class Rozkaz {
 	public function setFiremans(array $strazacy){
 		foreach ($strazacy as $strazak){
 			if($strazak instanceof Strazak){
-				$this->dane['list']['firemans'][] = array('value'=>$strazak->getStrazakId(),'key'=>$strazak->toString());
+				$this->dane['list']['@zmiana_str'][] = array('value'=>$strazak->getStrazakId(),'key'=>$strazak->toString());
 				//print_r($strazak->getHarmonogram());
 				if($strazak->getHarmonogram() instanceof Harmonogram){
 					$dayVal = $strazak->getHarmonogram()->getDayVal($this->date->getMonth(), $this->date->getDayOfMsc()-1);
 
 					if(!empty(get_harmo_val($dayVal))) {
-						$this->dane['list']['harmo_fireman_'.$dayVal][] = array('value'=>$strazak->getStrazakId(),'key'=>$strazak->toString());
+						$this->dane['list']['@harmo_'.$dayVal][] = array('value'=>$strazak->getStrazakId(),'key'=>$strazak->toString());
 					} else if(!empty(get_graf_val($dayVal))) {
-						$this->dane['list']['graf_fireman_'.$dayVal][] = array('value'=>$strazak->getStrazakId(),'key'=>$strazak->toString());
-					} else
-						$this->dane['list']['available_firemans'][] = array('value'=>$strazak->getStrazakId(),'key'=>$strazak->toString());
+						$this->dane['list']['@grafik_'.$dayVal][] = array('value'=>$strazak->getStrazakId(),'key'=>$strazak->toString());
+					} else{
+						$this->dane['list']['@zmiana_free_str'][] = array('value'=>$strazak->getStrazakId(),'key'=>$strazak->toString());
+					}
 				}
 				//$this->dane['list']['available_firemans'][] = array('value'=>$strazak->getStrazakId(),'key'=>$strazak->toString());
 
@@ -106,7 +106,7 @@ class Rozkaz {
 	}
 
 	public function getZmiana() : int{
-		return $this->dane['variable']['nr_zmiany'];
+		return $this->dane['variable']['[$nr_zmiany]'];
 	}
 	public function getSzablonId(){
 		return $this->dane['szablon']['id'];
@@ -157,37 +157,26 @@ class Rozkaz {
 	}
 
 	private function recognizeTypeData(HtmlObj $html_obj){
-		$var_val = $html_obj->getDataVarType();
-		if($var_val){
-			$var = explode('-',$var_val);
-			$type = $var[0];
-			$value = $var[1];
 
-			switch($type){
-				case 'constant':
-					if(array_key_exists($value, $this->dane['constant'])  && !empty($this->dane['constant'][$value]))
-						$html_obj->putContent($this->dane['constant'][$value]);
-					break;
-				case 'variable':
-					if(array_key_exists($value, $this->dane['variable']) && !empty($this->dane['variable'][$value]) )
-						$html_obj->putContent($this->dane['variable'][$value]);
-					break;
-				case 'list':
-					if($html_obj instanceof ListAdapter){
-						$types = explode(' ',$value);
-						foreach ($types as $typData){
-							if(array_key_exists($typData, $this->dane['list'])){
-								$html_obj->setListContent($this->dane['list'][$typData]);
-							}
-						}
-
+		if($html_obj instanceof TextType){
+			$zmienne = array();
+			foreach (DBJrgSettings::getZmienneRozkazu() as $var){
+				$zmienne[] = $var['id'];
+			}
+			$html_obj->changeContent($zmienne, $this->dane['variable']);
+		} else if($html_obj instanceof ListAdapter) {
+			$var_val = $html_obj->getDataVarType();
+			if($var_val){
+				$var = explode(' ',$var_val);
+				foreach ($var as $lista){
+					if(array_key_exists($lista,$this->dane['list'])){
+						$html_obj->setListContent($this->dane['list'][$lista]);
 					}
-
-					break;
-				default:
-					break;
+				}
 			}
 		}
+
+
 	}
 
 	private function setDaneId(HtmlObj $html_obj){

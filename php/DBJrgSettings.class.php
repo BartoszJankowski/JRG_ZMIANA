@@ -214,6 +214,42 @@ class DBJrgSettings extends DbConn {
 			throw new UserErrors('Wprowawdzone dane dla nowej wartości grafiku są błędne.');
 		}
 	}
+
+	public static function getZmienneRozkazu(){
+		$wartosci = array(
+			array('id'=>'[$nr_jrg]','opis'=>'Numer JRG'),
+			array('id'=>'[$miasto]','opis'=>'Miasto'),
+			array('id'=>'[$nr_rozkazu]','opis'=>'Nr rozkazu liczony od nr 1 dla 1 stycznia danego roku'),
+			array('id'=>'[$nr_zmiany]','opis'=>'Nr zmiany wypadającej w datę rozkazu'),
+			array('id'=>'[$data_rozkazu]','opis'=>'Data dla której pisany jest rozkaz dzienny ( wg tej daty liczony jest nr rozkazu oraz nr zmiany)'),
+			array('id'=>'[$data_edycji]','opis'=>'Data utworzenia lub edycji rozkazu'),
+			array('id'=>'[$rok]','opis'=>'Rok względem daty rozkazu'),
+			array('id'=>'[$msc]','opis'=>'Miesiąc z roku względem daty rozkazu.'),
+			array('id'=>'[$dzien]','opis'=>'Dzień w miesiącu względem daty rozkazu.')
+			);
+		return $wartosci;
+	}
+
+	public static function getListValues(){
+		$wartosci = array(
+			array('id'=>'@Dd','name'=>'Dyżur domowy'),
+			array('id'=>'@zmiana_str','name'=>'Lista strażaków'),
+			array('id'=>'@zmiana_free_str','name'=>'Wolni/dostępni strażacy')
+		);
+		foreach (self::$harmoValues as $harmo_value){
+			$wartosci[] = array('id'=>$harmo_value->getValueName(),'name'=>$harmo_value->getName());
+		}
+		foreach (self::$grafikValues as $grafik_value){
+			$wartosci[] = array('id'=>$grafik_value->getValueName(),'name'=>$grafik_value->getName());
+		}
+		return $wartosci;
+	}
+
+	public static function printJsListValues(){
+		$wartosci = self::getListValues();
+
+		echo '<script>var listyVar='.json_encode($wartosci).'; var zmienne='.json_encode(self::getZmienneRozkazu()).'</script>';
+	}
 }
 
 class Uprawnienie extends Value{
@@ -273,7 +309,7 @@ class Uprawnienie extends Value{
 	}
 
 	public function getValueName(): string {
-		return 'upr_'.$this->id;
+		return '@upr_'.$this->id;
 	}
 }
 
@@ -320,7 +356,7 @@ class GrafikValue extends Value{
 		echo '<li class="w3-padding"><span class="w3-border">'.$this->id.'</span> '.$this->getName().' <div class="w3-small w3-center"><msc>'.$this->getDesc().'</msc></div></li>';
 	}
 	public function getValueName(): string {
-		return 'grafik_'.$this->id;
+		return '@grafik_'.$this->id;
 	}
 }
 
@@ -380,7 +416,7 @@ class HarmoValue extends Value {
 	}
 
 	public function getValueName(): string {
-		return 'harmo_'.$this->id;
+		return '@harmo_'.$this->id;
 	}
 }
 
