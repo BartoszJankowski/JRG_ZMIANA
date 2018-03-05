@@ -1,4 +1,10 @@
 $(function () {
+    logD(location.hash);
+    if(location.hash === '#grafik'){
+        $("#slide_type").get(0).checked = true;
+        $("#dyzury_list").hide();
+        $("#dyzury_grafik").show();
+    }
 
     $('a.dropdown-item').click(function () {
         var that = this;
@@ -34,17 +40,24 @@ $(function () {
     $('#slide_type').change(function () {
 
         if(this.checked){
+            location.hash = 'grafik';
             $("#dyzury_list").hide();
             $("#dyzury_grafik").show();
         } else {
+            location.hash = 'lista';
             $("#dyzury_grafik").hide();
             $("#dyzury_list").show();
         }
     });
     $("#dyzury_grafik input").change(function () {
         sumujGodziny();
+        sumujDD(this);
+        sumaUpr(this);
     });
+    sumaNaStart();
     sumujGodziny();
+
+
 });
 
 
@@ -108,8 +121,46 @@ function sumujGodziny(){
         //logD($(this).find('input:checked').length);
         var godziny = 24*$(this).find('input:checked').length;
         if(godziny>72)
-            $(this).find('td.sumaH').text(godziny+"h").addClass('w3-text-red');
+            $(this).find('td.sumaH').text(godziny+"h").addClass('w3-red');
         else
-            $(this).find('td.sumaH').text(godziny+"h").removeClass('w3-text-red');
+            $(this).find('td.sumaH').text(godziny+"h").removeClass('w3-red');
     })
+}
+
+function sumujDD(input){
+    var colNr = $(input).attr('data-col');
+
+    if(input.checked){
+        changeTdNum('suma',colNr,1);
+    } else {
+        changeTdNum('suma',colNr,-1);
+    }
+}
+function sumaUpr(input){
+    var colNr = $(input).attr('data-col');
+    var uprTab = strazacyIn[$(input).val()];
+    if(uprTab.length>0){
+        for(x in uprTab){
+            if(input.checked){
+               changeTdNum(uprTab[x],colNr,1) ;
+            } else {
+                changeTdNum(uprTab[x],colNr,-1) ;
+            }
+        }
+    }
+}
+
+function changeTdNum(trName, colNr, num){
+    var td = $('tr[data-tr="'+trName+'"] td[data-col="'+colNr+'"]');
+    var nr = Number(td.text());
+
+        nr+= num;
+    td.text(Math.max(0,nr));
+}
+
+function sumaNaStart(){
+    $("input[data-col]:checked").each(function () {
+        sumujDD(this);
+        sumaUpr(this);
+    });
 }

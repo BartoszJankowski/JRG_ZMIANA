@@ -19,6 +19,7 @@ class DyzuryDomowe {
 	 */
 	private $strazacyIn = array();
 
+
 	/**
 	 * @var Harmonogram[]
 	 */
@@ -106,6 +107,7 @@ class DyzuryDomowe {
 			}
 		}
 	}
+
 	public function fillWithPostData(array $post){
 
 		foreach ($this as $property=>$value){
@@ -153,17 +155,18 @@ class DyzuryDomowe {
 		$firstRow = '<tr><th>Upr.</th><th>Strażak</th>'.$inn.'</tr>';
 
 		foreach ($this->strazacyIn as $id=>$tab){
-			$uprI = '';
+			$uprI = '';$col = 0;
 			foreach ($tab['str']->getUprawnienia() as $nr){
 				$uprawnienie = DBJrgSettings::getUprawnienie($nr);
 				$uprI .= '<msc class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'"></msc>';
 			}
 			$row = '<tr><td>'.$uprI.'</td><td>'.$tab['strDD']->getname().'</td>';
+
 			foreach ($this->dyzury as $pozycja_DD){
 				if($pozycja_DD->checkIfExists($id)){
-					$row.= '<td width="50"><label class="label_dyzur_grafik_check"><input class="dyzur_grafik_check" type="checkbox" name="dyzury['.$pozycja_DD->data.'][]" value="'.$id.'" checked/><span>D</span></label></td>';
+					$row.= '<td width="50"><label class="label_dyzur_grafik_check"><input data-col="'.$col++.'"  class="dyzur_grafik_check" type="checkbox" name="dyzury['.$pozycja_DD->data.'][]" value="'.$id.'" checked/><span>D</span></label></td>';
 				} else {
-					$row.= '<td width="50"><label class="label_dyzur_grafik_check"><input class="dyzur_grafik_check" type="checkbox" name="dyzury['.$pozycja_DD->data.'][]" value="'.$id.'" /><span>D</span></label></td>';
+					$row.= '<td width="50"><label class="label_dyzur_grafik_check"><input data-col="'.$col++.'"  class="dyzur_grafik_check" type="checkbox" name="dyzury['.$pozycja_DD->data.'][]" value="'.$id.'" /><span>D</span></label></td>';
 				}
 			}
 			$row .= '<td class="sumaH">0</td>';
@@ -172,16 +175,16 @@ class DyzuryDomowe {
 		}
 		$suma = '<td></td><th>Suma:</th>';
 		for ($i=0; $i<count($this->dyzury);$i++){
-			$suma .= '<td>0</td>';
+			$suma .= '<td data-col="'.$i.'">0</td>';
 		}
-		$firstRow .= '<tr class="w3-center">'.$suma.'</tr>';
+		$firstRow .= '<tr data-tr="suma" class="w3-center">'.$suma.'</tr>';
 
 		foreach (DBJrgSettings::getUprawnienia() as $uprawnienie){
 			$suma = '<td><i class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'" ></i></td><th>'.$uprawnienie->getName().'</th>';
 			for ($i=0; $i<count($this->dyzury);$i++){
-				$suma .= '<td>0</td>';
+				$suma .= '<td data-col="'.$i.'">0</td>';
 			}
-			$firstRow .= '<tr class="w3-center">'.$suma.'</tr>';
+			$firstRow .= '<tr data-tr="'.$uprawnienie->getName().'" class="w3-center">'.$suma.'</tr>';
 		}
 
 		echo '<input type="hidden" name="id" value="'.$this->id.'">';
@@ -193,6 +196,26 @@ class DyzuryDomowe {
 			/* @var $strazak Strazak */
 			$this->strazacyIn[$strazak->getStrazakId()] = array('strDD'=>new StrazakDD($strazak),'str'=>$strazak);
 		}
+	}
+
+
+	/**
+	 * @return string
+	 */
+	public function getStrazacyInPrev() {
+		$res = array();
+
+		foreach ($this->strazacyIn as $tab){
+			$id = $tab['strDD']->getId();
+			$listaU = array();
+			foreach ($tab['str']->getUprawnienia() as $nr){
+				$uprawnienie = DBJrgSettings::getUprawnienie($nr);
+				$listaU[] = $uprawnienie->getName();
+			}
+			$res[$id] = $listaU;
+		}
+
+		return json_encode($res);
 	}
 
 	public function printStrazacyInRows(){

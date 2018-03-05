@@ -158,17 +158,12 @@ require 'header.php';
 
 
 	</main>
+    <script>
+
+         var strazacyIn =<?php echo $ddomowe->getStrazacyInPrev();?>;
+    </script>
 <script type="text/javascript" src="js/dyzurydomowe.js?ver=<?php echo time(); ?>" />
-<script>
-    $(".range").each(function(){
-        $(this).prev().html("( "+$(this).val()+" )" );
-    }).on("input",function(){
-        $(this).prev().html("( "+$(this).val()+" )" );
-    });
 
-
-
-</script>
 <?php
 
 require 'footer.php';
