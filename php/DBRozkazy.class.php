@@ -88,7 +88,7 @@ class DBRozkazy extends DbConn {
 		try {
 			$stmt = $this->conn->prepare("INSERT INTO ".$this->tbl_szablony_rozkazu." (jrg_id,dataSzablonu, szablon, finished)
 			VALUES (:jrg_id, :dataSzablonu, :szablon, 0)");
-			$stmt->bindParam(':jrg_id',$user->getJrgId() );
+			$stmt->bindParam(':jrg_id',$user->getAdminJrgId() );
 			$stmt->bindParam(':dataSzablonu',$szablon->getDataSzablonu() );
 			$stmt->bindParam(':szablon',serialize($szablon->getObiektyHtml()) );
 			$stmt->execute();
@@ -120,6 +120,20 @@ class DBRozkazy extends DbConn {
 			$this->error = "DB error:".$e->getMessage();
 		}
 		return false;
+	}
+
+	public function copyTemplate($fromId, $toId){
+		$stmt = $this->conn->prepare("SELECT szablon FROM ".$this->tbl_szablony_rozkazu." WHERE id = :id");
+		$stmt->bindParam(':id',$fromId);
+		$stmt->execute();
+		$result = $stmt->fetch(PDO::FETCH_ASSOC);
+		if($result){
+			$stmt = $this->conn->prepare("UPDATE ".$this->tbl_szablony_rozkazu." SET szablon = :szablon WHERE id = :id");
+			$stmt->bindParam(':id',$toId);
+			$stmt->bindParam(':szablon',$result['szablon'] );
+			$stmt->execute();
+		}
+		echo 'wykonanno kopiowanie';
 	}
 
 	public function getSzablony($jrg_id) : array {
@@ -254,6 +268,7 @@ class DBRozkazy extends DbConn {
 		}
 		return false;
 	}
+
 
 	public function deleteSzablon($jrgId, Szablon $szablon) : bool {
 

@@ -70,6 +70,7 @@ class DBJrgSettings extends DbConn {
 				self::$grafikValues = unserialize($result['grafikValues']);
 				self::$harmoValues = unserialize($result['harmoValues']);
 			} else {
+				self::createDefaultSettings();
 				$stmt =  $this->conn->prepare("INSERT INTO ".$this->tbl_settings."
 				 (jrg_id, uprawnieniaList,grafikValues,harmoValues ) 
 				 VALUES(:jrg_id, :uprawnieniaList, :grafikValues,:harmoValues)") ;
@@ -108,6 +109,7 @@ class DBJrgSettings extends DbConn {
 		}
 		return self::$grafikValues;
 	}
+
 	/**
 	 * @return HarmoValue[]
 	 */
@@ -117,6 +119,7 @@ class DBJrgSettings extends DbConn {
 		}
 		return self::$harmoValues;
 	}
+
 	/**
 	 * @return Uprawnienie
 	 */
@@ -249,6 +252,27 @@ class DBJrgSettings extends DbConn {
 		$wartosci = self::getListValues();
 
 		echo '<script>var listyVar='.json_encode($wartosci).'; var zmienne='.json_encode(self::getZmienneRozkazu()).'</script>';
+	}
+
+	private static function createDefaultSettings(){
+		self::$uprawnieniaList = array();
+		self::$grafikValues = array();
+		self::$harmoValues = array();
+
+		self::$uprawnieniaList[] = new Uprawnienie('D-ca zastępu','fa-chess-king','green');
+		self::$uprawnieniaList[] = new Uprawnienie('Kierowca ','fa-car','orange');
+		self::$uprawnieniaList[] = new Uprawnienie('Operator','fa-truck','yellow');
+
+		self::$grafikValues[] = new GrafikValue('Ws','Wolna służba','Wolne');
+		self::$grafikValues[] = new GrafikValue('Pd','Podoficer','Służba podoficera');
+
+		self::$harmoValues[] = new HarmoValue('Uw','Urlop wypoczynkowy','Urlop wypoczynkowy', 'orange');
+		self::$harmoValues[] = new HarmoValue('Ud','Urlop dodatkowy','Urlop dodatkowy', 'green');
+		self::$harmoValues[] = new HarmoValue('O','Urlop okolicznościowy','Urlop okolicznościowy', 'blue');
+		self::$harmoValues[] = new HarmoValue('D','Delegacja','Delegacja', '#80ffff');
+		self::$harmoValues[] = new HarmoValue('Ch','Chorobowe','Chorobowe', '#996600');
+
+
 	}
 }
 

@@ -36,8 +36,11 @@ if(isset($_GET)){
 
 Szablon::$isEditing = true;
 
+
+//$dbRozkazy->copyTemplate(20,21);
+
 if(isset($_GET['start'])){
-	$szablon = new Szablon($user->getJrgId());
+	$szablon = new Szablon($user->getAdminJrgId());
 	if($dbRozkazy->utworzSzablon($user, $szablon) ){
 		header('Location: '.$base_url.$_SERVER['PHP_SELF'].'?edit='.$szablon->getId());
 		exit;
