@@ -42,8 +42,8 @@ if(isset($_POST['log_in'])){
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-<!--     <script type="text/javascript" src="js/ajax.js?ver=<?php echo time() ?>""></script>
-    <script type="text/javascript" src="js/scripts.js?ver=<?php echo time() ?>"></script> -->
+    <script type="text/javascript" src="js/ajax.js?ver=<?php echo time() ?>""></script>
+    <script type="text/javascript" src="js/scripts.js?ver=<?php echo time() ?>"></script>
 </head>
 
 <body>
