@@ -45,9 +45,7 @@ function submitForm() {
 				}
 					else{
 						$('#error').fadeIn(1000, function() {
-
 							$('#error').html('<div class="alert alert-danger"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp; '+response.errorMsg+' !</div>');
-
 								$('#log_in').html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Zaloguj się');
 
 					});
