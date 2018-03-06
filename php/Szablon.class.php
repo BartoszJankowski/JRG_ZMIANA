@@ -663,20 +663,23 @@ class Table extends HtmlObj{
 		$a = 0;
 		do{
 
-			$content .= '<tr>';
+			$temp = '<tr>';
 			$kontynuuj = false;
 			foreach ($this->cnt as $nr=> $col){
 				if($col instanceof Col){
 					$val = $col->getRowVal($a, $nr);
 					if($val){
 						$kontynuuj = true;
-						$content.= $val;
+						$temp.= $val;
 					} else {
-						$content .= '<td></td>';
+						$temp .= '<td></td>';
 					}
 				}
 			}
-			$content .= '</tr>';
+			$temp .= '</tr>';
+			if($kontynuuj){
+				$content .= $temp;
+			}
 			$a++;
 		} while($kontynuuj);
 

@@ -128,7 +128,7 @@ if(isset($_POST['log_in'])){
           <label for="exampleInputPassword1">Hasło</label>
             <input id="password" type="password" name="password" value="" class="form-control" required />
         </div>
-        <input id="log_in" type="submit" name="log_in" action="" class="btn btn-danger btn-lg btn-block btn__login__submit">Zaloguj</input>
+        <button id="log_in" type="submit" name="log_in" action="" class="btn btn-danger btn-lg btn-block btn__login__submit">Zaloguj</button>
   </form>
             <div class="w3-container">
                 <a class="w3-left" href="register.php" target="_self">Rejestracja</a>

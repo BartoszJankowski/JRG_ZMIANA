@@ -193,7 +193,7 @@ ul.newEmptyElement::after{
 klasy szablonu / rozkazu
  */
 
-span.max-width, input.max-width, select.max-width, h2.max-width {
+span.max-width, input.max-width, select.max-width, h2.max-width, button.max-width {
     display: block;
    width:100% !important;
 }
@@ -220,7 +220,7 @@ table.t12 { width: 100%;}
 
 .auto-width {}
 .align-right {
-    text-align: right; }
+    text-align: right !important; }
 
 .align-left {
     text-align: left; }
@@ -251,4 +251,111 @@ STYLIZACJA ELEMENTOW SZABLONU
  */
 .w3-row span, .w3-row input, .w3-row select {
     vertical-align: middle;
+}
+
+/*
+DYZURY DOMOWE
+ */
+a.w3-pale-blue.dropdown-item {
+    border:1px solid #1b6d85;
+}
+
+/*
+INPU SLIDER BTN
+ */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+.switch > .leftLabel {
+    position: absolute;
+    right: 110%;
+    font-weight: bold;
+    color:black;
+}
+.switch > .rightLabel {
+    position: absolute;
+    left: 110%;
+    color:#9d9d9d;
+}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7fcc7a;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:checked ~ span.rightLabel {
+    font-weight: bold;
+    color:black;
+}
+
+input:checked ~ span.leftLabel {
+    font-weight: normal;
+    color:#9d9d9d;
+}
+
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+.label_dyzur_grafik_check {
+    display: block;
+    margin:0;
+    width:50px;
+    min-height:30px;
+    height:100%;
+    text-align:center;
+}
+
+.dyzur_grafik_check {
+    display: none;
+}
+.dyzur_grafik_check + span {
+    display:none;
+}
+
+.dyzur_grafik_check:checked + span {
+    display: inline-block;
+}
+tr.w3-center td {
+    text-align: center;
+}
+td.sumaH {
+    text-align: right;
 }

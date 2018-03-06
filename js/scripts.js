@@ -1,37 +1,17 @@
 
-
-
+$(function () {
     $("#print").click(function () {
         window.print();
     });
 
-$(".login__icon").mouseenter(function () {
-      $(".register__box").fadeIn(400);
-});
-$(".login__icon").mouseleave(function () {
-      $(".register__box").fadeOut(400);
+    $(".login__icon").mouseenter(function () {
+        $(".register__box").fadeIn(400);
+    }).mouseleave(function () {
+        $(".register__box").fadeOut(400);
 
-});
-/*
-    $("#formRegister").validate({
-        rules: {
-            login : {
-                required : true,
-	            email : true
-            },
-            password : {
-                required : true,
-                minlength : 8
-            },
-            confirm_password : {
-                required : true,
-                minlength : 8,
-                equalTo : "#password"
-            }
-        }
     });
-*/
-$(".nextMsc").click(function () {
+
+    $(".nextMsc").click(function () {
         var tabs = $('.kalendar-div').toArray();
         var parentDiv = $(this).parent().parent().get(0);
 
@@ -66,3 +46,5 @@ $(".nextMsc").click(function () {
             }
         }
     });
+});
+

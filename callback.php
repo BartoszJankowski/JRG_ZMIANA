@@ -31,9 +31,57 @@ try {
 	$output['action'] = $_POST['action'];
 // logowanie, wylogowanie, tworzenie ejdnostki, rejestracja usersa
 	switch ($_POST['action']){
+			/*
+			 * LOGOWANIE UZYTKOWNIKA
+			 */
 		case 'log_in':
 			if($dbUsers->login($_POST['login'],$_POST['password'])) {
 				$output['result'] = true;
+			} else {
+				throw new UserErrors($dbUsers->error);
+			}
+			break;
+			/*
+			 * TWORZENIE NOWEJ JRG
+			 * WAZNE ! ! ! !
+			 * zwróć uwage że w typ przypadku możesz dodastac dodatkowy element 'info' ktory oznacza ze zostało utworzone konto administratora.
+			 */
+		case 'addJrg':
+			$db = new DBJednostki();
+			if($db->createJrg($_POST['jrg'], $_POST['city'],$_POST['street'],$_POST['nr'], $_POST['email'])){
+				$output['result'] = true;
+				if($dbUsers->createJrgAdmin($_POST['email'])){
+					$output['info'] = 'Na podany adres email zostały wysłane dane dostępowe do konta.';
+				};
+			} else {
+				throw new UserErrors($db->error);
+			}
+			break;
+			/*
+			 * RESET HASLA
+			 */
+		case 'reset':
+			if( $dbUsers->resetPass($_POST['email']) ){
+				$output['result'] = true;
+				//info -> Twoje hasło zostało zresetowane. Sprawdź skrzynkę email.
+			}  else {
+				throw new UserErrors($dbUsers->error);
+			}
+			break;
+			/*
+			 * RESJESTRACJA UZYTKOWNIKA
+			 */
+		case 'register':
+			if($dbUsers->registerNewUser(
+				$_POST['login'],
+				$_POST['password'],
+				$_POST['confirm_password'],
+				$_POST['jrg'],
+				$_POST['name'],
+				$_POST['surname']
+			)){
+				$output['result'] = true;
+				//info -> Twoje konto zostało utworzone. Możesz się zalogować <a href="http://zmiana.bjit.pl/login.php">Tutaj</a>. Na Twoją pocztę zostało wysłane potwierdzenie rejestracji.';
 			} else {
 				throw new UserErrors($dbUsers->error);
 			}
