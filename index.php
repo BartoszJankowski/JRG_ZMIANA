@@ -42,7 +42,7 @@ if(isset($_POST['log_in'])){
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-    <script type="text/javascript" src="js/ajax.js?ver=<?php echo time() ?>""></script>
+    <script type="text/javascript" src="js/ajax.js?ver=<?php echo time() ?>"></script>
     <script type="text/javascript" src="js/scripts.js?ver=<?php echo time() ?>"></script>
 </head>
 
@@ -97,7 +97,10 @@ if(isset($_POST['log_in'])){
     <div class="col-lg-3 col-sm-6 col-xs-6 login">
     <?php
          if(isset($_POST['log_in'])){
-         if(!$dbUsers->login($_POST['login'],$_POST['password']))
+         if(!$dbUsers->login(
+          $_POST['login'],
+          $_POST['password']
+          ))
          {
              echo $dbUsers->error;
                        // popraw !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
@@ -134,7 +137,7 @@ if(isset($_POST['log_in'])){
                 <a class="w3-left" href="register.php" target="_self">Rejestracja</a>
                 <a class="w3-right" href="reset.php" target="_self">Zapomniałeś hasła?</a>
             </div>
-<!--         </form> -->
+
     </div>
 </main>
 <?php

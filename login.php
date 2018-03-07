@@ -41,8 +41,11 @@ if(isset($_POST['addJrg'])){
                             <link rel="stylesheet" type="text/css" href="css/main.css">
                                 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"> 
                                     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&amp;subset=latin-ext" rel="stylesheet">
-    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    <script type="text/javascript" src="ajaxjrg.js?ver=<?php echo time() ?>"></script>
+    <script type="text/javascript" src="js/scripts.js?ver=<?php echo time() ?>"></script>
 
 </head>
 
@@ -118,11 +121,15 @@ if(isset($_POST['addJrg'])){
                                     # problem z wysłaniem email -->
                                
 
-                                <form method="post" action="" class="form-group addJrg__form">
+                                <form id="Jrg" method="post" action="" class="form-group addJrg__form">
+                                  <input type="hidden" name="action" value="addJrg" />
+                                      <div id="error"></div>
+                                      <div id="success" name="info" value="info"></div>
                                     <h2>Dodaj jednostkę do bazy</h2>
-                                    <?php
+
+                                    <!-- <?php
                                         echo $infoAdd;
-                                    ?>
+                                    ?> -->
 
                                     <label  class="text-secondary"> Miasto</label>
                                     <select class="form-control" name="city" required>
@@ -144,7 +151,7 @@ if(isset($_POST['addJrg'])){
                                     <label class="text-secondary"> Administrator (email)</label>
                                     <input type="email" name="email" value="<?php echo $_POST['email'] ?>" class="form-control" placeholder="jan_kowalski@wp.pl" required />
 
-                                    <button type="submit" name="addJrg" class="btn btn-danger btn-lg btn__addJrg">Dodaj</button>
+                                    <button id="addJrg" type="submit" name="addJrg" class="btn btn-danger btn-lg btn__addJrg">Dodaj</button>
                                 </form>
                             </div>
     </section>
