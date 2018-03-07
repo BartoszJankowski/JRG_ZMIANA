@@ -9,7 +9,7 @@ $(function(){
 		timeout : 15000
 	});
 
-	$("#Jrg").on("submit", function() {
+	$("#formRegister").on("submit", function() {
 		logD('->event onsubmit start');
 		submitForm();
         logD('->event onsubmit end');
@@ -24,38 +24,39 @@ function OnError(xhr){
 
 function submitForm() {
 
-	var postJrg = getPostData('Jrg');
+	var postRegister = getPostData('formRegister');
 
 	$.ajax({
 		type: 'POST',
-		data: postJrg,
+		data: postRegister,
 
         beforeSend : function() {
             $("#error").fadeOut();
-            $("#success").fadeOut();
-             $('#addJrg').html('<span class="glyphicon-transfer"></span> &nbsp; Wysłanie ...');
+            // $("#success").fadeOut();
+             $('#register').html('<span class="glyphicon-transfer"></span> &nbsp; Wysłanie ...');
              alert('beforeSend !');
         },
 		
 		success : function(response){
 
-			if(response){
+			if(response.result){
 				
-					$('#success').fadeIn(1000, function() {
-							$('#success').html('<div class="alert alert-success"> <span class="glyphicon glyphicon-info-sign">kurwa wa mac</span> &nbsp;'+response.info+' !</div>');
-								$('#addJrg').html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Dodano');
+				// 	$('#success').fadeIn(1000, function() {
+				// 			$('#success').html('<div class="alert alert-success"> <span class="glyphicon glyphicon-info-sign">kurwa wa mac</span> &nbsp;'+response.info+' !</div>');
+				// 				$('#register').html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Dodano');
 
-					});
-				}
-
-				//  $('#addJrg').html('<span class="glyphicon-transfer"></span> &nbsp; Dodano!');
-				// 		$('#success').html('<div class="alert alert-success"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp; '+result.info+' !</div>');
+				// 	});
 				// }
+
+				 $('#register').html('<span class="glyphicon-transfer"></span> &nbsp; Dodano!');
+							$('#success').html('<div class="alert alert-success"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp; '+response.info+' !</div>');
+								logD('response.errorMsg');
+				}
 					else{
 
 						$('#error').fadeIn(1000, function() {
-							$('#error').html('<div class="alert alert-danger"> <span class="glyphicon glyphicon-info-sign">hi hi hi</span> &nbsp; '+response.errorMsg+' !</div>');
-								$('#addJrg').html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Dodaj');
+							$('#error').html('<div class="alert alert-danger"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp; '+response.errorMsg+' !</div>');
+								$('#register').html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Zarejestruj się');
 								logD(response.errorMsg);
 
 					});
@@ -91,7 +92,7 @@ function submitForm() {
  */
 function getPostData(formIdString){
 
-    var postJrg = {};
+    var postRegister = {};
     var form = $("#"+formIdString).get(0);
     var formElements = form.elements;
     for(x in formElements){
@@ -101,12 +102,12 @@ function getPostData(formIdString){
         if(el.disabled || el.name === undefined || el.value === undefined || el.name.length<=0 || el.value.length <=0){
             continue;
         }
-		 postJrg[el.name] = el.value;
+		 postRegister[el.name] = el.value;
 
 
     }
-    logD(postJrg);
-    return postJrg;
+    logD(postRegister);
+    return postRegister;
 }
 
 function logD(str){

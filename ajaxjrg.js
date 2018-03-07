@@ -39,10 +39,10 @@ function submitForm() {
 		
 		success : function(response){
 
-			if(response){
+			if(response.result){
 				
 					$('#success').fadeIn(1000, function() {
-							$('#success').html('<div class="alert alert-success"> <span class="glyphicon glyphicon-info-sign">kurwa wa mac</span> &nbsp;'+response.info+' !</div>');
+							$('#success').html('<div class="alert alert-success"> <span class="glyphicon glyphicon-info-sign">kurwa wa mac</span> &nbsp;'+response.result.info+' !</div>');
 								$('#addJrg').html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Dodano');
 
 					});

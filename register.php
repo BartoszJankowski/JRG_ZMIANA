@@ -49,6 +49,11 @@ $res = $jednostki->getJrgList();
                         <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&amp;subset=latin-ext" rel="stylesheet">
                          <link rel="stylesheet" type="text/css" href="css/main.css" />
                             <link rel="stylesheet" type="text/css" href="css/login.css" />
+                                <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    <script type="text/javascript" src="js/scripts.js?ver=<?php echo time() ?>"></script>
+    <script type="text/javascript" src="ajaxregister.js?ver=<?php echo time() ?>"></script>
 </head>
 
 <body>
@@ -91,48 +96,55 @@ $res = $jednostki->getJrgList();
                             <div class="col-lg-5 offset-lg-1 col-sm-6 addJrg">
                             
                             
-                            <?php if (!empty($dbusers->error)) { ?>
+                          <!--   <?php if (!empty($dbusers->error)) { ?>
                                 <div  class="alert alert-danger info__wrong" role="alert">
                                      <?php echo $dbusers->error; ?>
                                 </div>
-                            <?php } ?>
+                            <?php } ?> -->
                            <!--  dodałem taka stylizacje komunikatu errora -->
 
                                         <?php
                                             echo $infoAdd;
                                         ?>
+
+                                   
                                 <h2>Rejestracja</h2>
-                                    <form method="post" action="" class="form-group addJrg__form" id="formRegister">
+
+                                    <form id="formRegister" method="post" action="" class="form-group addJrg__form">
+                                        <input type="hidden" name="action" value="register" />
+                                            <div id="error"></div>
+                                                <div id="success" name="info" value="info"></div>
 
                                         <label class="text-secondary">Email*</label>
                                             <input type="email" name="login" value="<?php echo $_POST['email'] ?>" class="form-control" required />
 
-                                                <label class="text-secondary">Hasło*</label>
-                                                    <input type="password" id="password" name="password" value="" class="form-control" required />
+                                        <label class="text-secondary">Hasło*</label>
+                                            <input type="password" id="password" name="password" value="" class="form-control" required />
 
-                                                        <label class="text-secondary"> Powtórz hasło*</label>
-                                                            <input type="password" name="confirm_password" value="" class="form-control" required />
+                                        <label class="text-secondary"> Powtórz hasło*</label>
+                                            <input type="password" name="confirm_password" value="" class="form-control" required />
 
-                                                                <label  class="text-secondary"> Imię</label>
-                                                                    <input type="text" name="name" value="" class="form-control"  />
+                                        <label  class="text-secondary"> Imię</label>
+                                            <input type="text" name="name" value="" class="form-control"  />
 
-                                                                        <label  class="text-secondary"> Nazwisko</label>
-                                                                            <input type="text" name="surname" value="" class="form-control"  />
+                                        <label  class="text-secondary"> Nazwisko</label>
+                                            <input type="text" name="surname" value="" class="form-control"  />
 
-                                                                                <label class="text-secondary">Wybierz jednostkę</label>
-                                                                                    <select name="jrg" class="form-control register__select__jrg">
-                                                                                        <option disabled selected> Rozwiń listę JRG</option>
-                                                                                            <?php
-                                                                                                if(is_array($res)){
-                                                                                                    foreach($res as $id=>$val){
-                                                                                                        echo '<option value="'.$id.'"> jrg '.$val.'</option>';
-                                                                                                    }
-                                                                                                }
-                                                                                            ?>
-                                                                                    </select>
+                                        <label class="text-secondary">Wybierz jednostkę</label>
+                                            <select name="jrg" class="form-control register__select__jrg">
+                                                <option disabled selected> Rozwiń listę JRG</option>
+                                                    <?php
+                                                        if(is_array($res)){
+                                                            foreach($res as $id=>$val){
+                                                                echo '<option value="'.$id.'"> jrg '.$val.'</option>';
+                                                            }
+                                                        }
+                                                    ?>
+                                            </select>
 
                                             <p class="info__required">* dane wymagane do rejestracji użytkownika</p>
-                                        <button id="add" type="submit" name="register" class="btn btn-danger btn-lg btn-block btn_register_submit">Zarejestruj</button>
+
+                                        <button id="register" type="submit" name="register" class="btn btn-danger btn-lg btn-block btn_register_submit">Zarejestruj</button>
                                 </form>
                             </div>
 

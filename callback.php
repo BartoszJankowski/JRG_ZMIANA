@@ -35,7 +35,10 @@ try {
 			 * LOGOWANIE UZYTKOWNIKA
 			 */
 		case 'log_in':
-			if($dbUsers->login($_POST['login'],$_POST['password'])) {
+			if($dbUsers->login(
+				$_POST['login'],
+				$_POST['password']
+				)) {
 				$output['result'] = true;
 			} else {
 				throw new UserErrors($dbUsers->error);
@@ -48,10 +51,18 @@ try {
 			 */
 		case 'addJrg':
 			$db = new DBJednostki();
-			if($db->createJrg($_POST['jrg'], $_POST['city'],$_POST['street'],$_POST['nr'], $_POST['email'])){
+			if($db->createJrg(
+				$_POST['jrg'], 
+				$_POST['city'],
+				$_POST['street'],
+				$_POST['nr'],
+				$_POST['email']
+				)){
 				$output['result'] = true;
-				if($dbUsers->createJrgAdmin($_POST['email'])){
-					$output['info'] = 'Na podany adres email zostały wysłane dane dostępowe do konta.';
+					if($dbUsers->createJrgAdmin(
+						$_POST['email']
+						)){
+						$output['info'] = 'Na podany adres email zostały wysłane dane dostępowe do konta.';
 				};
 			} else {
 				throw new UserErrors($db->error);
