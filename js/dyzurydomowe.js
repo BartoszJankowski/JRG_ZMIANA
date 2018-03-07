@@ -1,5 +1,4 @@
 $(function () {
-    logD(location.hash);
     if(location.hash === '#grafik'){
         $("#slide_type").get(0).checked = true;
         $("#dyzury_list").hide();

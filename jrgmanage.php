@@ -37,29 +37,67 @@ if(   $user->isAdmin() ) {
 
 	if($user->getAdminJrgId()>0){
 		$dbJednostki->selectJrg( $user->getAdminJrgId() );
-
 		$_SETTINGS->load($dbJednostki->getSelectedId());
-		if(isset($_POST['addUpr'])){
-			if($_SETTINGS->addUpr($_POST)){
-				header('Location: '.$base_url.$_SERVER['REQUEST_URI']);
-				exit;
-			}
-		}
-		if(isset($_POST['addharmoVal'])){
-			if($_SETTINGS->addHarmoValue($_POST)){
-				header('Location: '.$base_url.$_SERVER['REQUEST_URI']);
-				exit;
-			}
-		}
-		if(isset($_POST['addgrafVal'])){
-			if($_SETTINGS->addGrafValue($_POST)){
-				header('Location: '.$base_url.$_SERVER['REQUEST_URI']);
-				exit;
-			}
-		}
-		if(isset($_POST['uprDelete'])){
-			$_SETTINGS->deleteUpr($_POST['deleteUpr']);
-		}
+
+        if(isset($_POST['action'])){
+
+	        if($_POST['action'] === 'addVal'){
+		        if(isset($_POST['addUpr'])){
+			        if($_SETTINGS->addUpr($_POST)){
+				        header('Location: '.$base_url.$_SERVER['REQUEST_URI']);
+				        exit;
+			        }
+		        }
+		        if(isset($_POST['addharmoVal'])){
+			        if($_SETTINGS->addHarmoValue($_POST)){
+				        header('Location: '.$base_url.$_SERVER['REQUEST_URI']);
+				        exit;
+			        }
+		        }
+		        if(isset($_POST['addgrafVal'])){
+			        if($_SETTINGS->addGrafValue($_POST)){
+				        header('Location: '.$base_url.$_SERVER['REQUEST_URI']);
+				        exit;
+			        }
+		        }
+            } elseif($_POST['action'] === 'delete'){
+		        $result = array('result'=>false,'error'=>false);
+	            switch($_POST['type']){
+                    case "uprawnienie":
+	                    if($_SETTINGS->deleteUpr($_POST['id'])){
+		                    $result['result'] = true;
+                        } else {
+		                    $result['error'] = true;
+		                    $result['errorMsg'] = $_SETTINGS->getError();
+                        }
+                        break;
+		            case "grafik":
+			            if($_SETTINGS->deleteGraf($_POST['id'])){
+				            $result['result'] = true;
+			            } else {
+				            $result['error'] = true;
+				            $result['errorMsg'] = $_SETTINGS->getError();
+			            }
+			            break;
+		            case "harmonogram":
+			            if($_SETTINGS->deleteHarm($_POST['id'])){
+				            $result['result'] = true;
+			            } else {
+				            $result['error'] = true;
+				            $result['errorMsg'] = $_SETTINGS->getError();
+			            }
+			            break;
+                    default:
+                        $result['result'] = false;
+                        break;
+                }
+		        header("Content-Type: application/json; charset=UTF-8");
+		        echo json_encode($result);
+		        die;
+	        }
+
+        }
+
 	}
 
 } else {
@@ -209,7 +247,7 @@ require 'header.php';
             </div>
             <div  class="tab-pane w3-row" id="settings" role="tabpanel" aria-labelledby="settings-tab"  >
                 <div class="w3-col s4 w3-container">
-                    <h4 class="w3-row w3-margin-top">Uprawnienia: <button class="w3-btn w3-right" data-toggle="popover"  title="Dodaj uprawnienie"><i class="far fa-plus-square"></i></button></h4>
+                    <h4 class="w3-row w3-margin-top w3-gray"><span>&nbsp;&nbsp;Uprawnienia: </span><button class="w3-btn w3-right" data-toggle="popover" data-type="uprawnienie"  title="Dodaj uprawnienie"><i class="far fa-plus-square"></i></button></h4>
                     <ul class="list-group">
 		                <?php
 		                foreach (DBJrgSettings::getUprawnienia() as $uprawnienie){
@@ -237,7 +275,7 @@ require 'header.php';
                 </div>
 
                 <div class="w3-col s4 w3-container">
-                    <h4 class="w3-row w3-margin-top">Harmonogram: <button class="w3-btn w3-right" title="Zdefiniuj nowe pole"><i class="far fa-plus-square"></i></button></h4>
+                    <h4 class="w3-row w3-margin-top w3-gray"><span>&nbsp;&nbsp;Harmonogram: </span> <button class="w3-btn w3-right" data-toggle="popover" data-type="harmonogram"  title="Dodaj pole harmonogramu"><i class="far fa-plus-square"></i></button></h4>
 
                         <ul class="list-group">
                             <?php
@@ -268,7 +306,7 @@ require 'header.php';
                 </div>
 
                 <div class="w3-col s4">
-                    <h4 class="w3-row w3-margin-top">Grafik: <button class="w3-btn w3-right" data-toggle="popover"  title="Zdefiniuj nowe pole"><i class="far fa-plus-square"></i></button></h4>
+                    <h4 class="w3-row w3-margin-top w3-gray"><span>&nbsp;&nbsp;Grafik:</span> <button class="w3-btn w3-right" data-toggle="popover" data-type="grafik"  title="Dodaj nową wartość grafiku"><i class="far fa-plus-square"></i></button></h4>
                     <ul class="list-group">
 		                <?php
 		                foreach (DBJrgSettings::getGrafValues() as $grafik_value){
@@ -311,13 +349,10 @@ require 'header.php';
             $('#'+id+"-tab").tab('show');
 
         }
-        $('button[data-toggle="popover"]').popover({content:function(){return createNewValue(this)},html:true,placement:'bottom'})
+        $('button[data-toggle="popover"]').popover({content:function(){return values.createNewValue(this)},html:true,placement:'bottom'})
     });
 
-    function createNewValue(btn){
-        logD(btn);
-        return 'Siema';
-    }
+
 
 
 

@@ -126,7 +126,156 @@ function countLp(table){
 function usunUpr(btn){
     var type = $(btn).attr('data-type');
     var idUpr = $(btn).val();
-    logD(type+" "+idUpr);
+    $.ajax({
+        type:'POST',
+        data:{
+            action:'delete',
+            type:type,
+            id:idUpr
+        },
+        url:'jrgmanage.php',
+        beforeSend : function(xhr){
+            btn.disabled = true;
+            $(btn).html('<i class="w3-spin fas fa-spinner"></i>');
+        },
+        success : function (response) {
+            logD(response);
+            if(response.result){
+                $(btn).tooltip('dispose').parents('li').remove();
+            } else if(response.error) {
+                logD(response.errorMsg);
+            }
+        },
+        error : function () {
+
+        },
+        complete : function (xhr, status) {
+            $(btn).html('<i class="far fa-trash-alt"></i>');
+            btn.disabled = false;
+        }
+    });
 }
+
+var values = {
+    typ : '',
+    btn : null,
+    icons : ['fas fa-ambulance','fas fa-asterisk','fas fa-bolt',
+        'fas fa-bus','fas fa-car','fas fa-chess-king',
+        'fas fa-chess-rook','fas fa-child','fas fa-fighter-jet','fas fa-truck','fas fa-life-ring'],
+
+    /**
+     * Funkcja zwraca html do popover
+     * @param btn
+     * @returns {string}
+     */
+    createNewValue : function (button) {
+        this.typ = $(button).attr("data-type");
+        this.btn = button;
+        return '<form onsubmit="return values.checkForm(this)" action="#settings" method="post"><input type="hidden" name="action" value="addVal" /> ' +
+            this.getTag() +
+            '<div class="input-group mb-3">\n' +
+            '  <div class="input-group-prepend">\n' +
+            '    <span class="input-group-text" id="basic-addon3">Nazwa</span>\n' +
+            '  </div>\n' +
+            '  <input type="text" required class="form-control" id="basic-url" name="name" aria-describedby="basic-addon3">\n' +
+            '</div> ' +
+            '                                 ' + values.getIcons() + values.getDesc() + values.getColor() +
+            '</div>' + this.getSubmitBtn() +
+            '</form>';
+    },
+    getTag : function(){
+        if(this.typ !== 'uprawnienie') {
+            return '<div class="input-group mb-3">\n' +
+                '  <div class="input-group-prepend">\n' +
+                '    <span class="input-group-text" id="basic-addon3">Tag</span>\n' +
+                '  </div>\n' +
+                '  <input type="text" required class="form-control" id="basic-url" name="id" minlength="0" maxlength="3" aria-describedby="basic-addon3">\n' +
+                '</div> '
+        } else {
+            return '';
+        }
+    },
+    getIcons :function(){
+        if(this.typ === 'uprawnienie'){
+            var inn = '';
+            for(x in this.icons){
+                inn += '<a class="p-2 w3-text-black w3-large" href="#" onclick="values.setIcon(this)" data-icon="'+this.icons[x]+'" ><i class="'+this.icons[x]+'"></i></a>';
+            }
+            return '<div class="input-group mb-3">' +
+                '  <div class="input-group-prepend">' +
+                '    <input required type="hidden" name="icon"><button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ikona</button>\n' +
+                '    <div class="dropdown-menu">' +
+                '      <div class="d-flex">' + inn +'</div>' +
+                '    </div>' +
+                '  </div>' +
+                '  <span type="text" class="form-control" ></span>' +
+                '</div>';
+        } else {
+            return '';
+        }
+
+    },
+    getDesc : function(){
+        if(this.typ !== 'uprawnienie') {
+            return '<div class="input-group mb-3">\n' +
+                '  <div class="input-group-prepend">\n' +
+                '    <span class="input-group-text" id="basic-addon3">Opis</span>\n' +
+                '  </div>\n' +
+                '  <input type="text" required class="form-control" id="basic-url" name="desc" minlength="0" maxlength="80" aria-describedby="basic-addon3">\n' +
+                '</div> '
+        } else {
+            return '';
+        }
+    },
+    getColor : function(){
+        if(this.typ !== 'grafik'){
+            return '<div class="input-group mb-3">\n' +
+                '  <div class="input-group-prepend">\n' +
+                '    <span class="input-group-text" id="inputGroup-sizing-default">Kolor</span>\n' +
+                '  </div>\n' +
+                '  <label class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default"><input class="w3-input"  required type="color" name="color"></label>' ;
+
+        } else {
+            return '';
+        }
+    },
+    setIcon : function(a){
+        var ico = $(a).attr('data-icon');
+       var inp = $(a).parents('div.input-group-prepend').find('input[name="icon"]');
+      inp.val(ico).parent().next().html('<i class="'+ico+'"></i>');
+    },
+    getSubmitBtn : function(){
+        switch (this.typ){
+            case 'uprawnienie':
+                return '<button type="submit" name="addUpr" value="1" class="btn btn-secondary btn-lg btn-block">Dodaj</button>';
+            case 'grafik':
+                return '<button type="submit" name="addgrafVal" value="1" class="btn btn-secondary btn-lg btn-block">Dodaj</button>';
+            case 'harmonogram':
+                return '<button type="submit" name="addharmoVal" value="1" class="btn btn-secondary btn-lg btn-block">Dodaj</button>';
+            default:
+                break;
+        }
+    },
+    checkForm : function(form){
+        var res = true;
+        $(form).find('input').each(function(){
+            if(this.required){
+                if($(this).val().length<=0){
+                    $(this).addClass('error_inp');
+                    res = false;
+                } else {
+                    $(this).removeClass('error_inp');
+                }
+
+            }
+        });
+        return res;
+    }
+
+
+
+};
+
+
 
 

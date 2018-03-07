@@ -20,6 +20,26 @@ main {
     color:black;
 }
 
+input[type="color"].w3-input {
+
+    padding:1px;
+}
+input.error_inp {
+    outline: 2px dashed red;
+}
+input[type="hidden"].error_inp + * {
+    outline: 2px dashed red;
+}
+.my_badge {
+    display:inline-block;
+    padding:4px 6px;
+    margin:2px 4px;
+    vertical-align: top !important;
+    width:40px;
+    overflow: hidden;
+    text-align: center;
+
+}
 
 .no-display {
     display: none;

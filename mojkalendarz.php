@@ -46,7 +46,7 @@ if($user->getStrazak()){
         }
     }
 } else {
-	$info = '<div class="w3-container"><h1>Nie zostałeś przypisany !</h1><p>Twoje konto nie zostało powiązane jeszcze z istniejącym profilem strażaka. Skontaktuj się z administratorem JRG lub swoim szefem zmiany aby to zrobił.</p></div>';
+	$info = '<div class=""><h1>Nie zostałeś przypisany !</h1><p>Twoje konto nie zostało powiązane jeszcze z istniejącym profilem strażaka. Skontaktuj się z administratorem JRG lub swoim szefem zmiany aby to zrobił.</p></div>';
 }
 
 

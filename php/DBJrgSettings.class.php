@@ -157,20 +157,46 @@ class DBJrgSettings extends DbConn {
 		return $this->updateDatabase();
 	}
 
-	public function deleteUpr(array $listaId):bool {
+	public function deleteUpr( $idUpr):bool {
 		$tab = array();
 		foreach (self::$uprawnieniaList as $upr){
 			$found  = false;
-			foreach ($listaId as $id){
-				if($upr->getId() == $id){
+				if($upr->getId() == $idUpr){
 					$found = true;
 				}
-			}
 			if(!$found){
 				$tab[] = $upr;
 			}
 		}
 		self::$uprawnieniaList = $tab;
+		return $this->updateDatabase();
+	}
+	public function deleteHarm($idUpr){
+		$tab = array();
+		foreach (self::$harmoValues as $upr){
+			$found  = false;
+			if($upr->getId() == $idUpr){
+				$found = true;
+			}
+			if(!$found){
+				$tab[] = $upr;
+			}
+		}
+		self::$harmoValues = $tab;
+		return $this->updateDatabase();
+	}
+	public function deleteGraf($idUpr){
+		$tab = array();
+		foreach (self::$grafikValues as $upr){
+			$found  = false;
+			if($upr->getId() == $idUpr){
+				$found = true;
+			}
+			if(!$found){
+				$tab[] = $upr;
+			}
+		}
+		self::$grafikValues = $tab;
 		return $this->updateDatabase();
 	}
 
@@ -440,7 +466,7 @@ class HarmoValue extends Value {
 
 	public function printLiElement(){
 
-		echo '<li class="list-group-item"><button onclick="usunUpr(this)" class="btn btn-sm w3-right" data-type="harmonogram"  value="'.$this->getId().'" data-toggle="tooltip" data-trigger="hover" title="Usuń pozycję"><i class="far fa-trash-alt"></i></button><span class="w3-padding" style="background-color: '.$this->getColor().'">'.$this->id.'</span> '.$this->getName().' <div class="w3-small w3-center"><i>'.$this->getDesc().'</i></div></li>';
+		echo '<li class="list-group-item"><button onclick="usunUpr(this)" class="btn btn-sm w3-right" data-type="harmonogram"  value="'.$this->getId().'" data-toggle="tooltip" data-trigger="hover" title="Usuń pozycję"><i class="far fa-trash-alt"></i></button><span class="my_badge" style="background-color: '.$this->getColor().'">'.$this->id.'</span> <div class="d-inline-block">'.$this->getName().'<div  class="w3-small w3-center"><i>'.$this->getDesc().'</i></div></div></li>';
 	}
 
 	public function getValueName(): string {

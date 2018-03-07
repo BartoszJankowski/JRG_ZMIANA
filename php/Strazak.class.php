@@ -271,6 +271,7 @@ class Strazak {
 		$uprawnienia = $this->uprawnienia;
 		foreach ($uprawnienia as $id){
 			$uprawnienie =  DBJrgSettings::getUprawnienie($id);
+			if($uprawnienie!=null)
 			$uprI .= '<span data-toggle="tooltip" title="'.$uprawnienie->getName().'" data-placement="top" ><i class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'"></i></span>';
 		}
 		return $uprI;
