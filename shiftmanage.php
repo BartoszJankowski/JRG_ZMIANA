@@ -31,34 +31,39 @@ if(  isset($_GET['manage_jrg']) && $user->isAdmin() ) {
 }
 
 if( isset($_POST['addStrazak']) && ($user->isAdmin() || $user->isChef()) ){
+
 	$dbStrazacy->dodajStrazaka((new Strazak())->create($_POST));
 }
 
 if(isset($_POST['editFireman'])){
-  //  print_r($_POST);
+
 	$dbStrazacy->edytujStrazaka($user, (new Strazak())->create($_POST));
 }
 
-if(isset($_POST['deleteFireman'] )){
-	if($dbStrazacy->deleteFireman($user, $_POST['strazakId'])){
-		echo "Strazak usunięty";
+if(isset($_GET['deleteFireman'] )){
+	if($dbStrazacy->deleteFireman($user, $_GET['strazakId'])){
+		$info = '<div class="alert alert-success" role="alert">
+                  <h4 class="alert-heading">Wykonano</h4>
+                  <p>Strażak ('.$dbStrazacy->deletedStrazak->toString().') został poprawnie usunięty z bazy danych.</p>
+                </div>';
 	} else {
 		echo $dbStrazacy->error;
 	}
 }
+
 $title = "Stan zmiany";
 require 'header.php';
 ?>
 <main>
-	<div>
-		Witaj, <?php echo $user->getName() != null ? $user->getName() . ' ' . $user->getSurname() : $user->login; echo ' [' . $user->getPrevilages() . ']'; ?>
-	</div>
     <!-- PANEL SZEFA ZMIANY -->
 	<?php if($user->isChef()) :
+        echo $info;
         $strazak = $user->getStrazak();
 	    if(isset($_GET['editFireman'])) :
             $edytowanyStrazak = $dbStrazacy->getStrazak($_GET['editFireman']);
+
 	?>
+
             <div class="w3-row">
                 <h2>Edycja danych strazaka</h2>
                 <div class="w3-container w3-quarter" >
@@ -130,16 +135,16 @@ require 'header.php';
                             </select>
                         </div>
                         <div>
-                            <label class="w3-text-gray">Numer porządkowy</label>
-                            <input class="w3-input" type="number" value="<?php echo $edytowanyStrazak->getNrPorz(); ?>" name="nr_porz" min="0" max="99" />
-                        </div>
-                        <div>
                             <label class="w3-text-gray">Nazwisko</label>
                             <input class="w3-input" type="text" name="nazwisko" value="<?php echo $edytowanyStrazak->getNazwisko(); ?>" />
                         </div>
                         <div>
                             <label class="w3-text-gray">Imię</label>
                             <input class="w3-input" type="text" name="imie"  value="<?php echo $edytowanyStrazak->getImie(); ?>" />
+                        </div>
+                        <div>
+                            <label class="w3-text-gray">Data badań</label>
+                            <input class="w3-input" type="date" name="badania"  />
                         </div>
                         <div>
                             <label class="w3-text-gray">Kolor</label>
@@ -162,21 +167,13 @@ require 'header.php';
                         <input type="submit" class="w3-input w3-margin-top" name="editFireman" value="Zapisz zmiany" />
                     </form>
                 </div>
-                <div class="w3-container w3-half">
+                <div class="w3-container w3-threequarter">
 				    <?php
 				    $uzytkownicy = $dbUsers->getUsersList($user,$strazak->getJrgId() );
 				    $strazacy = $dbStrazacy->getZmianaListStrazacy($strazak->getJrgId(),$strazak->getZmiana());
 				    echo '<div class="w3-container"><h4>zmiana '.$strazak->getZmiana().' <span class="w3-small">('.count($strazacy).' strażaków)</span></h4><ul class="w3-ul">';
-				    foreach ($strazacy as $str){
-					    $str->printHtml($uzytkownicy );
-				    }
+				    Strazak::printTableHtml($strazacy, $uzytkownicy);
 				    echo '</ul></div>';
-				    ?>
-                </div>
-                <div class="w3-quarter w3-border" style="">
-				    <?php
-				    echo '<div class="w3-container w3-large">Lista nieprzypisanych strażaków ('.count($usersList).')</div>';
-				    foreach ($usersList as $userObject) { $userObject->printUserHtml(); }
 				    ?>
                 </div>
             </div>
@@ -228,10 +225,6 @@ require 'header.php';
                             </select>
                         </div>
                         <div>
-                            <label class="w3-text-gray">Numer porządkowy</label>
-                            <input class="w3-input" type="number" name="nr_porz" min="0" max="99" />
-                        </div>
-                        <div>
                             <label class="w3-text-gray">Nazwisko</label>
                             <input class="w3-input" type="text" name="nazwisko"  />
                         </div>
@@ -239,11 +232,15 @@ require 'header.php';
                             <label class="w3-text-gray">Imię</label>
                             <input class="w3-input" type="text" name="imie"  />
                         </div>
-
+                        <div>
+                            <label class="w3-text-gray">Data badań</label>
+                            <input class="w3-input" type="date" name="badania"  />
+                        </div>
                         <div>
                             <label class="w3-text-gray">Kolor</label>
                             <input class="w3-input" type="color" name="kolor"  />
                         </div>
+
                         <div>
                             <label class="w3-text-gray">Zaznacz uprawnienia pracownika: </label><br>
                             <?php
@@ -256,23 +253,24 @@ require 'header.php';
                         <input type="submit" class="w3-input w3-margin-top" name="addStrazak" value="Dodaj" />
                     </form>
                 </div>
-                <div class="w3-container w3-half">
+                <div class="w3-container w3-threequarter">
                     <?php
                     $uzytkownicy = $dbUsers->getUsersList($user,$strazak->getJrgId() );
                     $strazacy = $dbStrazacy->getZmianaListStrazacy($strazak->getJrgId(),$strazak->getZmiana());
                     echo '<div class="w3-container"><h4>zmiana '.$strazak->getZmiana().' <span class="w3-small">('.count($strazacy).' strażaków)</span></h4><ul class="w3-ul">';
-                    foreach ($strazacy as $str){
-                        $str->printHtml($uzytkownicy);
-                    }
+                    Strazak::printTableHtml($strazacy, $uzytkownicy);
+
                     echo '</ul></div>';
                     ?>
                 </div>
-                <div class="w3-quarter w3-border" style="">
+                <!--
+                <div class="w3-quarter w3-border" style="display: none">
                     <?php
                         echo '<div class="w3-container w3-large">Lista nieprzypisanych strażaków ('.count($usersList).')</div>';
                         foreach ($usersList as $userObject) { $userObject->printUserHtml(); }
                     ?>
                 </div>
+                -->
             </div>
 	    <?php endif; ?>
 	<?php endif; ?>

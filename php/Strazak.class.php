@@ -8,11 +8,13 @@
 
 class Strazak {
 
+
+
 	/**
 	 * Dane bazy danych
 	 * @var
 	 */
-	private $id,$jrg_id, $zmiana, $nazwa_funkcji, $previlages, $user_id, $nr_porz, $imie, $nazwisko, $stopien, $kolor;
+	private $id,$jrg_id, $zmiana, $nazwa_funkcji, $previlages, $user_id, $nr_porz, $imie, $nazwisko, $stopien, $kolor, $badania;
 	private $uprawnienia = array();
 
 	/**
@@ -122,6 +124,22 @@ class Strazak {
 		return $this->kolor;
 	}
 
+	public function getbadaniaData(){
+		if((new LocalDateTime($this->badania))->getYear()<0){
+			return null;
+		}
+		return $this->badania;
+	}
+
+	public function getBadaniaDayTillNow():int{
+		$days = 365;
+		if($this->getbadaniaData()!=null){
+			$sec = (new LocalDateTime($this->badania))->getTimeTillNow()*-1;
+			$days = round($sec / (24*3600),1);
+		}
+		return $days;
+	}
+
 	/**
 	 * @return int[]
 	 */
@@ -186,5 +204,94 @@ class Strazak {
 				<span class="w3-text-gray">'.$funkcja.'</span>
 				</form>';
 	}
+
+	public static function printTableHtml(array $strazacy, array $listUsers){
+		$naglowek = '<tr class="w3-small w3-light-gray">
+							<th>L.p.</th>
+							<th>Stopień</th>
+							<th>Nazwisko i imię</th>
+							<th>Funkcja</th>
+							<th>Uprawnienia</th>
+							<th>Badania</th>
+							<th>Akcja</th>
+						</tr>';
+		$wiersze = '';
+		$i = 1;
+
+		foreach ($strazacy as $strazak){
+			if($strazak instanceof  Strazak){
+				$wiersze .= '<tr>';
+				$wiersze .= '<td>'.$i++.'</td>';
+				$wiersze .= '<td>'.get_stopien_short($strazak->getStopien()).'</td>';
+				$wiersze .= '<td>'.$strazak->getUserHtmlInfo($listUsers).'<a href="?editFireman='.$strazak->getStrazakId().'">'.$strazak->getNazwisko().' '.$strazak->getImie().'</a></td>';
+				$wiersze .= '<td>'.get_nazwa_funkcji($strazak->getNazwafunkcji()).'</td>';
+				$wiersze .= '<td>'.$strazak->getUprawnieniaHtml().'</td>';
+				$wiersze .= '<td style="background-color: '.UserSettings::getAlertType($strazak->getBadaniaDayTillNow()).'"><span data-toggle="tooltip" data-placement="top" title="Pozostało: '.$strazak->getBadaniaDayTillNow().' dni">'.$strazak->getBadaniaData().'</span></td>';
+				$wiersze .= '<td><form class="form_str_actions no-margin" action="" method="get" ><input type="hidden" value="'.$strazak->getStrazakId().'" name="strazakId"><button class="w3-small" type="submit" name="deleteFireman" value="1" data-toggle="tooltip" data-placement="top" title="Usuń strażaka" ><i class="fa fa-trash"></i></button></form></td>';
+				$wiersze .= '</tr>';
+			}
+		}
+
+		echo '<table class="w3-table w3-border">'.$naglowek.$wiersze.'</table>';
+	}
+
+	public static function printJrgTableStrazacy(array $zmiany, array $listUsers){
+		$naglowek = '<tr class="w3-small w3-light-gray">
+							<th >L.p.</th>
+							<th onclick="sortTable($(this).parent().parent(),1)" style="cursor:pointer;">Zmiana</th>
+							<th onclick="sortTable($(this).parent().parent(),2)" style="cursor:pointer;">Stopień, nazwisko i imię</th>
+							<th onclick="sortTable($(this).parent().parent(),3)" style="cursor:pointer;">Funkcja</th>
+							<th onclick="sortTable($(this).parent().parent(),4)" style="cursor:pointer;">Uprawnienia</th>
+							<th>Badania</th>
+							<th>Usuń</th>
+						</tr>';
+		$wiersze = '';
+		$i = 1;
+		foreach ($zmiany as $nrZmiany =>$strazacy){
+			foreach ($strazacy as $strazak){
+				if($strazak instanceof  Strazak){
+					$wiersze .= '<tr>';
+					$wiersze .= '<td>'.$i++.'</td>';
+					$wiersze .= '<td>'.$nrZmiany.'</td>';
+					$wiersze .= '<td>'.get_stopien_short($strazak->getStopien()).' '.$strazak->getNazwisko().' '.$strazak->getImie().'</td>';
+					$wiersze .= '<td>'.get_nazwa_funkcji($strazak->getNazwafunkcji()).'</td>';
+					$wiersze .= '<td>'.$strazak->getUprawnieniaHtml().'</td>';
+					$wiersze .= '<td style="background-color: '.UserSettings::getAlertType($strazak->getBadaniaDayTillNow()).'"><span data-toggle="tooltip" data-placement="top" title="Pozostało: '.$strazak->getBadaniaDayTillNow().' dni">'.$strazak->getBadaniaData().'</span></td>';
+					$wiersze .= '<td><form class="form_str_actions no-margin" action="" method="get" ><input type="hidden" value="'.$strazak->getStrazakId().'" name="strazakId"><button class="w3-small" type="submit" name="deleteFireman" value="1" data-toggle="tooltip" data-placement="top" title="Usuń strażaka" ><i class="fa fa-trash"></i></button></form></td>';
+					$wiersze .= '</tr>';
+				}
+			}
+		}
+
+		echo '<table class="w3-table w3-border">'.$naglowek.$wiersze.'</table>';
+	}
+
+	private function getUprawnieniaHtml(){
+		$uprI = '';
+		$uprawnienia = $this->uprawnienia;
+		foreach ($uprawnienia as $id){
+			$uprawnienie =  DBJrgSettings::getUprawnienie($id);
+			$uprI .= '<span data-toggle="tooltip" title="'.$uprawnienie->getName().'" data-placement="top" ><i class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'"></i></span>';
+		}
+		return $uprI;
+	}
+
+	public function getUserHtmlInfo(array $userList){
+		$user = '';
+		if(!empty($this->getUserId())){
+			foreach($userList as $us){
+				if($us->getId()===$this->getUserId()){
+					$user =  '<span data-toggle="tooltip" data-placement="top" title="Użytkownik: '.$us->getNameEmailIfNull().'"><i class="fas fa-user-circle"  ></i></span>';
+					break;
+				}
+			}
+
+		} else {
+
+			$user ='<span data-toggle="tooltip" data-placement="top" title="Brak przypisanego użytkownika aplikacji."><i class="fa fa-user-times" ></i></span>';
+		}
+		return $user;
+	}
+
 
 }

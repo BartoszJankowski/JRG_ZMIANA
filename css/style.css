@@ -5,8 +5,21 @@ main {
     margin-bottom:80px;
 }
 
-#settings {
-    display: none; }
+.zmienneJrg {
+    display: none;
+}
+
+#jrg_tabs .nav-item:hover {
+   padding:0 !important;
+}
+#jrg_tabs .nav-link {
+    color:rgba(0,0,0,0.6);
+}
+#jrg_tabs .nav-link.active {
+    font-weight: bold;
+    color:black;
+}
+
 
 .no-display {
     display: none;

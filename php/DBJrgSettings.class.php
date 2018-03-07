@@ -11,6 +11,10 @@ class DBJrgSettings extends DbConn {
 	private $tbl_settings;
 	private static $jrg_id;
 
+	public static $NOTIFY_EMAIL = true;
+	public static $NOTIFY_CHEF = true;
+	public static $NOTIFY_ADMIN = true;
+
 	private static $loaded = false;
 
 	/**
@@ -301,7 +305,7 @@ class Uprawnienie extends Value{
 	}
 
 	public function printLiElement(){
-		echo '<li> <input type="checkbox" class="w3-check" name="deleteUpr[]" value="'.$this->id.'" /> <msc class="fa fa-fw '.$this->i.'" style="color:'.$this->c.'"></msc> '.$this->n.'</li>';
+		echo '<li class="list-group-item"><span><i class="fa fa-fw '.$this->i.'" style="color:'.$this->c.'"></i> '.$this->n.'</span> <button onclick="usunUpr(this)" class="btn btn-sm w3-right" value="'.$this->getId().'" data-toggle="tooltip" data-trigger="hover" title="Usuń pozycję" data-type="uprawnienie" ><i class="far fa-trash-alt"></i></button></li>';
 	}
 
 	/**
@@ -377,7 +381,7 @@ class GrafikValue extends Value{
 
 	public function printLiElement(){
 
-		echo '<li class="w3-padding"><span class="w3-border">'.$this->id.'</span> '.$this->getName().' <div class="w3-small w3-center"><msc>'.$this->getDesc().'</msc></div></li>';
+		echo '<li class="list-group-item"><button onclick="usunUpr(this)" class="btn btn-sm w3-right" value="'.$this->getId().'" data-type="grafik" data-toggle="tooltip" data-trigger="hover" title="Usuń pozycję"><i class="far fa-trash-alt"></i></button><span class="w3-border">'.$this->id.'</span> '.$this->getName().' <div class="w3-small w3-center"><i>'.$this->getDesc().'</i></div></li>';
 	}
 	public function getValueName(): string {
 		return '@grafik_'.$this->id;
@@ -436,7 +440,7 @@ class HarmoValue extends Value {
 
 	public function printLiElement(){
 
-		echo '<li class="w3-padding"><span class="w3-padding" style="background-color: '.$this->getColor().'">'.$this->id.'</span> '.$this->getName().' <div class="w3-small w3-center"><msc>'.$this->getDesc().'</msc></div></li>';
+		echo '<li class="list-group-item"><button onclick="usunUpr(this)" class="btn btn-sm w3-right" data-type="harmonogram"  value="'.$this->getId().'" data-toggle="tooltip" data-trigger="hover" title="Usuń pozycję"><i class="far fa-trash-alt"></i></button><span class="w3-padding" style="background-color: '.$this->getColor().'">'.$this->id.'</span> '.$this->getName().' <div class="w3-small w3-center"><i>'.$this->getDesc().'</i></div></li>';
 	}
 
 	public function getValueName(): string {

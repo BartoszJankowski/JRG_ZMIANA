@@ -70,11 +70,11 @@ if(   $user->isAdmin() ) {
 
 
 if( isset($_POST['addStrazak']) && ($user->isAdmin() || $user->isChef()) ){
-	$dbStrazacy->dodajStrazaka((new Strazak())->create(test_input($_POST)));
+	$dbStrazacy->dodajStrazaka((new Strazak())->create($_POST));
 }
 
-if(isset($_POST['deleteFireman'] )){
-	if($dbStrazacy->deleteFireman($user, test_input($_POST['strazakId']))){
+if(isset($_GET['deleteFireman'] )){
+	if($dbStrazacy->deleteFireman($user, $_GET['strazakId'])){
 		echo "Strazak usunięty";
 	} else {
 		echo $dbStrazacy->error;
@@ -85,14 +85,11 @@ require 'header.php';
 ?>
 
 <main>
-	<div>
-		Witaj, <?php echo $user->getName() != null ? $user->getName() . ' ' . $user->getSurname() : $user->login; echo ' [' . $user->getPrevilages() . ']'; ?>
-	</div>
 	<!--  PANEL ADMINA -->
 	<?php if($user->isAdmin()): ?>
 		<div id="manageJrg">
             <?php if(!empty($list)) : ?>
-			<div id="list_jrg" class="w3-border-bottom w3-row-padding">
+			<div id="list_jrg" class=" w3-row-padding">
 				<h5>Zarządzaj jednostką: </h5>
 				<?php
 				foreach ($list as $jrg){
@@ -102,14 +99,22 @@ require 'header.php';
 			</div>
 			<?php endif;
 			    if($dbJednostki->getSelectedId()>0) :?>
-                <div class="w3-bar w3-black">
-                    <a href="#listaStrazakow"  class="w3-bar-item w3-hover-green settings_bars">Lista strażaków</a>
-                    <a href="#zmienneJrg" class="w3-bar-item w3-hover-green settings_bars">Ustawienia zmiennych</a>
-                    <a href="szablonrozkazu.php" class="w3-bar-item w3-hover-green" data-toggle="tooltip" data-placement="bottom" title="Edycja szablonu">Szablon rozkazu</a>
-                </div>
-            <div  class="jrg_settings w3-row listaStrazakow">
-                <div class="w3-quarter w3-border">
+                    <ul class="nav nav-tabs" id="jrg_tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="strazacy-tab" data-toggle="tab" href="#strazacy" role="tab" aria-controls="strazacy" aria-selected="true">Strażacy</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false">Ustawienia</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/szablonrozkazu.php" >Szablon rozkazu</a>
+                        </li>
+                    </ul>
+            <div class="tab-content">
+            <div  class="tab-pane w3-row show active" id="strazacy" role="tabpanel" aria-labelledby="strazacy-tab" >
+                <div class="w3-quarter w3-border-right w3-border-bottom">
                     <form action="" method="post" id="addFireman" class="w3-margin">
+                            <h4><i class="fas fa-user-plus"></i> Dodaj strażaka</h4>
                             <input type="hidden" name="jrg_id" value="<? echo $dbJednostki->getSelectedId() ?>" />
                             <div>
                                 <label class="w3-text-gray">Numer zmiany:</label>
@@ -160,16 +165,16 @@ require 'header.php';
                                 </select>
                             </div>
                             <div>
-                                <label class="w3-text-gray">Numer porządkowy</label>
-                                <input class="w3-input" type="number" name="nr_porz" min="0" max="99" />
-                            </div>
-                            <div>
                                 <label class="w3-text-gray">Nazwisko</label>
                                 <input class="w3-input" type="text" name="nazwisko"  />
                             </div>
                             <div>
                                 <label class="w3-text-gray">Imię</label>
                                 <input class="w3-input" type="text" name="imie"  />
+                            </div>
+                            <div>
+                                <label class="w3-text-gray">Data badań</label>
+                                <input class="w3-input" type="date" name="badania"  />
                             </div>
                             <div>
                                 <label class="w3-text-gray">Kolor</label>
@@ -191,13 +196,8 @@ require 'header.php';
 		            <?php
 			            $zmiany = $dbStrazacy->getJRGListStrazacy($dbJednostki->getSelectedId());
 			            $uzytkownicy = $dbUsers->getUsersList($user,$dbJednostki->getSelectedId() );
-			            foreach ($zmiany  as $nr => $strazacy ) {
-				            echo '<div class="w3-third w3-container"><h4>zmiana '.$nr.' ('.count($strazacy).')</h4><ul class="w3-ul">';
-				            foreach ($strazacy as $str){
-					            $str->printHtml($uzytkownicy);
-				            }
-				            echo '</ul></div>';
-			            }
+			            Strazak::printJrgTableStrazacy($zmiany, $uzytkownicy);
+
 		            ?>
                 </div>
                 <div class="w3-threequarter w3-border" style="">
@@ -207,122 +207,98 @@ require 'header.php';
 		            ?>
                 </div>
             </div>
-             <div  class="jrg_settings zmienneJrg">
-                 <div class="w3-row w3-border-bottom">
-                    <div class="w3-container w3-half">
-                         <div class="w3-container w3-half">
-                             <h4>Dodaj nowe uprawnienie:</h4>
-                             <form action="" method="post">
-                                 <label>Nazwa
-                                     <input class="w3-input" type="text" name="name"></label><br>
-                                 <label>Ikona
-                                     <input class="w3-input" type="text" name="icon"></label><br>
-                                 <label>Kolor
-                                     <input  type="color" name="color"></label><br>
-                                 <button class="w3-input w3-margin-top" type="submit" name="addUpr"> Dodaj</button><br>
-                             </form>
-                         </div>
-                        <div class="w3-container w3-half">
-                            <form action="" method="post">
-                                <ul>
-                                    <?php
-                                    foreach (DBJrgSettings::getUprawnienia() as $uprawnienie){
-                                        $uprawnienie->printLiElement();
-                                    }
-                                    ?>
-                                </ul>
-                                <input type="submit" name="uprDelete" value="Usuń">
-                            </form>
+            <div  class="tab-pane w3-row" id="settings" role="tabpanel" aria-labelledby="settings-tab"  >
+                <div class="w3-col s4 w3-container">
+                    <h4 class="w3-row w3-margin-top">Uprawnienia: <button class="w3-btn w3-right" data-toggle="popover"  title="Dodaj uprawnienie"><i class="far fa-plus-square"></i></button></h4>
+                    <ul class="list-group">
+		                <?php
+		                foreach (DBJrgSettings::getUprawnienia() as $uprawnienie){
+			                $uprawnienie->printLiElement();
+		                }
+		                ?>
+                    </ul>
+                    <p class="w3-margin-top">
+                        <a class="btn btn-info" data-toggle="collapse" href="#uprawnieniaInfo" role="button" aria-expanded="false" aria-controls="collapseExample">
+                            <i class="fas fa-info-circle"></i> Dowiedz się więcej
+                        </a>
+                    </p>
+                    <div class="collapse" id="uprawnieniaInfo">
+                        <div class="card card-body">
+                            <p class="w3-margin">
+                                Zdefiniowanie uprawnień strażaka
+                                pozwala przypisać je pracownikowi aby
+                                następnie były one wyświetlane szefowi
+                                zmiany przy tworzeniu grafiku,
+                                rozkazu lub dyzurów domowych.
+                            </p>
                         </div>
                     </div>
-                     <div class="w3-conteiner w3-half">
-                         <h3><u>Uprawnienia strażaka: </u></h3>
-                         <p>
-                            Zdefiniowanie uprawnień strażaka pozwala przypisać je pracownikowi aby następnie były one wyświetlane szefowi zmiany przy tworzeniu grafiku, rozkazu lub dyzurów domowych.
-                         </p>
-                     </div>
-                 </div>
-                 <div  class="w3-row w3-border-bottom">
-                    <div class="w3-conteiner w3-half">
-                         <div class="w3-container w3-half">
-                             <h4>Dodaj wartość:</h4>
-                             <form action="" method="post">
-                                 <label>Nazwa skrócona (max. 3 znaki)
-                                     <input class="w3-input" type="text" name="id" maxlength="3"></label><br>
-                                 <label>Nazwa pełna
-                                     <input class="w3-input" type="text" name="name"></label><br>
-                                 <label>Opis
-                                     <input class="w3-input" type="text" name="desc"></label><br>
-                                 <label>Kolor
-                                     <input  type="color" name="color"></label><br>
-                                 <button class="w3-input w3-margin-top" type="submit" name="addharmoVal"> Dodaj</button><br>
-                             </form>
-                         </div>
-                        <div class="w3-half">
-                            <ul>
-                                <?php
-                                foreach (DBJrgSettings::getHarmoValues() as $harmo_value){
-                                    $harmo_value->printLiElement();
-                                }
-                                ?>
-                            </ul>
-                        </div>
-                     </div>
-                     <div class="w3-conteiner w3-half">
-                         <h3><u>Zmienne/wartości pól dla Harmonogramu</u> </h3>
-                         <p>
-                            Wartości harmonogramu ustawiane są przez szefa zmiany tylko w oknie edycji harmonogramu, gdzie dodane pole widoczne jest jako kolor. Ustawione wartości harmonogramu sa również widoczne (skrócona nazwa) w podglądzie grafiku.
-                         </p>
-                         <p>
-                             Wartości harmonogramy służą do automatyzacji rozkazu dziennego. Najczęściej są wykorzystywane jako listy osób nieobecnych.
-                         </p>
-                         <p>
-                             Wartości (skrócone nazwy) sa widoczne dla strażaka w jego kalendarzu.
-                         </p>
-                     </div>
-                 </div>
-                 <div class="w3-row w3-border-bottom">
 
-                    <div class="w3-conteiner w3-half">
-                         <div class="w3-container w3-half">
-                             <h4>Dodaj wartość:</h4>
-                             <form action="" method="post">
-                                 <label>Nazwa skrócona (max. 3 znaki)
-                                     <input class="w3-input" type="text" name="id" maxlength="3"></label><br>
-                                 <label>Nazwa pełna
-                                     <input class="w3-input" type="text" name="name"></label><br>
-                                 <label>Opis
-                                     <input class="w3-input" type="text" name="desc"></label><br>
-                                 <button class="w3-input w3-margin-top" type="submit" name="addgrafVal"> Dodaj</button><br>
-                             </form>
-                         </div>
-                        <div class="w3-half">
+                </div>
 
-                            <ul>
-                                <?php
-                                foreach (DBJrgSettings::getGrafValues() as $grafik_value){
-                                    $grafik_value->printLiElement();
-                                }
-                                ?>
-                            </ul>
+                <div class="w3-col s4 w3-container">
+                    <h4 class="w3-row w3-margin-top">Harmonogram: <button class="w3-btn w3-right" title="Zdefiniuj nowe pole"><i class="far fa-plus-square"></i></button></h4>
+
+                        <ul class="list-group">
+                            <?php
+                            foreach (DBJrgSettings::getHarmoValues() as $harmo_value){
+                                $harmo_value->printLiElement();
+                            }
+                            ?>
+                        </ul>
+                    <p class="w3-margin-top">
+                        <a class="btn btn-info" data-toggle="collapse" href="#harmonogramInfo" role="button" aria-expanded="false" aria-controls="collapseExample">
+                            <i class="fas fa-info-circle"></i> Dowiedz się więcej
+                        </a>
+                    </p>
+                    <div class="collapse" id="harmonogramInfo">
+                        <div class="card card-body">
+                            <p>
+                                Wartości harmonogramu ustawiane są przez szefa zmiany tylko w oknie edycji harmonogramu, gdzie dodane pole widoczne jest jako kolor. Ustawione wartości harmonogramu sa również widoczne (skrócona nazwa) w podglądzie grafiku.
+                            </p>
+                            <p>
+                                Wartości harmonogramy służą do automatyzacji rozkazu dziennego. Najczęściej są wykorzystywane jako listy osób nieobecnych.
+                            </p>
+                            <p>
+                                Wartości (skrócone nazwy) sa widoczne dla strażaka w jego kalendarzu.
+                            </p>
                         </div>
-                     </div>
-                     <div class="w3-conteiner w3-half">
-                         <h3><u>Zmienne/wartości pól dla Grafiku</u></h3>
-                        <p>
-                            Wartości pól grafiku ustawiane są przez szefa zmiany tylko w oknie edycji grafiku. Pokazywane są jako skrócona nazwa, nie są widoczne w oknie harmonogramu.
-                        </p>
-                         <p>
-                             Wartości grafiku moga służyć przy tworzeniu rozkazu dziennego. Pojawiają sie tam jako zmienne do wykorzystania.
-                         </p>
-                         <p>
-                             Wartości (skrócone nazwy) sa widoczne dla strażaka w jego kalendarzu.
-                         </p>
-                     </div>
-                 </div>
+                    </div>
+
+                </div>
+
+                <div class="w3-col s4">
+                    <h4 class="w3-row w3-margin-top">Grafik: <button class="w3-btn w3-right" data-toggle="popover"  title="Zdefiniuj nowe pole"><i class="far fa-plus-square"></i></button></h4>
+                    <ul class="list-group">
+		                <?php
+		                foreach (DBJrgSettings::getGrafValues() as $grafik_value){
+			                $grafik_value->printLiElement();
+		                }
+		                ?>
+                    </ul>
+                    <p class="w3-margin-top">
+                        <a class="btn btn-info" data-toggle="collapse" href="#grafikInfo" role="button" aria-expanded="false" aria-controls="collapseExample">
+                            <i class="fas fa-info-circle"></i> Dowiedz się więcej
+                        </a>
+                    </p>
+                    <div class="collapse" id="grafikInfo">
+                        <div class="card card-body">
+                            <p>
+                                Wartości pól grafiku ustawiane są przez szefa zmiany tylko w oknie edycji grafiku. Pokazywane są jako skrócona nazwa, nie są widoczne w oknie harmonogramu.
+                            </p>
+                            <p>
+                                Wartości grafiku moga służyć przy tworzeniu rozkazu dziennego. Pojawiają sie tam jako zmienne do wykorzystania.
+                            </p>
+                            <p>
+                                Wartości (skrócone nazwy) sa widoczne dla strażaka w jego kalendarzu.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
              </div>
-
-            <?php endif;  ?>
+            </div>
+			    <?php endif;  ?>
         </div>
 		<!-- KONIEC PANELU ADMINA -->
 	<?php endif; ?>
@@ -331,25 +307,18 @@ require 'header.php';
 <script>
     $(function () {
         if(window.location.hash!==""){
-            $('.settings_bars').each(function () {
-                if(this.hash === window.location.hash){
-                    $(this).addClass("w3-green");
-                }
-            });
             var id = window.location.hash.slice(1,window.location.hash.length);
-            $('.jrg_settings').hide();
-            $('.'+id).show();
+            $('#'+id+"-tab").tab('show');
+
         }
+        $('button[data-toggle="popover"]').popover({content:function(){return createNewValue(this)},html:true,placement:'bottom'})
     });
 
-    $('.settings_bars').on("click", function (event) {
-        event.preventDefault();
-        var id = this.hash.slice(1,this.hash.length);
-        $('.jrg_settings').hide();
-        $('.'+id).show();
-        location.hash = this.hash;
-        $('.settings_bars').toggleClass("w3-green");
-    });
+    function createNewValue(btn){
+        logD(btn);
+        return 'Siema';
+    }
+
 
 
 </script>

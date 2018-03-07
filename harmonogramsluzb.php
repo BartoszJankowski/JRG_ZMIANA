@@ -208,7 +208,14 @@ require 'header.php';
 
     <?php endif; ?>
 </main>
+    <script>
 
+        $(function () {
+            $('button[data-toggle="popover"]').popover({content:createSelect});
+        });
+
+
+    </script>
 
 <?php
 

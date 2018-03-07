@@ -30,12 +30,6 @@ require 'header.php';
 ?>
 <main>
 
-    <div>
-        <h4>Witaj, <?php echo $user->getName() != null ? $user->getName() . ' ' . $user->getSurname() : $user->login; echo ' [' . $user->getPrevilages() . ']'; ?>
-        </h4>
-            <div>
-            </div>
-    </div>
 
 
 </main>

@@ -20,8 +20,6 @@ $proceedTime = round(microtime(true) - $timeStart,3);
 <script>
 
     $(function () {
-
-        $('button[data-toggle="popover"]').popover({content:createSelect});
         $('td[data-toggle="popover"]').popover({content:addInfo});
         $('[data-toggle="tooltip"]').tooltip();
 

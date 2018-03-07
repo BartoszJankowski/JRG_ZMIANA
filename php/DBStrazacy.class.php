@@ -32,6 +32,7 @@ class DBStrazacy extends DbConn {
 	            imie CHAR(255),
 	            nazwisko CHAR(255),
 	            kolor CHAR(10),
+	            badania DATE,
 	            uprawnienia SET('kierowca','nurek','d-ca zastepu','operator hiab')
 	        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
@@ -63,8 +64,8 @@ class DBStrazacy extends DbConn {
 			}
 
 			$stmt = $this->conn->prepare("INSERT INTO ".$this->tbl_strazacy."
-			 (zmiana, jrg_id, user_id, nazwa_funkcji, previlages, nr_porz, stopien, imie, nazwisko, kolor, uprawnienia)
-    		 VALUES (:zmiana, :jrg_id, :user_id, :nazwa_funkcji, :previlages, :nr_porz, :stopien, :imie, :nazwisko, :kolor, :uprawnienia )");
+			 (zmiana, jrg_id, user_id, nazwa_funkcji, previlages, nr_porz, stopien, imie, nazwisko, kolor,badania, uprawnienia)
+    		 VALUES (:zmiana, :jrg_id, :user_id, :nazwa_funkcji, :previlages, :nr_porz, :stopien, :imie, :nazwisko, :kolor,:badania, :uprawnienia )");
 
 			$stmt->bindParam(':zmiana', $strazak->getZmiana());
 			$stmt->bindParam(':jrg_id', $strazak->getJrgId());
@@ -87,6 +88,7 @@ class DBStrazacy extends DbConn {
 			} else {
 				$stmt->bindParam(':nazwisko', $strazak->getNazwisko());
 			}
+			$stmt->bindParam(':badania', $strazak->getbadaniaData());
 			$stmt->bindParam(':kolor', $strazak->getKolor());
 			$stmt->bindParam(':uprawnienia', serialize($strazak->getUprawnienia()));
 			$stmt->execute();
@@ -119,6 +121,7 @@ class DBStrazacy extends DbConn {
 			 imie = :imie, 
 			 nazwisko = :nazwisko, 
 			 kolor = :kolor, 
+			 badania = :badania,
 			 uprawnienia = :uprawnienia
     		 WHERE id = :id");
 			$userId = empty($user) ? $user: $user->getId();
@@ -127,6 +130,7 @@ class DBStrazacy extends DbConn {
 			$stmt->bindParam(':previlages', $strazak->getPrevilages());
 			$stmt->bindParam(':nr_porz', $strazak->getNrPorz());
 			$stmt->bindParam(':stopien', $strazak->getStopien());
+			$stmt->bindParam(':badania', $strazak->getbadaniaData());
 
 			//pobranie danych z konta uzytkownika jesli administrator nie wprowadził innych danych imienia msc nazwiska
 			if($user!=null && empty($strazak->getImie())){
@@ -255,7 +259,7 @@ class DBStrazacy extends DbConn {
 	public function deleteFireman(User $user, $firemanId){
 
 		//TODO: usunac harmonogramy strazaka
-		$strazak = $this->getStrazak($firemanId);
+		$this->deletedStrazak = $strazak = $this->getStrazak($firemanId);
 		if($strazak){
 			$allowedToDelete = false;
 			if($user->isAdmin()){
