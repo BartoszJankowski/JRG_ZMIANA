@@ -29,6 +29,7 @@ function isActivePage($nazwa){global $t, $$t; echo $$nazwa;}
                 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" /> 
                     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&amp;subset=latin-ext" rel="stylesheet">
                         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="/css/print.css" media="print" rel="stylesheet" />
     <style>
         <?php  echo $style; ?>
     </style>
@@ -37,6 +38,7 @@ function isActivePage($nazwa){global $t, $$t; echo $$nazwa;}
     <script defer type="text/javascript" src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
     <script type="text/javascript" src="js/ajax.js?ver=<?php echo time() ?>"></script>
     <script type="text/javascript" src="js/scripts.js?ver=<?php echo time() ?>"></script>
+
 </head>
 
 <body >

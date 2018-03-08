@@ -66,7 +66,7 @@ require 'header.php';
 			$nastepnaSluzba  = $ltd->getMySqlDate();
 			$ltd->addDays(-3);
             ?>
-	<form action="" method="get" >
+	<form action="" class="noprint" method="get" >
 		<h1 class="w3-center">
 			<button name="data" value="<?php echo $poprzedniaSluzba ?>" type="submit" class="w3-button w3-xlarge"><i class="fa fa-fw fa-angle-double-left"></i></button>
 			<button name="data" value="<?php echo $dzienPoprzedni ?>" type="submit" class="w3-button w3-xlarge"><i class="fa fa-fw fa-angle-left"></i></button>
@@ -80,8 +80,7 @@ require 'header.php';
 		echo '<h2>Poprawnie zapisano rozkaz dzienny</h2>';
 	}
 	?>
-	<div class="w3-container">
-		<div class="w3-container w3-border podglad-rozkazu">
+        <div id="printable" class="w3-container w3-border podglad-rozkazu w3-margin">
 			<?php
 			$rozkaz->displayRozkaz();
 
@@ -92,7 +91,6 @@ require 'header.php';
 			</form>
 			<?php endif; ?>
 		</div>
-	</div>
 	<?php endif; ?>
 </main>
 

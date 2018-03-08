@@ -263,7 +263,7 @@ class Strazak {
 			}
 		}
 
-		echo '<table class="w3-table w3-border">'.$naglowek.$wiersze.'</table>';
+		echo '<table id="printable" class="w3-table w3-border">'.$naglowek.$wiersze.'</table>';
 	}
 
 	private function getUprawnieniaHtml(){

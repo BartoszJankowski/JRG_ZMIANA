@@ -392,3 +392,9 @@ tr.w3-center td {
 td.sumaH {
     text-align: right;
 }
+
+.podglad-rozkazu {
+    height: 297mm;
+    width: 210mm;
+    margin:0 auto !important;
+}

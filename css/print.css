@@ -1,0 +1,29 @@
+header {
+    display: none;
+}
+footer {
+    display: none;
+}
+.noprint {
+    display: none;
+}
+#printable {
+    height: auto;
+    width: auto;
+    border:none !important;
+    padding:0 !important;
+    margin: 0 !important;
+}
+main {
+    margin:0 !important;
+}
+html,body{
+    max-height:297mm;
+    width:210mm;
+    overflow: hidden;
+}
+
+@page {
+    size: 21cm 29.7cm;
+    margin: 10mm 5mm; /* change the margins as you want them to be. */
+}
