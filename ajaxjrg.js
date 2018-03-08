@@ -30,31 +30,27 @@ function submitForm() {
 		type: 'POST',
 		data: postJrg,
 
+
         beforeSend : function() {
             $("#error").fadeOut();
-            $("#success").fadeOut();
+            $("#info").fadeOut();
              $('#addJrg').html('<span class="glyphicon-transfer"></span> &nbsp; Wysłanie ...');
-             alert('beforeSend !');
+             // alert('beforeSend !');
         },
-		
-		success : function(response){
-
+	  }).done(function(response) {
+	  	// debugger
 			if(response.result){
-				
-					$('#success').fadeIn(1000, function() {
-							$('#success').html('<div class="alert alert-success"> <span class="glyphicon glyphicon-info-sign">kurwa wa mac</span> &nbsp;'+response.result.info+' !</div>');
+					// debugger
+					$('#info').fadeIn(1000, function() {
+							$('#info').html('<div class="alert alert-success"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp;'+response.info+' !</div>');
 								$('#addJrg').html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Dodano');
 
 					});
-				}
-
-				//  $('#addJrg').html('<span class="glyphicon-transfer"></span> &nbsp; Dodano!');
-				// 		$('#success').html('<div class="alert alert-success"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp; '+result.info+' !</div>');
-				// }
-					else{
+			}
+				else{
 
 						$('#error').fadeIn(1000, function() {
-							$('#error').html('<div class="alert alert-danger"> <span class="glyphicon glyphicon-info-sign">hi hi hi</span> &nbsp; '+response.errorMsg+' !</div>');
+							$('#error').html('<div class="alert alert-danger"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp; '+response.errorMsg+' !</div>');
 								$('#addJrg').html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Dodaj');
 								logD(response.errorMsg);
 
@@ -63,21 +59,20 @@ function submitForm() {
 			 
 			var jsonResponse = null;
 
-            logD(response.reault);
+            logD(response);
 			try {
 				if(response){
 					logD('udalo się!');
 				} 
 				else {
-                    logD('coś poszło nie tak '+response.info+' - sprawdzmy teraz response.error oraz inne zmienne z odpowiedzi');
+                    logD('coś poszło nie tak - sprawdzmy teraz response.error oraz inne zmienne z odpowiedzi');
 				}
 			} 
 			catch(e){
 
 				logD(e.message)
 			}
-		}
-	  });	
+		});
 
 	return false;
 }
@@ -105,6 +100,7 @@ function getPostData(formIdString){
 
 
     }
+
     logD(postJrg);
     return postJrg;
 }

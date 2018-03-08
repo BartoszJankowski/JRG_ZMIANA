@@ -25,7 +25,7 @@ if(isset($_GET)){
 }
 
 
-$output = array('result'=>false,'action'=>null,'error'=>null,'errorMsg'=>null);
+$output = array('result'=>false,'action'=>null,'info'=>null,'error'=>null,'errorMsg'=>null);
 
 try {
 	$output['action'] = $_POST['action'];
@@ -50,6 +50,7 @@ try {
 			 * zwróć uwage że w typ przypadku możesz dodastac dodatkowy element 'info' ktory oznacza ze zostało utworzone konto administratora.
 			 */
 		case 'addJrg':
+
 			$db = new DBJednostki();
 			if($db->createJrg(
 				$_POST['jrg'], 
@@ -63,7 +64,7 @@ try {
 						$_POST['email']
 						)){
 						$output['info'] = 'Na podany adres email zostały wysłane dane dostępowe do konta.';
-				};
+						};
 			} else {
 				throw new UserErrors($db->error);
 			}

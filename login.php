@@ -124,7 +124,7 @@ if(isset($_POST['addJrg'])){
                                 <form id="Jrg" method="post" action="" class="form-group addJrg__form">
                                   <input type="hidden" name="action" value="addJrg" />
                                       <div id="error"></div>
-                                      <div id="success" name="info" value="info"></div>
+                                      <div id="info" name="info" value="info"></div>
                                     <h2>Dodaj jednostkę do bazy</h2>
 
                                     <!-- <?php
