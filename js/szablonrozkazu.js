@@ -19,10 +19,10 @@ function setPopoverFunctions(jQrElement){
         event.stopPropagation();
         htmlObj.closePopover();
         $(this).addClass("highlight-element").popover('show');
-        $('label[data-toggle="tooltip"]').tooltip({trigger:'hover',placement:'top'});
-
-
-    }).popover({content:function(){return htmlObj.popoverAddObj(this)},trigger:'manual'});
+    }).popover({content:function(){return htmlObj.popoverAddObj(this)},trigger:'manual'}).on('shown.bs.popover',function (event) {
+        event.stopPropagation();
+       $('label[data-toggle="tooltip"]').tooltip({trigger:'hover',placement:'top'});
+    });
 
 }
 

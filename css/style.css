@@ -148,8 +148,9 @@ table.table-calendar tr:first-child td {
 }
 
 #szablon_container {
-    min-height:150px;
-    padding-bottom:16px;
+    margin: auto auto;
+    width: 231mm;
+    min-height: 297mm;
     background-color: white;
 }
 #szablon_container *:hover {
@@ -209,8 +210,11 @@ table.table-calendar tr:first-child td {
     padding-right:25px;
     font-size:75%;
     overflow: scroll;
-    height:400px;
+    height:297mm;
     resize: vertical;
+    background-color: white;
+    display: none;
+    clear: both;
 }
 ul.no-wrap * {
     white-space: nowrap;
@@ -225,6 +229,7 @@ ul.newEmptyElement::after{
 /*
 klasy szablonu / rozkazu
  */
+
 
 span.max-width, input.max-width, select.max-width, h2.max-width, button.max-width {
     display: block;

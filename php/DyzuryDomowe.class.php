@@ -158,7 +158,8 @@ class DyzuryDomowe {
 			$uprI = '';$col = 0;
 			foreach ($tab['str']->getUprawnienia() as $nr){
 				$uprawnienie = DBJrgSettings::getUprawnienie($nr);
-				$uprI .= '<msc class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'"></msc>';
+				if($uprawnienie != null)
+					$uprI .= '<i class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'"></i>';
 			}
 			$row = '<tr><td>'.$uprI.'</td><td>'.$tab['strDD']->getname().'</td>';
 

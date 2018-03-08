@@ -206,16 +206,17 @@ require 'header.php';
     </div>
 
     <?php if($szablon) :
-		echo '<p>Edycja szablonu '.$szablon->getDataSzablonu().'/'.$szablon->getId().'</p>';
+		echo '<h2>Edycja szablonu '.$szablon->getDataSzablonu().'/'.$szablon->getId().'</h2>';
 
 		?>
         <div class="w3-row" >
+            <p>Rozpocznij edycję szablonu klikając w element ponizej </p>
             <label><input class="w3-check" type="checkbox" id="szablon_active" <?php echo $szablon->getFinished()?'checked':''; ?> /> Ustaw jako aktywny</label>
             <div class="w3-col" style="width: 50px;">
                 <button class="w3-xlarge" onclick="animateBar(this)">
                     <i class="fas fa-bars"></i>
                 </button>
-                <div class="w3-border w3-container" style="display: none">
+                <div class="w3-border w3-container w3-white" style="display: none">
                     <div>
                         <h4>Obiekty: </h4>
                         <b>Sekcja</b>
@@ -267,7 +268,7 @@ require 'header.php';
                 <button class="w3-xlarge w3-right" onclick="animateBar(this)" >
                     <i class="fas fa-sitemap"></i>
                 </button>
-                <div id="szablon_tree" class="w3-border w3-container" style="display: none;clear: both"></div>
+                <div id="szablon_tree" class="w3-border w3-container"></div>
 
             </div>
             <div class="w3-rest">
