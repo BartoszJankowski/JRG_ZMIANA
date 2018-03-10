@@ -31,9 +31,11 @@ if(isset($_POST['reset'])){
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<style type="text/css">
-
-	</style>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    <script type="text/javascript" src="ajax.js?ver=<?php echo time() ?>"></script>
+    <script type="text/javascript" src="js/scripts.js?ver=<?php echo time() ?>"></script>
 </head>
 
 <body>
@@ -46,16 +48,19 @@ if(isset($_POST['reset'])){
 	<!--
 		Formularz do logowania uzytkownika.
 	-->
-	<form method="post" action="">
+	<form id="Jrg" method="post" action="">
+		<input type="hidden" name="action" value="addJrg" />
+            <div id="error"></div>
+                <div id="info" name="info" value="info"></div>
 		<h2>Zresetuj hasło</h2>
 		<?php
 		echo $infoAdd;
-		?>
+		?> 
 
 		<label  class="w3-text-gray"> Login / email</label>
 		<input type="email" name="email" value="<?php test_input($_POST['email']) ?>" class="w3-input" required />
 
-		<input class="w3-input w3-margin-top" type="submit" name="reset" value="Resetuj"/>
+		<button id="addJrg" type="submit" name="addJrg" class="btn btn-danger btn-lg btn__addJrg">Resetuj</button>
 	</form>
 </div>
 

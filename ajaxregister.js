@@ -32,52 +32,46 @@ function submitForm() {
 
         beforeSend : function() {
             $("#error").fadeOut();
-            // $("#success").fadeOut();
-             $('#register').html('<span class="glyphicon-transfer"></span> &nbsp; Wysłanie ...');
-             alert('beforeSend !');
+             	$('#register').html('<span class="glyphicon-transfer"></span> &nbsp; Wysyłanie ...');
         },
-		
-		success : function(response){
+
+		}).done(function(response) {
 
 			if(response.result){
 				
-				// 	$('#success').fadeIn(1000, function() {
-				// 			$('#success').html('<div class="alert alert-success"> <span class="glyphicon glyphicon-info-sign">kurwa wa mac</span> &nbsp;'+response.info+' !</div>');
-				// 				$('#register').html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Dodano');
+					$('#success').fadeIn(1000, function() {
+							$('#success').html('<div class="alert alert-success"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp;'+response.info+' !</div>');
+								$('#register').html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Dodano');
+									$('#register').attr('disabled', '1');
 
-				// 	});
-				// }
 
-				 $('#register').html('<span class="glyphicon-transfer"></span> &nbsp; Dodano!');
-							$('#success').html('<div class="alert alert-success"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp; '+response.info+' !</div>');
-								logD('response.errorMsg');
-				}
+					});
+			}
 					else{
 
 						$('#error').fadeIn(1000, function() {
 							$('#error').html('<div class="alert alert-danger"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp; '+response.errorMsg+' !</div>');
 								$('#register').html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Zarejestruj się');
-								logD(response.errorMsg);
 
 					});
 				}
 			 
 			var jsonResponse = null;
 
-            logD(response.reault);
-			try {
-				if(response){
-					logD('udalo się!');
-				} 
-				else {
-                    logD('coś poszło nie tak '+response.info+' - sprawdzmy teraz response.error oraz inne zmienne z odpowiedzi');
-				}
-			} 
-			catch(e){
+   //          logD(response.reault);
+			// try {
+			// 	if(response){
+			// 		logD('udalo się!');
+			// 	} 
+			// 	else {
+   //                  logD('coś poszło nie tak '+response.info+' - sprawdzmy teraz response.error oraz inne zmienne z odpowiedzi');
+			// 	}
+			// } 
+			// catch(e){
 
-				logD(e.message)
-			}
-		}
+			// 	logD(e.message)
+			// }
+		// }
 	  });	
 
 	return false;

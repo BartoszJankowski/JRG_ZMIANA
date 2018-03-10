@@ -75,7 +75,9 @@ try {
 		case 'reset':
 			if( $dbUsers->resetPass($_POST['email']) ){
 				$output['result'] = true;
-				//info -> Twoje hasło zostało zresetowane. Sprawdź skrzynkę email.
+					$output['info'] = 'Twoje hasło zostało zresetowane. Sprawdź skrzynkę email.';
+					
+						//info -> Twoje hasło zostało zresetowane. Sprawdź skrzynkę email.
 			}  else {
 				throw new UserErrors($dbUsers->error);
 			}
@@ -93,6 +95,8 @@ try {
 				$_POST['surname']
 			)){
 				$output['result'] = true;
+					$output['info'] = 'Twoje konto zostało utworzone. Możesz się zalogować <a href="http://zmiana.bjit.pl/login.php">Tutaj</a>. Na Twoją pocztę zostało wysłane potwierdzenie rejestracji.';
+				
 				//info -> Twoje konto zostało utworzone. Możesz się zalogować <a href="http://zmiana.bjit.pl/login.php">Tutaj</a>. Na Twoją pocztę zostało wysłane potwierdzenie rejestracji.';
 			} else {
 				throw new UserErrors($dbUsers->error);

@@ -30,7 +30,6 @@ function submitForm() {
 		type: 'POST',
 		data: postJrg,
 
-
         beforeSend : function() {
             $("#error").fadeOut();
             $("#info").fadeOut();
@@ -44,6 +43,7 @@ function submitForm() {
 					$('#info').fadeIn(1000, function() {
 							$('#info').html('<div class="alert alert-success"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp;'+response.info+' !</div>');
 								$('#addJrg').html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Dodano');
+									$('#addJrg').attr('disabled', '1');
 
 					});
 			}
@@ -52,26 +52,25 @@ function submitForm() {
 						$('#error').fadeIn(1000, function() {
 							$('#error').html('<div class="alert alert-danger"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp; '+response.errorMsg+' !</div>');
 								$('#addJrg').html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Dodaj');
-								logD(response.errorMsg);
 
 					});
 				}
 			 
 			var jsonResponse = null;
 
-            logD(response);
-			try {
-				if(response){
-					logD('udalo się!');
-				} 
-				else {
-                    logD('coś poszło nie tak - sprawdzmy teraz response.error oraz inne zmienne z odpowiedzi');
-				}
-			} 
-			catch(e){
+   //          logD(response);
+			// try {
+			// 	if(response){
+			// 		logD('udalo się!');
+			// 	} 
+			// 	else {
+   //                  logD('coś poszło nie tak - sprawdzmy teraz response.error oraz inne zmienne z odpowiedzi');
+			// 	}
+			// } 
+			// catch(e){
 
-				logD(e.message)
-			}
+			// 	logD(e.message)
+			// }
 		});
 
 	return false;
