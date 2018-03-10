@@ -18,7 +18,7 @@ if(isset($_POST['register'])){
 		test_input($_POST['name']),
 		test_input($_POST['surname'])
 	) ) {
-		header('Location: '.$base_url.'/register.php?succes');
+		header('Location: '.$base_url);
 		exit;
 	} 
     else {
@@ -53,7 +53,7 @@ $res = $jednostki->getJrgList();
     <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
     <script type="text/javascript" src="js/scripts.js?ver=<?php echo time() ?>"></script>
-    <script type="text/javascript" src="ajaxregister.js?ver=<?php echo time() ?>"></script>
+    <script type="text/javascript" src="js/ajaxregister.js?ver=<?php echo time() ?>"></script>
 </head>
 
 <body>
@@ -94,20 +94,7 @@ $res = $jednostki->getJrgList();
         <section class="col-12 intro__section">
                     
                             <div class="col-lg-5 offset-lg-1 col-sm-6 addJrg">
-                            
-                            
-                          <!--   <?php if (!empty($dbusers->error)) { ?>
-                                <div  class="alert alert-danger info__wrong" role="alert">
-                                     <?php echo $dbusers->error; ?>
-                                </div>
-                            <?php } ?> -->
-                           <!--  dodałem taka stylizacje komunikatu errora -->
-
-                                        <?php
-                                            echo $infoAdd;
-                                        ?>
-
-                                   
+                                                               
                                 <h2>Rejestracja</h2>
 
                                     <form id="formRegister" method="post" action="" class="form-group addJrg__form">

@@ -9,13 +9,17 @@
 require 'php/config.php';
 
 if(isset($_GET['succes'])){
-	$infoAdd = "<h3>Twoje hasło zostało zresetowane. Sprawdź skrzynkę email.</h3>";
+	// $infoAdd = "<h3>Twoje hasło zostało zresetowane. Sprawdź skrzynkę email.</h3>";
 }
 
 if(isset($_POST['reset'])){
 	$dbUsers = new DBUsers();
-	if( $dbUsers->resetPass(test_input($_POST['email'])) ){
-		header('Location: '.$base_url.'/reset.php?succes=1');
+	if( $dbUsers->resetPass(
+		test_input($_POST['email'])
+
+		) ){
+		header('Location: '.$base_url);
+		// header('Location: '.$base_url.'/jrg_zmiana/reset.php?succes=1');
 		exit;
 	} else {
 		$infoAdd = "<h3>" . $dbUsers->error . "</h3>";
@@ -34,7 +38,7 @@ if(isset($_POST['reset'])){
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-    <script type="text/javascript" src="ajax.js?ver=<?php echo time() ?>"></script>
+    <script type="text/javascript" src="js/ajaxreset.js?ver=<?php echo time() ?>"></script>
     <script type="text/javascript" src="js/scripts.js?ver=<?php echo time() ?>"></script>
 </head>
 
@@ -48,19 +52,19 @@ if(isset($_POST['reset'])){
 	<!--
 		Formularz do logowania uzytkownika.
 	-->
-	<form id="Jrg" method="post" action="">
-		<input type="hidden" name="action" value="addJrg" />
-            <div id="error"></div>
-                <div id="info" name="info" value="info"></div>
+
+	<div id="error"></div>
+            <div id="info" name="info" value="info"></div>
+
+	<form id="reset" method="post" action="">
+		<input type="hidden" name="action" value="reset" />
+            
 		<h2>Zresetuj hasło</h2>
-		<?php
-		echo $infoAdd;
-		?> 
 
 		<label  class="w3-text-gray"> Login / email</label>
 		<input type="email" name="email" value="<?php test_input($_POST['email']) ?>" class="w3-input" required />
 
-		<button id="addJrg" type="submit" name="addJrg" class="btn btn-danger btn-lg btn__addJrg">Resetuj</button>
+		<button id="reset" type="submit" name="reset" class="btn btn-danger btn-lg btn__addJrg">Resetuj</button>
 	</form>
 </div>
 

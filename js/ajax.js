@@ -54,21 +54,6 @@ function submitForm() {
 				}
 
 			var jsonResponse = null;
-
-  //           logD(response);
-		// 	try {
-		// 		if(response.result){
-		// 			logD('udalo się!');
-		// 		} 
-		// 		else {
-  //                   logD('coś poszło nie tak'+response.errorMsg+' - sprawdzmy teraz response.error oraz inne zmienne z odpowiedzi');
-		// 		}
-		// 	} 
-		// 	catch(e){
-
-		// 		// logD(e.message)
-		// 	}
-		// }
 	  });	
 
 	return false;
@@ -90,7 +75,7 @@ function getPostData(formIdString){
 
 
     }
-    logD(postData);
+    // logD(postData);
     return postData;
 }
 

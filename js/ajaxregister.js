@@ -9,7 +9,7 @@ $(function(){
 		timeout : 15000
 	});
 
-	$("#Jrg").on("submit", function() {
+	$("#formRegister").on("submit", function() {
 		logD('->event onsubmit start');
 		submitForm();
         logD('->event onsubmit end');
@@ -24,54 +24,54 @@ function OnError(xhr){
 
 function submitForm() {
 
-	var postJrg = getPostData('Jrg');
+	var postRegister = getPostData('formRegister');
 
 	$.ajax({
 		type: 'POST',
-		data: postJrg,
+		data: postRegister,
 
         beforeSend : function() {
             $("#error").fadeOut();
-            $("#info").fadeOut();
-             $('#addJrg').html('<span class="glyphicon-transfer"></span> &nbsp; Wysłanie ...');
-             // alert('beforeSend !');
+             	$('#register').html('<span class="glyphicon-transfer"></span> &nbsp; Wysyłanie ...');
         },
-	  }).done(function(response) {
-	  	// debugger
+
+		}).done(function(response) {
+
 			if(response.result){
-					// debugger
-					$('#info').fadeIn(1000, function() {
-							$('#info').html('<div class="alert alert-success"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp;'+response.info+' !</div>');
-								$('#addJrg').html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Zresetoano');
-									$('#addJrg').attr('disabled', '1');
+					$('#success').fadeIn(1000, function() {
+							$('#success').html('<div class="alert alert-success"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp;'+response.info+' !</div>');
+								$('#register').html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Dodano');
+									$('#register').attr('disabled', '1');
+
 
 					});
 			}
-				else{
+					else{
 
 						$('#error').fadeIn(1000, function() {
 							$('#error').html('<div class="alert alert-danger"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp; '+response.errorMsg+' !</div>');
-								$('#addJrg').html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Resetuj');
+								$('#register').html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Zarejestruj się');
 
 					});
 				}
 			 
 			var jsonResponse = null;
 
-            logD(response);
-			try {
-				if(response){
-					logD('udalo się!');
-				} 
-				else {
-                    logD('coś poszło nie tak - sprawdzmy teraz response.error oraz inne zmienne z odpowiedzi');
-				}
-			} 
-			catch(e){
+   //          logD(response.reault);
+			// try {
+			// 	if(response){
+			// 		logD('udalo się!');
+			// 	} 
+			// 	else {
+   //                  logD('coś poszło nie tak '+response.info+' - sprawdzmy teraz response.error oraz inne zmienne z odpowiedzi');
+			// 	}
+			// } 
+			// catch(e){
 
-				logD(e.message)
-			}
-		});
+			// 	logD(e.message)
+			// }
+		// }
+	  });	
 
 	return false;
 }
@@ -85,7 +85,7 @@ function submitForm() {
  */
 function getPostData(formIdString){
 
-    var postJrg = {};
+    var postRegister = {};
     var form = $("#"+formIdString).get(0);
     var formElements = form.elements;
     for(x in formElements){
@@ -95,13 +95,12 @@ function getPostData(formIdString){
         if(el.disabled || el.name === undefined || el.value === undefined || el.name.length<=0 || el.value.length <=0){
             continue;
         }
-		 postJrg[el.name] = el.value;
+		 postRegister[el.name] = el.value;
 
 
     }
-
-    logD(postJrg);
-    return postJrg;
+    // logD(postRegister);
+    return postRegister;
 }
 
 function logD(str){
