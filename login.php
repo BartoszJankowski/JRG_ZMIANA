@@ -19,8 +19,7 @@ if(isset($_POST['addJrg'])){
   $db = new DBJednostki();
   $db->createTable();
   if($db->createJrg($_POST['jrg'], $_POST['city'],$_POST['street'],$_POST['nr'], $_POST['email'])){
-    $infoAdd = '<p class="alert alert-success info__sendMail" role="alert"><strong>Świetnie ! - </strong> Poprawnie dodano jednostkę  ✔</p>';
-    if($dbUsers->createJrgAdmin($_POST['email'])){
+      if($dbUsers->createJrgAdmin($_POST['email'])){
       $infoAdd .= '<p class="info info__sendMail text-success">Na podany adres email zostały wysłane dane dostępowe do konta.</p>';
         };
     } else {
@@ -44,7 +43,7 @@ if(isset($_POST['addJrg'])){
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-    <script type="text/javascript" src="ajaxjrg.js?ver=<?php echo time() ?>"></script>
+    <script type="text/javascript" src="js/ajaxjrg.js?ver=<?php echo time() ?>"></script>
     <script type="text/javascript" src="js/scripts.js?ver=<?php echo time() ?>"></script>
 
 </head>

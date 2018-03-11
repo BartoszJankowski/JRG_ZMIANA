@@ -102,8 +102,7 @@ if(isset($_POST['log_in'])){
           $_POST['password']
           ))
          {
-             echo $dbUsers->error;
-                       // popraw !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+             // echo $dbUsers->error;
          } else {
              header('Location: '.$base_url.'/main.php');
              exit;

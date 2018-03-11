@@ -25,11 +25,10 @@ if(isset($_GET)){
 }
 
 
-$output = array('result'=>false,'action'=>null,'info'=>null,'error'=>null,'errorMsg'=>null);
+$output = array('result'=>false,'action'=>null,'error'=>null,'errorMsg'=>null);
 
 try {
 	$output['action'] = $_POST['action'];
-// logowanie, wylogowanie, tworzenie ejdnostki, rejestracja usersa
 	switch ($_POST['action']){
 			/*
 			 * LOGOWANIE UZYTKOWNIKA
@@ -75,7 +74,7 @@ try {
 		case 'reset':
 			if( $dbUsers->resetPass($_POST['email']) ){
 				$output['result'] = true;
-				//info -> Twoje hasło zostało zresetowane. Sprawdź skrzynkę email.
+					$output['info'] = 'Twoje hasło zostało zresetowane. Sprawdź skrzynkę email.';
 			}  else {
 				throw new UserErrors($dbUsers->error);
 			}
@@ -93,7 +92,8 @@ try {
 				$_POST['surname']
 			)){
 				$output['result'] = true;
-				//info -> Twoje konto zostało utworzone. Możesz się zalogować <a href="http://zmiana.bjit.pl/login.php">Tutaj</a>. Na Twoją pocztę zostało wysłane potwierdzenie rejestracji.';
+					$output['info'] = 'Twoje konto zostało utworzone. Możesz się zalogować <a href="http://zmiana.bjit.pl/login.php">Tutaj</a>. Na Twoją pocztę zostało wysłane potwierdzenie rejestracji.';
+			
 			} else {
 				throw new UserErrors($dbUsers->error);
 			}

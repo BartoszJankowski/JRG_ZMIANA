@@ -111,7 +111,7 @@ class Emails {
 			$this->mail->AltBody = "Dziekujemy za rejestrację \r\n Poniżej znajdują się Twoje dane dostępowe: \r\n Login: ".$adres." \r\n\ Hasło: ".$password." \r\n Aby się zalogowac wprowadź dane na stronie \r\n >> http://zmiana.bjit.pl/login.php \r\n Pozdrawiamy zespół zmiana.bjit.pl ";
 
 			if($this->mail->send()){
-				echo 'Poprawnie wysłano wiadomość.'; // <----
+				// echo 'Poprawnie wysłano wiadomość.'; // <----
 			} else {
 				echo  $this->mail->ErrorInfo;
 			}
