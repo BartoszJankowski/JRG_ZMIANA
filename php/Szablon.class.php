@@ -360,11 +360,11 @@ class Naglowek extends HtmlObj  implements TextType  {
 
 class Input extends HtmlObj implements ValueAdapter {
 
-	public function __construct(string $typ, string $name) {
+	public function __construct(string $typ) {
 		parent::__construct();
 		$this->n = 'input';
 		$this->addAttr('type',$typ);
-		$this->addAttr('name',$name);
+		$this->addAttr('name',$this->i);
 
 	}
 

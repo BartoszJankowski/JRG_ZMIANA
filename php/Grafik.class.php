@@ -38,16 +38,19 @@ class Grafik {
 
 		//TODO: szef zmiany ustala co ma byc dla niego widoczne w grafiku
 		$tabGrafVals = get_grafik_values();
-		foreach ($tabGrafVals as $val){
+		foreach ($tabGrafVals as $id=>$val){
 			foreach ($this->dni as $nr=>$v){
-				$this->suma['Stan'][$nr] = 0;
-				$this->suma[$val['n']][$nr] = 0;
+				$this->suma['Stan'][$nr]['id'] = 'stan';
+				$this->suma['Stan'][$nr]['s'] = 0;
+				$this->suma[$val['n']][$nr]['id'] = $id;
+				$this->suma[$val['n']][$nr]['s'] = 0;
 			}
 		}
 		$uprList = DBJrgSettings::getUprawnienia();
 		foreach ($uprList as $uprawnienie){
 			foreach ($this->dni as $nr=>$v) {
-				$this->suma[ $uprawnienie->getName() ][$nr] = 0;
+				$this->suma[ $uprawnienie->getName() ][$nr]['id'] = $uprawnienie->getId();
+				$this->suma[ $uprawnienie->getName() ][$nr]['s'] = 0;
 			}
 		}
 	}
@@ -57,10 +60,10 @@ class Grafik {
 		echo '<form action="" method="post" class="w3-center"><table  class="w3-table-all w3-hoverable w3-xsmall table-grafik" >';
 		echo $this->printHeader();
 		foreach ($this->dni as $nr=>$v){
-			$this->suma['Stan'][$nr] = count($strazacy);
+			$this->suma['Stan'][$nr]['s'] = count($strazacy);
 		}
-		foreach ($strazacy as $strazak){
-			echo $this->strazakLine($strazak);
+		foreach ($strazacy as $nr=>$strazak){
+			echo $this->strazakLine($strazak,$nr+1);
 		}
 
 		$this->printFooter();
@@ -90,16 +93,24 @@ class Grafik {
 		echo '<tr><td>Suma:</td></tr>';
 		foreach($this->suma as $name=>$tab){
 			$inner = '';
-			foreach ($tab as $val){
-				$inner .= '<td>'.$val.'</td>';
+			foreach ($tab as $nr=>$val){
+				$inner .= '<td row-id="'.$val['id'].'" col="'.$nr.'" >'.$val['s'].'</td>';
 			}
 
-			echo '<tr><td></td><td>'.$name.'</td>'.$inner.'</tr>';
+			echo '<tr  row-name="'.$name.'"><td></td><td>'.$name.'</td>'.$inner.'</tr>';
 		}
 	}
 
-	private function strazakLine(Strazak $strazak) : string {
-		$resultString = '<td>'.$strazak->getNrPorz().'.</td><td>'.$strazak->toString().'</td>';
+	public function printSumaCheckbox(){
+		$check = '<div class="w3-container" style="width: 200px;position: absolute;top:80px;left:10px;">';
+		foreach ($this->suma as $name=>$val){
+			$check .= '<label><input class="w3-check" onchange="showHideGrafikRow(this)" checked type="checkbox" name="rows" value="'.$name.'" />'.$name.'</label><br>';
+		}
+		echo $check.'</div>';
+	}
+
+	private function strazakLine(Strazak $strazak, $rowNum) : string {
+		$resultString = '<td>'.$rowNum.'.</td><td>'.$strazak->toString().'</td>';
 		foreach ($this->dni as $nr => $dzienTyg){
 			$val = '';
 			$notka = '';
@@ -111,22 +122,26 @@ class Grafik {
 				}
 				$this->setSumaVal($strazak, $val,$nr);
 			}
-			$resultString .= '<td class="scale w3-display-container">'.$notka.'<select name="'.$strazak->getStrazakId().'['.($nr).']" class="w3-select my-own-select" >'.$this->getSelectOptions($val).'</select></td>';
+			$resultString .= '<td class="scale w3-display-container">'.$notka.'<select col="'.$nr.'" onchange="zliczKolumneGrafiku(this)" name="'.$strazak->getStrazakId().'['.($nr).']" class="w3-select my-own-select" >'.$this->getSelectOptions($val).'</select></td>';
 		}
-		return  '<tr>'.$resultString.'</tr>';
+		return  '<tr strid="'.$strazak->getStrazakId().'" >'.$resultString.'</tr>';
 	}
 
 	private function setSumaVal(Strazak $strazak, $val, $nrDnia){
 
 		if(!empty(get_graf_val($val))){
-			$this->suma[get_harmo_val($val)['n']][$nrDnia]++;
+			$this->suma[get_graf_val($val)['n']][$nrDnia]['s']++;
+			if($val === 'Ws'){
+				$this->suma['Stan'][$nrDnia]['s']--;
+			}
 		} else if(!empty(get_harmo_val($val))){
-			$this->suma['Stan'][$nrDnia]--;
+			$this->suma['Stan'][$nrDnia]['s']--;
 		}
 		foreach ($strazak->getUprawnienia() as $idUrp){
 			$upr = DBJrgSettings::getUprawnienie($idUrp);
+			if($upr!=null)
 			if(array_key_exists($upr->getName(),$this->suma)){
-				$this->suma[$upr->getName()][$nrDnia]++;
+				$this->suma[$upr->getName()][$nrDnia]['s']++;
 			}
 		}
 	}

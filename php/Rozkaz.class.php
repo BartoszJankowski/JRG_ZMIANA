@@ -131,6 +131,19 @@ class Rozkaz {
 		$this->displaySzablon();
 	}
 
+	public function printLists(){
+		//print_r($this->dane['list']);
+		foreach ($this->dane['list'] as $id=>$lista){
+			$datalist = '<datalist id="'.$id.'">';
+			foreach ($lista as $pozycja){
+				$datalist .= '<option value="'.$pozycja['key'].'">'.$pozycja['value'].'</option>';
+			}
+			$datalist .= '</datalist>';
+			echo $datalist;
+		}
+
+	}
+
 
 	private function loopThroughObjects($objects, string $functionName){
 		if($objects instanceof HtmlObj){

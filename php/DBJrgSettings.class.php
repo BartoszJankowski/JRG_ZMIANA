@@ -186,6 +186,9 @@ class DBJrgSettings extends DbConn {
 		return $this->updateDatabase();
 	}
 	public function deleteGraf($idUpr){
+		if($idUpr === 'Ws'){
+			return false;
+		}
 		$tab = array();
 		foreach (self::$grafikValues as $upr){
 			$found  = false;

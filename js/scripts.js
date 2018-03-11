@@ -276,6 +276,47 @@ var values = {
 
 };
 
+function showHideGrafikRow(checkbox){
+    var nazwaRow = checkbox.value;
+    if(checkbox.checked){
+        $('tr[row-name="'+nazwaRow+'"]').show();
+    } else {
+        $('tr[row-name="'+nazwaRow+'"]').hide();
+    }
+}
+
+function zliczKolumneGrafiku(select) {
+    var suma = {'stan':0};
+
+   var col = $(select).attr('col');
+   var selects = $('select[col="'+col+'"]');
+   var opcje = selects.get(0).options;
+
+    for(x in opcje){
+        suma[opcje[x].value] = 0;
+    }
+
+    selects.each(function () {
+       var wartosc = this.value;
+       if(wartosc.length>0){
+           if(wartosc !== 'Ws'){
+               suma.stan++;
+               //ZLICZ STRAZAKA UPR
+           }
+           suma[wartosc] ++;
+       } else {
+           suma.stan++;
+           //ZLICZ STRAZAKA UPR
+       }
+   });
+    for(x in suma){
+        $('[row-id="'+x+'"][col="'+col+'"]').text(suma[x]);
+    }
+
+
+
+}
+
 
 
 

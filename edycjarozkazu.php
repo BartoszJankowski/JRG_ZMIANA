@@ -70,8 +70,6 @@ if( $hasSzablon ){
 
 	if(isset($_POST['saveRozkaz'])){
 		$rozkaz->save($_POST);
-		//print_r($_POST);
-		//die;
 		if($dbRozkazy->saveRozkaz($user->getStrazak()->getJrgId(),$rozkaz)){\
 			header('Location: '.$base_url.'/rozkazpodglad.php?data='.$_POST['data'].'&edit=1');
 			exit;
@@ -97,13 +95,15 @@ require 'header.php';
                     echo '<h3>'.$saveInfo.'</h3>';
                 }
             ?>
-            <div class="w3-container"><div class="w3-container w3-border">
+            <div class="w3-container"><div class="w3-container w3-border podglad-rozkazu">
         <?php
             if(isset($_POST['edit']) && $user->getStrazak()->getZmiana() == $rozkaz->getZmiana()){
                 echo '<form action="" method="post" ><input type="hidden" name="edit" value="1" /><input type="hidden" name="data" value="'.$_POST['data'].'" />';
                 $rozkaz->displaySzablon();
                 echo '<button class="w3-input  w3-margin-top" type="submit" name="saveRozkaz">Zapisz rozkaz</button></form>';
+                $rozkaz->printLists();
             }
+
             ?>
             </div></div>
         <? endif; ?>

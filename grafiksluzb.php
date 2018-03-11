@@ -89,14 +89,16 @@ $title = "Grafik";
 require 'header.php';
 ?>
 
-	<main class="" xmlns="http://www.w3.org/1999/html">
+	<main class="" xmlns="http://www.w3.org/1999/html" style="position:relative;">
 		<form action="" method="get" >
 			<input type="hidden" name="month" value="<?php echo $localDateTime->getMonth(); ?>"> <input type="hidden" name="year" value="<?php echo $localDateTime->getYear(); ?>">
 			<h1 class="w3-center">
                 <button name="mscAction" value="-1" type="submit" class="w3-button w3-xlarge"><i class="fa fa-fw fa-chevron-left"></i></button>
                 <span style="width: 25%;display: inline-block"><?php echo get_moth_name($localDateTime->getMonth()).' '.$localDateTime->getYear(); ?></span><button name="mscAction" value="1" type="submit" class="w3-button w3-xlarge"><i class="fa fa-fw fa-chevron-right"></i></button></h1>
 		</form>
-
+		<?php
+		$grafik->printSumaCheckbox();
+		?>
 		<?php
             if($user->isChef() || $user->isAdmin())
 			    $grafik->printMiesiac($strazacy);
@@ -112,6 +114,7 @@ require 'header.php';
 			}
 			?>
 		</div>
+
 
 	</main>
     <script>

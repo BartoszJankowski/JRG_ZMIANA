@@ -119,8 +119,9 @@ function createHtmlObj($obiektArray) : HtmlObj{
 	        $htmlObj->addClass($obiektArray['class']);
             break;
         case 'INPUT':
-            $htmlObj = new Input('text','brakName');
+            $htmlObj = new Input('text');
 	        $htmlObj->addClass($obiektArray['class']);
+	        $htmlObj->addAttr('list',$obiektArray['attr']['list']);
 	        $htmlObj->setVal($obiektArray['value']);
 	        //TODO: attrybut
             break;
@@ -145,7 +146,7 @@ function createHtmlObj($obiektArray) : HtmlObj{
 	        $htmlObj = new Table();
 	        $htmlObj->addClass($obiektArray['class']);
 	        foreach($obiektArray['content'] as $nrCol =>$col){
-	            $kolumna = new Col($col['value'], $nrCol);
+	            $kolumna = new Col($col['value']);
 		        $kolumna->setList($col['attr']);
 		        $htmlObj->addCol($kolumna);
 		        foreach ($col['content'] as $td){
