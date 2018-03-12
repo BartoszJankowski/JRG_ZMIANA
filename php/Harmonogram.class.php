@@ -115,17 +115,17 @@ class Harmonogram {
 			foreach ($this->miesiace[$month] as $nrDnia =>$dzien){
 				$color = get_harmo_val($dzien['v'])['col'];
 				$inner .= '<td title="Zmień godziny pracy" data-placement="top"  class="w3-center  tdHarmCell" style="background-color: '.$color.'">
-							<label>
+							
 							<input class="w3-hide harmoCheck" type="checkbox" name="'.$strazak->getStrazakId().'['.$nrDnia.'][v]" value="'.$nrDnia.'" />
 							<div class="harmoCell "><input type="text" name="'.$strazak->getStrazakId().'['.$nrDnia.'][h]" min="0" max="24" value="'.$dzien['h'].'" /></div>
-							</label>
+							
 							</td>';
 			}
 		} else {
-			$inner .= '<td class="w3-center " colspan="10"></form><b>Brak harmonogramu </b></td><td  class="tdHarmCell" colspan="21" ><form action="" method="get"><select class="" name="typ"><option value="110">Służba Służba Wolne</option><option value="101">Służba Wolne Służba</option><option value="011">Wolne Służba Służba</option></select><button type="submit" name="createHarmo" value="'.$strazak->getStrazakId().'" class="">Stwórz</button></form></td>';
+			$inner .= '<td draggable="true" class="w3-center " colspan="10"></form><b>Brak harmonogramu </b></td><td  class="tdHarmCell" colspan="21" ><form action="" method="get"><select class="" name="typ"><option value="110">Służba Służba Wolne</option><option value="101">Służba Wolne Służba</option><option value="011">Wolne Służba Służba</option></select><button type="submit" name="createHarmo" value="'.$strazak->getStrazakId().'" class="">Stwórz</button></form></td>';
 		}
 
-		echo '<tr>'.$inner.'</tr>';
+		echo '<tr strid="'.$strazak->getStrazakId().'">'.$inner.'</tr>';
 	}
 
 
