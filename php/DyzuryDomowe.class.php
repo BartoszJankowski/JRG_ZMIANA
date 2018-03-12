@@ -477,7 +477,8 @@ class PozycjaDD {
 				$uprawnienia = $dyzury_domowe->getStrazakIn($idStr)->getUprawnienia();
 				foreach ($uprawnienia as $id){
 					$uprawnienie =  DBJrgSettings::getUprawnienie($id);
-					$uprI .= '<msc class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'"></msc>';
+					if($uprawnienie!=null)
+					$uprI .= '<i class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'"></i>';
 				}
 
 				$res .= '<li><button class="btn btn-outline-secondary dropdown-toggle max-width" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="min-width: 150px;"><input type="hidden" class="input_onchange" name="dyzury['.$this->data.'][]" value="'.$this->strazacy[$i]->getId().'" /><span>'.$this->strazacy[$i]->getName().' '.$uprI.'</span></button>'.$dyzury_domowe->getStrazacyDropdownMenu($this->strazacy[$i]->getId()).'</li>';

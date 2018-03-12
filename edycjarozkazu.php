@@ -53,8 +53,10 @@ if( $hasSzablon ){
 	} else {
 		$strazacy = $dbStrazacy->getZmianaListStrazacy($user->getStrazak()->getJrgId(),$user->getStrazak()->getZmiana());
 		$harmonogramy = $dbharmo->getJrgharmos($user->getStrazak()->getJrgId(),$ltd->getYear() );
+
 		foreach ( $strazacy as $strazak){
 			if(array_key_exists($strazak->getStrazakId(), $harmonogramy)){
+			    //echo 'set for '+$strazak->getStrazakId();
 				$strazak->setHarmonogram( $harmonogramy[$strazak->getStrazakId()] );
 			}
 		}

@@ -20,9 +20,7 @@ class Rozkaz {
 	private $JRG_ID;
 	private $obiekty = array();
 
-	public function __construct( ) {
-
-	}
+	public function __construct( ) {}
 
 	public function createDane(int $jrg_id,LocalDateTime $ltd, DBJednostki $jednostka, DbDyzuDomowy $dbDyzury = null){
 		$kalendar = new Kalendarz($ltd->getYear(), $ltd->getMonth(), $ltd->getDayOfMsc());
