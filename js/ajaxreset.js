@@ -24,36 +24,50 @@ function OnError(xhr){
 
 function submitForm() {
 
-	var postreset = getPostData('reset');
+	var postReset = getPostData('reset');
 
 	$.ajax({
 		type: 'POST',
-		data: postreset,
+		data: postReset,
 
         beforeSend : function() {
-            $("#error").fadeOut();
-            $("#info").fadeOut();
+            $("#errorreset").fadeOut();
+            // $("#info").fadeOut();
              $('#reset').html('<span class="glyphicon-transfer"></span> &nbsp; Wysłanie ...');
         },
 	  }).done(function(response) {
-	  	debugger
+	  	// debugger
 			if(response.result){
-					debugger
-					$('#info').fadeIn(1000, function() {
-							$('#info').html('<div class="alert alert-success"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp;'+response.info+' !</div>');
+					// debugger
+					$('#inforeset').fadeIn(1000, function() {
+							$('#inforeset').html('<div class="alert alert-success"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp;'+response.info+' !</div>');
 								$('#reset').html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Zresetowano');
 					});
 			}
 				else{
 
-						$('#error').fadeIn(1000, function() {
-							$('#error').html('<div class="alert alert-danger"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp; '+response.errorMsg+' !</div>');
-								$('#reset').html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; <a href="../register.php">Zarejestruj się</a>');
+						$('#errorreset').fadeIn(1000, function() {
+							$('#errorreset').html('<div class="alert alert-danger"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp; '+response.errorMsg+' !</div>');
+								$('#reset').html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; <button class="btn btn-danger btn-lg btn__register" data-dismiss="modal" data-toggle="modal" data-target="#myModal1">Zarejestruj się</button>');
 
 					});
 				}
 			 
 			var jsonResponse = null;
+
+			logD(response.result);
+					try {
+						if(response){
+							logD('udalo się!');
+						} 
+						else {
+		                    logD('coś poszło nie tak '+response.info+' - sprawdzmy teraz response.error oraz inne zmienne z odpowiedzi');
+						}
+					} 
+					catch(e){
+
+						logD(e.message)
+					}
 		});
 
 	return false;
@@ -68,7 +82,7 @@ function submitForm() {
  */
 function getPostData(formIdString){
 
-    var postreset = {};
+    var postReset = {};
     var form = $("#"+formIdString).get(0);
     var formElements = form.elements;
     for(x in formElements){
@@ -78,11 +92,11 @@ function getPostData(formIdString){
         if(el.disabled || el.name === undefined || el.value === undefined || el.name.length<=0 || el.value.length <=0){
             continue;
         }
-		 postreset[el.name] = el.value;
+		 postReset[el.name] = el.value;
     }
 
-    // logD(postreset);
-    return postreset;
+    logD(postReset);
+    return postReset;
 }
 
 function logD(str){

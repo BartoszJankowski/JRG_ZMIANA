@@ -25,7 +25,7 @@ if(isset($_GET)){
 }
 
 
-$output = array('result'=>false,'action'=>null,'error'=>null,'errorMsg'=>null);
+$output = array('result'=>false,'action'=>null,'info'=>null,'error'=>null,'errorMsg'=>null);
 
 try {
 	$output['action'] = $_POST['action'];
@@ -72,7 +72,9 @@ try {
 			 * RESET HASLA
 			 */
 		case 'reset':
-			if( $dbUsers->resetPass($_POST['email']) ){
+			if( $dbUsers->resetPass(
+				$_POST['email']
+				)){
 				$output['result'] = true;
 					$output['info'] = 'Twoje hasło zostało zresetowane. Sprawdź skrzynkę email.';
 			}  else {

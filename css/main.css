@@ -240,6 +240,16 @@ main {
 .text-secondary {
   font-weight: 300; }
 
+.modal-dialog {
+  max-width: 1000px !important; }
+
+#myModal3 {
+  margin: 20vh auto auto auto; }
+  #myModal3 .reset_box {
+    margin: auto; }
+  #myModal3 .modal-footer {
+    margin-top: 50px; }
+
 footer {
   bottom: 0;
   width: 100%;

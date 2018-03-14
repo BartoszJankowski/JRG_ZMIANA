@@ -8,8 +8,7 @@
 
 require 'php/config.php';
 
-if(isset($_GET['succes'])){
-	// $infoAdd = "<h3>Twoje hasło zostało zresetowane. Sprawdź skrzynkę email.</h3>";
+if(isset($_GET['success'])){
 }
 
 if(isset($_POST['reset'])){
@@ -19,7 +18,6 @@ if(isset($_POST['reset'])){
 
 		) ){
 		header('Location: '.$base_url);
-		// header('Location: '.$base_url.'/jrg_zmiana/reset.php?succes=1');
 		exit;
 	} else {
 		$infoAdd = "<h3>" . $dbUsers->error . "</h3>";
@@ -33,8 +31,12 @@ if(isset($_POST['reset'])){
 	<title>Zmiana-login</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+          <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+            <link rel="stylesheet" type="text/css" href="css/login.css" />
+              <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" /> 
+                <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&amp;subset=latin-ext" rel="stylesheet">
+                  <link rel="stylesheet" type="text/css" href="css/main.css" />
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
@@ -53,12 +55,13 @@ if(isset($_POST['reset'])){
 		Formularz do logowania uzytkownika.
 	-->
 
-	<div id="error"></div>
-            <div id="info" name="info" value="info"></div>
+	<div id="errorreset"></div>
+            <div id="inforeset" name="info" value="info"></div>
 
 	<form id="reset" method="post" action="">
 		<input type="hidden" name="action" value="reset" />
-            
+
+
 		<h2>Zresetuj hasło</h2>
 
 		<label  class="w3-text-gray"> Login / email</label>

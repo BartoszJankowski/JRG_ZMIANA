@@ -267,6 +267,20 @@ main{
 	font-weight: 300;
 }
 
+.modal-dialog{
+	max-width: 1000px !important;
+}
+
+#myModal3{
+		margin: 20vh auto auto auto;
+	.reset_box{
+		margin: auto;
+}
+	.modal-footer{
+		margin-top: 50px;
+	}
+}
+
 footer{
 
 	bottom: 0;

@@ -17,7 +17,7 @@ if($dbUsers->checkSession($user)){
 }
 
 if(isset($_POST['log_in'])){
-     if(!$dbUsers->login($_POST['login'],$_POST['password']))
+     if(!$dbUsers->login($_POST['login'],$_POST['pass']))
      {
          echo $dbUsers->error;
      } else {
@@ -25,6 +25,26 @@ if(isset($_POST['log_in'])){
          exit;
      }
 }
+
+if(isset($_GET['success'])){
+  // $infoAdd = "<h3>Twoje hasło zostało zresetowane. Sprawdź skrzynkę email.</h3>";
+}
+
+if(isset($_POST['reset'])){
+  $dbUsers = new DBUsers();
+  if( $dbUsers->resetPass(
+    test_input($_POST['email'])
+
+    ) ){
+    header('Location: '.$base_url);
+    // header('Location: '.$base_url.'/jrg_zmiana/reset.php?succes=1');
+    exit;
+  } else {
+    $infoAdd = "<h3>" . $dbUsers->error . "</h3>";
+  }
+}
+
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
@@ -42,8 +62,12 @@ if(isset($_POST['log_in'])){
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-    <script type="text/javascript" src="js/ajax.js?ver=<?php echo time() ?>"></script>
+    
     <script type="text/javascript" src="js/scripts.js?ver=<?php echo time() ?>"></script>
+    <script type="text/javascript" src="js/ajax.js?ver=<?php echo time() ?>"></script>
+<!--         <script type="text/javascript" src="js/ajaxreset.js?ver=<?php echo time() ?>"></script> -->
+  <!-- <script type="text/javascript" src="js/ajaxjrg.js?ver=<?php echo time() ?>"></script> -->
+        
 </head>
 
 <body>
@@ -102,7 +126,8 @@ if(isset($_POST['log_in'])){
           $_POST['password']
           ))
          {
-             // echo $dbUsers->error;
+             echo $dbUsers->error;
+
          } else {
              header('Location: '.$base_url.'/main.php');
              exit;
@@ -111,7 +136,7 @@ if(isset($_POST['log_in'])){
      ?> 
     <form id="login_form" name="" method="post" action="" class="form">
       <input type="hidden" name="action" value="log_in" />
-        <div id="error">
+        <div id="errorlog">
             
         </div>
 
@@ -139,6 +164,7 @@ if(isset($_POST['log_in'])){
 
     </div>
 </main>
+
 <?php
 
 require 'footer.php';

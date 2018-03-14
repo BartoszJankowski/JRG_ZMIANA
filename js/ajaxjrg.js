@@ -31,16 +31,16 @@ function submitForm() {
 		data: postJrg,
 
         beforeSend : function() {
-            $("#error").fadeOut();
-            $("#info").fadeOut();
+            $("#erroradd").fadeOut();
+            $("#infoadd").fadeOut();
              $('#addJrg').html('<span class="glyphicon-transfer"></span> &nbsp; Wysłanie ...');
 
         },
 	  }).done(function(response) {
 	  	// debugger
 			if(response.result){
-					$('#info').fadeIn(1000, function() {
-							$('#info').html('<div class="alert alert-success"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp;'+response.info+' !</div>');
+					$('#infoadd').fadeIn(1000, function() {
+							$('#infoadd').html('<div class="alert alert-success"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp;'+response.info+' !</div>');
 								$('#addJrg').html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Dodano');
 									$('#addJrg').attr('disabled', '1');
 
@@ -48,8 +48,8 @@ function submitForm() {
 			}
 				else{
 
-						$('#error').fadeIn(1000, function() {
-							$('#error').html('<div class="alert alert-danger"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp; '+response.errorMsg+' !</div>');
+						$('#erroradd').fadeIn(1000, function() {
+							$('#erroradd').html('<div class="alert alert-danger"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp; '+response.errorMsg+' !</div>');
 								$('#addJrg').html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Dodaj');
 
 					});
@@ -85,7 +85,7 @@ function getPostData(formIdString){
 
     }
 
-    // logD(postJrg);
+    logD(postJrg);
     return postJrg;
 }
 

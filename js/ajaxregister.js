@@ -31,12 +31,12 @@ function submitForm() {
 		data: postRegister,
 
         beforeSend : function() {
-            $("#error").fadeOut();
+            $("#errorreg").fadeOut();
              	$('#register').html('<span class="glyphicon-transfer"></span> &nbsp; Wysyłanie ...');
         },
 
 		}).done(function(response) {
-
+			debugger
 			if(response.result){
 					$('#success').fadeIn(1000, function() {
 							$('#success').html('<div class="alert alert-success"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp;'+response.info+' !</div>');
@@ -48,8 +48,8 @@ function submitForm() {
 			}
 					else{
 
-						$('#error').fadeIn(1000, function() {
-							$('#error').html('<div class="alert alert-danger"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp; '+response.errorMsg+' !</div>');
+						$('#errorreg').fadeIn(1000, function() {
+							$('#errorreg').html('<div class="alert alert-danger"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp; '+response.errorMsg+' !</div>');
 								$('#register').html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Zarejestruj się');
 
 					});
@@ -57,20 +57,19 @@ function submitForm() {
 			 
 			var jsonResponse = null;
 
-   //          logD(response.reault);
-			// try {
-			// 	if(response){
-			// 		logD('udalo się!');
-			// 	} 
-			// 	else {
-   //                  logD('coś poszło nie tak '+response.info+' - sprawdzmy teraz response.error oraz inne zmienne z odpowiedzi');
-			// 	}
-			// } 
-			// catch(e){
+            logD(response.result);
+			try {
+				if(response){
+					logD('udalo się!');
+				} 
+				else {
+                    logD('coś poszło nie tak '+response.info+' - sprawdzmy teraz response.error oraz inne zmienne z odpowiedzi');
+				}
+			} 
+			catch(e){
 
-			// 	logD(e.message)
-			// }
-		// }
+				logD(e.message)
+			}
 	  });	
 
 	return false;
@@ -99,7 +98,7 @@ function getPostData(formIdString){
 
 
     }
-    // logD(postRegister);
+    logD(postRegister);
     return postRegister;
 }
 

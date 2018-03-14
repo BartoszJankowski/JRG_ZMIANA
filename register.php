@@ -99,7 +99,7 @@ $res = $jednostki->getJrgList();
 
                                     <form id="formRegister" method="post" action="" class="form-group addJrg__form">
                                         <input type="hidden" name="action" value="register" />
-                                            <div id="error"></div>
+                                            <div id="errorreg"></div>
                                                 <div id="success" name="info" value="info"></div>
 
                                         <label class="text-secondary">Email*</label>

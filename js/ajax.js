@@ -32,13 +32,13 @@ function submitForm() {
 		data: postData,
 
         beforeSend : function() {
-            $("#error").fadeOut();
+            $("#errorlog").fadeOut();
             $('#log_in').html('<span class="glyphicon-transfer"></span> &nbsp; Logowanie ...');
 
         },
 		
 		}).done(function(response) {
-
+				logD(response);
 			if(response.result){
 
 				 $('#log_in').html('<img src="img/btn-ajax-loader.gif" /> &nbsp; Logowanie ...');
@@ -46,8 +46,8 @@ function submitForm() {
 				}
 
 					else{
-						$('#error').fadeIn(1000, function() {
-							$('#error').html('<div class="alert alert-danger"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp; '+response.errorMsg+' !</div>');
+						$('#errorlog').fadeIn(1000, function() {
+							$('#errorlog').html('<div class="alert alert-danger"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp; '+response.errorMsg+' !</div>');
 								$('#log_in').html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Zaloguj się');
 
 					});
@@ -75,7 +75,7 @@ function getPostData(formIdString){
 
 
     }
-    // logD(postData);
+    logD(postData);
     return postData;
 }
 
