@@ -1,5 +1,10 @@
 
+var startSelect = false;
+var lastSelected = {tr:null,input:null};
+
 $(function () {
+
+
     $("#print").click(function () {
         window.print();
     });
@@ -63,6 +68,27 @@ $(function () {
             event.preventDefault();
         }
     });
+
+    //TEN KOD DOTYCZY HARMONOGRAMU i ZAZNACZANIA KOMÓREK
+   $('td.tdHarmCell').mousedown(function(event){
+       if(event.button == 2) {return}
+       startSelect = true;
+       var inp = $(this).find('input.harmoCheck').get(0);
+       inp.checked = !inp.checked;
+   }).mouseenter(function (event) {
+        if(startSelect){
+            var inp = $(this).find('input.harmoCheck').get(0);
+            inp.checked = !inp.checked;
+        }
+   });
+   $('.harmoCell input').mousedown(function (event) {
+       logD('siema');
+       event.stopPropagation();
+   });
+   window.addEventListener("mouseup",function (ev) {
+       startSelect = false;
+   })
+
 });
 
 

@@ -208,11 +208,11 @@ class Strazak {
 	public static function printTableHtml(array $strazacy, array $listUsers){
 		$naglowek = '<tr class="w3-small w3-light-gray">
 							<th>L.p.</th>
-							<th>Stopień</th>
-							<th>Nazwisko i imię</th>
-							<th>Funkcja</th>
-							<th>Uprawnienia</th>
-							<th>Badania</th>
+							<th onclick="sortTable($(this).parent().parent(),1)">Stopień</th>
+							<th onclick="sortTable($(this).parent().parent(),2)">Nazwisko i imię</th>
+							<th onclick="sortTable($(this).parent().parent(),3)">Funkcja</th>
+							<th onclick="sortTable($(this).parent().parent(),4)">Uprawnienia</th>
+							<th onclick="sortTable($(this).parent().parent(),5)">Badania</th>
 							<th>Akcja</th>
 						</tr>';
 		$wiersze = '';

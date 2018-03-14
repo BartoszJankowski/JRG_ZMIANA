@@ -211,6 +211,7 @@ class DyzuryDomowe {
 			$listaU = array();
 			foreach ($tab['str']->getUprawnienia() as $nr){
 				$uprawnienie = DBJrgSettings::getUprawnienie($nr);
+				if($uprawnienie!=null)
 				$listaU[] = $uprawnienie->getName();
 			}
 			$res[$id] = $listaU;
@@ -228,7 +229,8 @@ class DyzuryDomowe {
 				$uprI = '';
 				foreach ($tab['str']->getUprawnienia() as $id){
 					$uprawnienie = DBJrgSettings::getUprawnienie($id);
-					$uprI .= '<msc class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'"></msc>';
+					if($uprawnienie!=null)
+					$uprI .= '<i class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'"></i>';
 				}
 				$res .= '<tr><td nowrap >'.$uprI.'</td><td class="highlightFireman" id="str_id_'.$str_id.'">'.$tab['strDD']->getName().' </td><td>'.$this->countStrOccurences($str_id).'</td></tr>';
 			}
@@ -244,7 +246,8 @@ class DyzuryDomowe {
 			$selected = '';
 			foreach ($tab['str']->getUprawnienia() as $id){
 				$uprawnienie = DBJrgSettings::getUprawnienie($id);
-				$uprI .= '<msc class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'"></msc>';
+				if($uprawnienie!=null)
+				$uprI .= '<i class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'"></i>';
 			}
 			if($selectStrId!=null && $selectStrId == $strId){
 				$selected = 'w3-pale-blue';
@@ -474,7 +477,8 @@ class PozycjaDD {
 				$uprawnienia = $dyzury_domowe->getStrazakIn($idStr)->getUprawnienia();
 				foreach ($uprawnienia as $id){
 					$uprawnienie =  DBJrgSettings::getUprawnienie($id);
-					$uprI .= '<msc class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'"></msc>';
+					if($uprawnienie!=null)
+					$uprI .= '<i class="fa fa-fw '.$uprawnienie->getIcon().'" style="color: '.$uprawnienie->getColor().'"></i>';
 				}
 
 				$res .= '<li><button class="btn btn-outline-secondary dropdown-toggle max-width" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="min-width: 150px;"><input type="hidden" class="input_onchange" name="dyzury['.$this->data.'][]" value="'.$this->strazacy[$i]->getId().'" /><span>'.$this->strazacy[$i]->getName().' '.$uprI.'</span></button>'.$dyzury_domowe->getStrazacyDropdownMenu($this->strazacy[$i]->getId()).'</li>';
