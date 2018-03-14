@@ -35,9 +35,9 @@ if( isset($_POST['addStrazak']) && ($user->isAdmin() || $user->isChef()) ){
 	$dbStrazacy->dodajStrazaka((new Strazak())->create($_POST));
 }
 
-if(isset($_POST['editFireman'])){
+if(isset($_POST['editFireman']) && $user->isChef()){
 
-	$dbStrazacy->edytujStrazaka($user, (new Strazak())->create($_POST));
+	$dbStrazacy->edytujStrazaka( (new Strazak())->create($_POST));
 }
 
 if(isset($_GET['deleteFireman'] )){

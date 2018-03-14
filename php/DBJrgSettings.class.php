@@ -127,7 +127,7 @@ class DBJrgSettings extends DbConn {
 	/**
 	 * @return Uprawnienie
 	 */
-	public static function getUprawnienie(int $id){
+	public static function getUprawnienie( $id){
 		if(!self::$loaded){
 			throw new Error('Próba pobrania danych ustawień przy nie załadowanych danych.');
 		}
@@ -292,9 +292,15 @@ class DBJrgSettings extends DbConn {
 		self::$grafikValues = array();
 		self::$harmoValues = array();
 
-		self::$uprawnieniaList[] = new Uprawnienie('D-ca zastępu','fa-chess-king','green');
-		self::$uprawnieniaList[] = new Uprawnienie('Kierowca ','fa-car','orange');
-		self::$uprawnieniaList[] = new Uprawnienie('Operator','fa-truck','yellow');
+		$upr = new Uprawnienie('D-ca zastępu','fa-chess-king','green');
+		$upr->setId(0);
+		self::$uprawnieniaList[] = $upr;
+		$upr =new Uprawnienie('Kierowca ','fa-car','orange');
+		$upr->setId(0);
+		self::$uprawnieniaList[] = $upr;
+		$upr = new Uprawnienie('Operator','fa-truck','yellow');
+		$upr->setId(0);
+		self::$uprawnieniaList[] = $upr;
 
 		self::$grafikValues[] = new GrafikValue('Ws','Wolna służba','Wolne');
 		self::$grafikValues[] = new GrafikValue('Pd','Podoficer','Służba podoficera');

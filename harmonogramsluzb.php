@@ -49,66 +49,75 @@ if(isset($_GET)){
 $month= $localDateTime->getMonth() ;
 $year = $localDateTime->getYear() ;
 
+try{
 
+	if($user->isChef()){
+		$harmo = new Harmonogram($year);
+		$harmo->genHarmonogram();
+		$strazacy = $dbStrazacy->getZmianaListStrazacy($user->getJrgId(),$user->getStrazak()->getZmiana());
+		$harmonogramy = $dbharmo->getJrgharmos($user->getJrgId(),$year );
 
-if($user->isChef()){
-	$harmo = new Harmonogram($year);
-	$harmo->genHarmonogram();
-	$strazacy = $dbStrazacy->getZmianaListStrazacy($user->getJrgId(),$user->getStrazak()->getZmiana());
-	$harmonogramy = $dbharmo->getJrgharmos($user->getJrgId(),$year );
-
-	if(isset($_GET['createHarmo'])){
-		$harmonogram = new Harmonogram($year);
-		foreach ($strazacy as $strazak){
-			if( $strazak->getStrazakId() == $_GET['createHarmo'] ){
-				$harmonogram->genHarmoForStrazak($strazak, $_GET['typ']);
-				$dbharmo->saveHarmonogram($user->getJrgId(),$year,$strazak->getStrazakId(),$harmonogram);
-				$harmonogramy[$strazak->getStrazakId()] = $harmonogram;
+		if(isset($_GET['createHarmo'])){
+			$harmonogram = new Harmonogram($year);
+			foreach ($strazacy as $strazak){
+				if( $strazak->getStrazakId() == $_GET['createHarmo'] ){
+					$harmonogram->genHarmoForStrazak($strazak, $_GET['typ']);
+					$dbharmo->saveHarmonogram($user->getJrgId(),$year,$strazak->getStrazakId(),$harmonogram);
+					$harmonogramy[$strazak->getStrazakId()] = $harmonogram;
+				}
 			}
 		}
-	}
-    elseif(isset($_POST['editHarmoType'])){
-		$idStr = $_POST['editHarmoType'];
-		if(is_numeric($idStr)){
-			if(array_key_exists($idStr, $harmonogramy)){
-				foreach ($strazacy as $strazak){
-					if( $strazak->getStrazakId() == $idStr ){
-						$harmonogramy[$idStr]->changeHarmoType($strazak, $_POST['typ']);
-						$dbharmo->changeHarmo($year,$idStr,$harmonogramy[$idStr]);
+        elseif(isset($_POST['editHarmoType'])){
+			$idStr = $_POST['editHarmoType'];
+			if(is_numeric($idStr)){
+				if(array_key_exists($idStr, $harmonogramy)){
+					foreach ($strazacy as $strazak){
+						if( $strazak->getStrazakId() == $idStr ){
+							$harmonogramy[$idStr]->changeHarmoType($strazak, $_POST['typ']);
+							$dbharmo->changeHarmo($year,$idStr,$harmonogramy[$idStr]);
+						}
+					}
+
+				}
+			}
+		}
+
+		if(isset($_POST['harmoVal'])){
+			$daneDoZapisu = array();
+			foreach ($_POST as $nr=>$harmoChanges){
+				if(is_numeric($nr)){
+					if(array_key_exists($nr, $harmonogramy)){
+						$harmonogramy[$nr]->putChanges($_POST['month'],$harmoChanges,  $_POST['harmoVal']);
+						$daneDoZapisu[$nr] = array('harmonogram'=>$harmonogramy[$nr],'exists'=>true);
 					}
 				}
-
 			}
-		}
-	}
-
-	if(isset($_POST['harmoVal'])){
-		$daneDoZapisu = array();
-		foreach ($_POST as $nr=>$harmoChanges){
-			if(is_numeric($nr)){
-				if(array_key_exists($nr, $harmonogramy)){
-					$harmonogramy[$nr]->putChanges($_POST['month'],$harmoChanges,  $_POST['harmoVal']);
-					$daneDoZapisu[$nr] = array('harmonogram'=>$harmonogramy[$nr],'exists'=>true);
+			$dbharmo->saveHarmos($user->getStrazak()->getJrgId(),$year,$daneDoZapisu);
+			header('Location: '.$_SERVER['HTTP_REFERER']);
+			exit;
+		} else {
+			foreach ( $strazacy as $strazak ){
+				if(array_key_exists($strazak->getStrazakId(), $harmonogramy)){
+					$strazak->setHarmonogram( $harmonogramy[$strazak->getStrazakId()] );
+				} else {
+					$harm = new Harmonogram($year);
+					// $harm->genHarmoForStrazak($strazak);
+					$strazak->setHarmonogram( $harm );
 				}
 			}
 		}
-		$dbharmo->saveHarmos($user->getStrazak()->getJrgId(),$year,$daneDoZapisu);
-		header('Location: '.$_SERVER['HTTP_REFERER']);
-		exit;
 	} else {
-		foreach ( $strazacy as $strazak ){
-			if(array_key_exists($strazak->getStrazakId(), $harmonogramy)){
-				$strazak->setHarmonogram( $harmonogramy[$strazak->getStrazakId()] );
-			} else {
-				$harm = new Harmonogram($year);
-				// $harm->genHarmoForStrazak($strazak);
-				$strazak->setHarmonogram( $harm );
-			}
+		if($user->getStrazak() == null){
+			throw new UserErrors('Nie zostałeś jeszcze przypisany do zmiany aby móc przegladać harmonogram.');
 		}
+		$harmo = $dbharmo->getHarmo($user->getStrazak(),$year);
 	}
-} else {
-    $harmo = $dbharmo->getHarmo($user->getStrazak(),$year);
+} catch (UserErrors $user_errors){
+	$info = '<h3>'.$user_errors->getMessage().'</h3>';
 }
+
+
+
 
 $style ='
 .table-harmo-admin td:nth-of-type(2) {
@@ -149,6 +158,9 @@ require 'header.php';
             </h1>
         <?php endif; ?>
     </form>
+    <?php
+    echo $info;
+    ?>
 
     <div class="w3-conteiner w3-row w3-row-padding w3-margin">
         <?php
@@ -192,7 +204,7 @@ require 'header.php';
 	</form>
 	<?php else : ?>
     <div class="w3-conteiner w3-padding">
-	    <?php if($harmo->isHarmoSet()) : ?>
+	    <?php if($harmo!=null && $harmo->isHarmoSet()) : ?>
         <table class="w3-table-all w3-hoverable w3-small">
 		    <?php
 	            $harmo->printHarmoHeaderForUser();

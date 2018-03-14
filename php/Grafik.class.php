@@ -36,7 +36,6 @@ class Grafik {
 			}
 		}
 
-		//TODO: szef zmiany ustala co ma byc dla niego widoczne w grafiku
 		$tabGrafVals = get_grafik_values();
 		foreach ($tabGrafVals as $id=>$val){
 			foreach ($this->dni as $nr=>$v){

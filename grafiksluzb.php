@@ -19,69 +19,77 @@ if(!$dbUsers->checkSession($user)){
 	header('Location: '.$base_url.'/login.php');
 	exit;
 }
-$_SETTINGS->load($user->getJrgId());
-if(isset($_POST)){
-	$_POST = test_input($_POST);
-}
-if(isset($_GET)){
-	$_GET = test_input($_GET);
-	if(isset($_GET['month'],$_GET['year']))
-		$localDateTime = new LocalDateTime($_GET['year'].'-'.$_GET['month'].'-1');
-	if(isset($_GET['mscAction'])){
-		if($_GET['mscAction'] > 0){
-			$localDateTime->add(new DateInterval('P'.$_GET['mscAction'].'M'));
-		} else {
-			$localDateTime->sub(new DateInterval('P'.abs($_GET['mscAction']).'M'));
-		}
-		header('Location: '.$base_url.$_SERVER['PHP_SELF'].'?month='.$localDateTime->getMonth().'&year='.$localDateTime->getYear());
-		exit;
+try{
+	if($user->getStrazak() == null){
+		throw new UserErrors('Nie zostałeś jeszcze przypisany do zmiany aby móc przegladać grafik.');
 	}
-}
-
-if(isset($_POST['addUserInfo'])){
-	$dataPost = new LocalDateTime($_POST['data']);
-	$harmonogram = $dbharmo->getHarmo($user->getStrazak(), $localDateTime->getYear());
-	if($harmonogram->setV2($dataPost,$_POST['info'] )){
-		if($dbharmo->changeHarmo($localDateTime->getYear(),$user->getStrazak()->getStrazakId(),$harmonogram)){
-			header('Location: '.$_SERVER['HTTP_REFERER']);
-			exit;
-		} else {
-			$info = $dbharmo->getError();
-		}
-	} else {
-		$info = 'Błąd dodania.';
+	$_SETTINGS->load($user->getJrgId());
+	if(isset($_POST)){
+		$_POST = test_input($_POST);
 	}
-}
-
-
-$grafik = new Grafik($localDateTime->getYear(),$localDateTime->getMonth(),$user->getStrazak()->getZmiana());
-$strazacy = $dbStrazacy->getZmianaListStrazacy($user->getStrazak()->getJrgId(),$user->getStrazak()->getZmiana());
-$harmonogramy = $dbharmo->getJrgharmos($user->getStrazak()->getJrgId(),$localDateTime->getYear() );
-foreach ( $strazacy as $strazak){
-	if(array_key_exists($strazak->getStrazakId(), $harmonogramy)){
-		$strazak->setHarmonogram( $harmonogramy[$strazak->getStrazakId()] );
-	}
-}
-
-if(isset($_POST['saveGraf']) && $user->isChef()){
-	$daneDoZapisu = array();
-	foreach ($_POST as $str_id=>$harmoChangesTab){
-		if(is_numeric($str_id)){
-			if(array_key_exists($str_id, $harmonogramy)){
-				$harmonogramy[$str_id]->putGrafChanges($localDateTime->getMonth(),$harmoChangesTab);
-				$daneDoZapisu[$str_id] = array( 'harmonogram' =>$harmonogramy[$str_id], 'exists' =>true);
+	if(isset($_GET)){
+		$_GET = test_input($_GET);
+		if(isset($_GET['month'],$_GET['year']))
+			$localDateTime = new LocalDateTime($_GET['year'].'-'.$_GET['month'].'-1');
+		if(isset($_GET['mscAction'])){
+			if($_GET['mscAction'] > 0){
+				$localDateTime->add(new DateInterval('P'.$_GET['mscAction'].'M'));
 			} else {
-				$harmonogram = new Harmonogram($localDateTime->getYear());
-				$harmonogram->genHarmoForStrazak($dbStrazacy->getStrazak($str_id),'110');
-				$harmonogram->putGrafChanges($localDateTime->getMonth(),$harmoChangesTab);
-				$daneDoZapisu[$str_id] = array( 'harmonogram' =>$harmonogram, 'exists' =>false); ;
+				$localDateTime->sub(new DateInterval('P'.abs($_GET['mscAction']).'M'));
+			}
+			header('Location: '.$base_url.$_SERVER['PHP_SELF'].'?month='.$localDateTime->getMonth().'&year='.$localDateTime->getYear());
+			exit;
+		}
+	}
+
+	if(isset($_POST['addUserInfo'])){
+		$dataPost = new LocalDateTime($_POST['data']);
+		$harmonogram = $dbharmo->getHarmo($user->getStrazak(), $localDateTime->getYear());
+		if($harmonogram->setV2($dataPost,$_POST['info'] )){
+			if($dbharmo->changeHarmo($localDateTime->getYear(),$user->getStrazak()->getStrazakId(),$harmonogram)){
+				header('Location: '.$_SERVER['HTTP_REFERER']);
+				exit;
+			} else {
+				$info = $dbharmo->getError();
+			}
+		} else {
+			$info = 'Błąd dodania.';
+		}
+	}
+
+
+	$grafik = new Grafik($localDateTime->getYear(),$localDateTime->getMonth(),$user->getStrazak()->getZmiana());
+	$strazacy = $dbStrazacy->getZmianaListStrazacy($user->getStrazak()->getJrgId(),$user->getStrazak()->getZmiana());
+	$harmonogramy = $dbharmo->getJrgharmos($user->getStrazak()->getJrgId(),$localDateTime->getYear() );
+	foreach ( $strazacy as $strazak){
+		if(array_key_exists($strazak->getStrazakId(), $harmonogramy)){
+			$strazak->setHarmonogram( $harmonogramy[$strazak->getStrazakId()] );
+		}
+	}
+
+	if(isset($_POST['saveGraf']) && $user->isChef()){
+		$daneDoZapisu = array();
+		foreach ($_POST as $str_id=>$harmoChangesTab){
+			if(is_numeric($str_id)){
+				if(array_key_exists($str_id, $harmonogramy)){
+					$harmonogramy[$str_id]->putGrafChanges($localDateTime->getMonth(),$harmoChangesTab);
+					$daneDoZapisu[$str_id] = array( 'harmonogram' =>$harmonogramy[$str_id], 'exists' =>true);
+				} else {
+					$harmonogram = new Harmonogram($localDateTime->getYear());
+					$harmonogram->genHarmoForStrazak($dbStrazacy->getStrazak($str_id),'110');
+					$harmonogram->putGrafChanges($localDateTime->getMonth(),$harmoChangesTab);
+					$daneDoZapisu[$str_id] = array( 'harmonogram' =>$harmonogram, 'exists' =>false); ;
+				}
 			}
 		}
+		$dbharmo->saveHarmos($user->getStrazak()->getJrgId(),$localDateTime->getYear(),$daneDoZapisu);
+		header('Location: '.$_SERVER['HTTP_REFERER']);
+		exit;
 	}
-	$dbharmo->saveHarmos($user->getStrazak()->getJrgId(),$localDateTime->getYear(),$daneDoZapisu);
-	header('Location: '.$_SERVER['HTTP_REFERER']);
-	exit;
+} catch (UserErrors $user_errors){
+    $info = '<h3>'.$user_errors->getMessage().'</h3>';
 }
+
 
 
 
@@ -96,7 +104,11 @@ require 'header.php';
                 <button name="mscAction" value="-1" type="submit" class="w3-button w3-xlarge"><i class="fa fa-fw fa-chevron-left"></i></button>
                 <span style="width: 25%;display: inline-block"><?php echo get_moth_name($localDateTime->getMonth()).' '.$localDateTime->getYear(); ?></span><button name="mscAction" value="1" type="submit" class="w3-button w3-xlarge"><i class="fa fa-fw fa-chevron-right"></i></button></h1>
 		</form>
+        <?php
+            echo $info;
+        ?>
 		<?php
+        if($grafik!=null) :
 		$grafik->printSumaCheckbox();
 		?>
 		<?php
@@ -114,7 +126,7 @@ require 'header.php';
 			}
 			?>
 		</div>
-
+        <?php endif; ?>
 
 	</main>
     <script>
