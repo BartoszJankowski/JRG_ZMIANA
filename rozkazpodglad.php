@@ -17,29 +17,40 @@ $_SETTINGS->load($user->getJrgId());
 
 if(isset($_POST)){$_POST = test_input($_POST);}
 if(isset($_GET)){$_GET = test_input($_GET);}
-$hasSzablon = $dbRozkazy->hasActiveTemplate( $user->getStrazak()->getJrgId());
-
-if($hasSzablon){
-	$ltd = new LocalDateTime($_GET['data']);
-
-	$dbJednostki = new DBJednostki();
-	$dbJednostki->selectJrg($user->getStrazak()->getJrgId() );
-
-	$rozkaz = $dbRozkazy->selectRozkaz($user->getStrazak()->getJrgId(), $ltd);
-
-	if($rozkaz){
-		$szablon = new Szablon($user->getStrazak()->getJrgId());
-		$dbRozkazy->getSzablon($user->getStrazak()->getJrgId(), $rozkaz->getSzablonId(), $szablon);
-		$rozkaz->setSzablon($szablon->getId(), $szablon->getObiektyHtml() );
-	} else {
-		$rozkaz = new Rozkaz();
-		$szablon = $dbRozkazy->selectCurrentOrderTemplate($user->getStrazak()->getJrgId());
-		$rozkaz->createDane($user->getStrazak()->getJrgId(),$ltd , $dbJednostki);
-		$rozkaz->setSzablon($szablon['id'], unserialize($szablon['szablon']));
+try {
+	if($user->getStrazak() == null){
+		throw new UserErrors('Nie zostałeś jeszcze przypisany do zmiany aby móc przegladać rozkazy dzienne.');
 	}
+	$hasSzablon = $dbRozkazy->hasActiveTemplate( $user->getStrazak()->getJrgId());
 
-	$rozkaz->setObjectData();
+	if($hasSzablon){
+		$ltd = new LocalDateTime($_GET['data']);
+
+		$dbJednostki = new DBJednostki();
+		$dbJednostki->selectJrg($user->getStrazak()->getJrgId() );
+
+		$rozkaz = $dbRozkazy->selectRozkaz($user->getStrazak()->getJrgId(), $ltd);
+
+		if($rozkaz){
+			$szablon = new Szablon($user->getStrazak()->getJrgId());
+			$dbRozkazy->getSzablon($user->getStrazak()->getJrgId(), $rozkaz->getSzablonId(), $szablon);
+			$rozkaz->setSzablon($szablon->getId(), $szablon->getObiektyHtml() );
+		} else {
+			$rozkaz = new Rozkaz();
+			$szablon = $dbRozkazy->selectCurrentOrderTemplate($user->getStrazak()->getJrgId());
+			$rozkaz->createDane($user->getStrazak()->getJrgId(),$ltd , $dbJednostki);
+			$rozkaz->setSzablon($szablon['id'], unserialize($szablon['szablon']));
+		}
+
+		$rozkaz->setObjectData();
+	} else {
+	    $info = '<h1>Brak szablonów</h1>
+	<p>Twoja jednostka nie posiada szablonu rozkazu.</p>';
+    }
+} catch (UserErrors $user_errors){
+	$info = '<h3>'.$user_errors->getMessage().'</h3>';
 }
+
 
 
 
@@ -47,10 +58,9 @@ $title = "Rozkaz dzienny";
 require 'header.php';
 ?>
 <main>
-	<?php if(!$hasSzablon) :  ?>
-		<h1>Brak szablonów</h1>
-	<p>Twoja jednostka nie posiada szablonu rozkazu.</p>
-	<?php
+	<?php if(isset($info)) :
+
+        echo $info;
 
 	echo ($user->isChef() ? '<p>Aby go utworzyć przejdź <a href="szablonrozkazu.php" title="Twórz szablon rozkazu" >tutaj</a> </p>': '');
 

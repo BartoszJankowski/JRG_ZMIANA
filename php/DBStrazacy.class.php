@@ -51,7 +51,7 @@ class DBStrazacy extends DbConn {
 
 	public function dodajStrazaka(Strazak $strazak){
 
-		//TODO: check who is adding
+
 		try {
 			$user = null;
 			if($strazak->getUserId() != null){
@@ -102,9 +102,7 @@ class DBStrazacy extends DbConn {
 		}
 	}
 
-	public function edytujStrazaka(User $chef, Strazak $strazak){
-		//TODO: check $chef for adding
-		//TODO: zmienic harmonogram jesli sie zmienia jego styl
+	public function edytujStrazaka( Strazak $strazak){
 
 		$oldStrazak = $this->getStrazak($strazak->getStrazakId());
 		if($oldStrazak){
@@ -170,7 +168,7 @@ class DBStrazacy extends DbConn {
 	}
 
 	public function getJRGListStrazacy($jrg_id){
-		//TODO: check if admin of this jrg
+
 		$tab=array(1=>array(),2=>array(),3=>array());
 		try {
 			$stmt = $this->conn->prepare("SELECT * FROM ".$this->tbl_strazacy." WHERE jrg_id = :jrg_id");

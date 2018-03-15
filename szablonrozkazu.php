@@ -123,7 +123,6 @@ function createHtmlObj($obiektArray) : HtmlObj{
 	        $htmlObj->addClass($obiektArray['class']);
 	        $htmlObj->addAttr('list',$obiektArray['attr']['list']);
 	        $htmlObj->setVal($obiektArray['value']);
-	        //TODO: attrybut
             break;
         case 'SELECT':
             $htmlObj = new Select('wybor');

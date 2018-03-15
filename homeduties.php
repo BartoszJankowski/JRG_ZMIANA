@@ -74,7 +74,6 @@ $title = "Dyżury domowe";
 require 'header.php';
 
 
-//TODO: js editing
 ?>
 	<main class="w3-container" >
         <form action="" method="get" >

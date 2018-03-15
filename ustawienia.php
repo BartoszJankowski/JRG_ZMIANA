@@ -117,27 +117,6 @@ require 'header.php';
 
 	<script>
         /*
-		jquery validator dla formularza #changePass
-		 */
-        $("#changePass").validate({
-            rules: {
-                oldpass: {
-                    required : true,
-                    minlength : 8
-                },
-                newpass : {
-                    required : true,
-                    minlength : 8
-                },
-                newpass2 : {
-                    required : true,
-                    minlength : 8,
-                    equalTo : '#newpass'
-                }
-            }
-        });
-
-        /*
 		menu btns
 		 */
         $("#btnSett").click(function () {

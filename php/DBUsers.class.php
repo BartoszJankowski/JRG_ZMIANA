@@ -379,7 +379,6 @@ class DBUsers extends DbConn {
 				}
 			}
 		} catch (PDOException $e){
-			//TODO: log error
 			$this->error = $e->getMessage();
 		}
 		return $arr;
@@ -419,7 +418,6 @@ class DBUsers extends DbConn {
 				return new User($result);
 			}
 		} catch (PDOException $e){
-			//TODO: log error
 			$this->error = $e->getMessage();
 		}
 		return null;
@@ -442,7 +440,6 @@ class DBUsers extends DbConn {
 					$stmt->execute();
 					return $user;
 				} catch (PDOException $e){
-					//TODO: log error
 					$this->error = $e->getMessage();
 				}
 			} elseif($user->getJrgId() === $idJrg) {
@@ -497,7 +494,6 @@ class DBUsers extends DbConn {
 			$user->setTempJrgId($temp_jrg);
 			return $user;
 		} catch (PDOException $e){
-			//TODO: log error
 			$this->error = $e->getMessage();
 		}
 	}
