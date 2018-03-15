@@ -105,7 +105,7 @@ if(isset($_POST['addJrg'])){
     
     <script type="text/javascript" src="js/scripts.js?ver=<?php echo time() ?>"></script>
       <script type="text/javascript" src="js/ajax.js?ver=<?php echo time() ?>"></script>
-        <script type="text/javascript" src="js/ajaxreset.js?ver=<?php echo time() ?>"></script>
+        <script type="text/javascript" src="js/ajaxreset2.js?ver=<?php echo time() ?>"></script>
           <script type="text/javascript" src="js/ajaxjrg.js?ver=<?php echo time() ?>"></script>
             <script type="text/javascript" src="js/ajaxregister.js?ver=<?php echo time() ?>"></script>
         

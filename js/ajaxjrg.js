@@ -11,7 +11,7 @@ $(function(){
 
 	$("#Jrg").on("submit", function() {
 		logD('->event onsubmit start');
-		submitForm();
+		submitFormJrg();
         logD('->event onsubmit end');
 		
 		return false;
@@ -22,7 +22,7 @@ function OnError(xhr){
     logD(xhr.statusText);
 }
 
-function submitForm() {
+function submitFormJrg() {
 
 	var postJrg = getPostData('Jrg');
 

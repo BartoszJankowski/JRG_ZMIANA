@@ -143,6 +143,13 @@ main {
   margin-top: 25px;
   margin-left: 5%; }
 
+.no-button {
+  border: none;
+  background: #dc3545;
+  color: #ffffff; }
+  .no-button:hover {
+    background: #c82333; }
+
 .register__icon__mobile {
   display: none; }
   @media only screen and (max-width: 320px) {

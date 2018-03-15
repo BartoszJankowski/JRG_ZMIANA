@@ -9,9 +9,9 @@ $(function(){
 		timeout : 15000
 	});
 
-	$("#login_form").on("submit", function(){
+	$("#addUserInfo").on("submit", function(){
         logD('->event onsubmit start');
-		submitForm();
+		submitFormLogin();
         logD('->event onsubmit end');
 		
 		return false;
@@ -22,9 +22,9 @@ function OnError(xhr){
     logD(xhr.statusText);
 }
 
-function submitForm() {
+function submitFormLogin() {
 
-	var postData = getPostData('login_form');
+	var postData = getPostData('addUserInfo');
 	
 
 	$.ajax({
