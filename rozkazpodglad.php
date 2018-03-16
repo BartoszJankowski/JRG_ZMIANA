@@ -95,7 +95,7 @@ require 'header.php';
 			$rozkaz->displayRozkaz();
 
 			if($user->getStrazak()->getZmiana() == $rozkaz->getZmiana() && $user->isChef()) : ?>
-			<form action="edycjarozkazu.php" method="post" >
+			<form class="noprint" action="edycjarozkazu.php" method="post" >
 				<input type="hidden" name="data" value="<? echo $ltd->getMySqlDate(); ?>">
 				<button  class="w3-input w3-margin-top"  type="submit" name="edit">Rozpocznij edycję</button>
 			</form>

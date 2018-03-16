@@ -54,7 +54,7 @@ td.Nd, td.Sob {
 td.tdHarmCell {
     padding: 0px !important; }
 
-td.tdHarmCell {
+td.tdHarmCell > label {
     cursor: pointer; }
 
 input.harmoCheck:checked ~ div.harmoCell {

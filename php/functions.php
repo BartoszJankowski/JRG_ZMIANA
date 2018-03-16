@@ -179,3 +179,17 @@ function get_graf_val(string $v){
 function get_dni_tyg_iterator() : ArrayIterator{
 	return (new ArrayObject(array("Pn","Wt","Śr","Cz","Pt","Sb","Nd")))->getIterator();
 }
+
+function removeFromArray($igla, $tablica){
+	$newTab  = array();
+	if(is_array($tablica)){
+		foreach ($tablica as $v){
+			if($v === $igla || $v == $igla){
+				continue;
+			}
+			$newTab[] = $v;
+		}
+	}
+	return $newTab;
+
+}
