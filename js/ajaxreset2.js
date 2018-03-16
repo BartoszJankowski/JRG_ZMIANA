@@ -48,7 +48,7 @@ function submitFormReset() {
 
 						$('#errorreset').fadeIn(1000, function() {
 							$('#errorreset').html('<div class="alert alert-danger"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp; '+response.errorMsg+' !</div>');
-								$('#reset').html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; <a class="btn btn-danger btn-lg btn-block btn__login__submit" href="register.php">Zarejestruj się</a>');
+								$('#reset').html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; <button class="btn btn-danger btn-lg btn__register" data-toggle="modal" data-target="#myModal1">Zarejestruj się</button>');
 
 					});
 				}

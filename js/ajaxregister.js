@@ -11,7 +11,7 @@ $(function(){
 
 	$("#formRegister").on("submit", function() {
 		logD('->event onsubmit start');
-		submitForm();
+		submitFormReg();
         logD('->event onsubmit end');
 		
 		return false;
@@ -22,7 +22,7 @@ function OnError(xhr){
     logD(xhr.statusText);
 }
 
-function submitForm() {
+function submitFormReg() {
 
 	var postRegister = getPostData('formRegister');
 

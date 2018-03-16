@@ -159,6 +159,15 @@ main{
 	margin-left: 5%;
 }
 
+.no-button{
+	border: none;
+	background: #dc3545;
+	color: #ffffff;
+	&:hover{
+		background: #c82333;
+	}
+}
+
 .register__icon__mobile{
 	display: none;
 	 @include screen('mobile'){
