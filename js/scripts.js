@@ -19,6 +19,16 @@ $(function () {
          $(".register__box").fadeOut(400);
     });
 
+    $('.remember_pass').click(function() {
+        $('.log_ico').removeClass('active');
+    });
+
+    $('.btn__register').click(function() {
+        $('.add_Jrg').removeClass('active');
+        $('.log_ico').removeClass('active');
+    });
+
+
 
     $(".nextMsc").click(function () {
         var tabs = $('.kalendar-div').toArray();
