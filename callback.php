@@ -100,30 +100,6 @@ try {
 				throw new UserErrors($dbUsers->error);
 			}
 			break;
-			/*
-			 * Notatki
-			 */
-
-			$dbDyzury->loadDyzuryNaRok($user->getJrgId(), $user->getStrazak()->getZmiana(),$czas->getYear() );
-			$kalendarz = new Kalendarz($czas->getYear());
-			$harmonogram = $dbHarmo->getHarmo($user->getStrazak(), $czas->getYear());
-
-		case 'addUserInfo':
-			$dataPost = new LocalDateTime($_POST['data']);
-		if($harmonogram->setV2(
-			$dataPost,
-			$_POST['info'] 
-			)){
-				if($dbHarmo->changeHarmo($czas->getYear(),$user->getStrazak()->getStrazakId(),$harmonogram
-					)){
-			   $info = 'Zapisano poprawnie:) ';
-            } else {
-			    $info = $dbHarmo->getError();
-            }
-        } else {
-			$info = 'Błąd dodania.';
-        }
-    }
 		default:
 			throw new UserErrors('Nieznana akcja. System nie mógł wykonać polecenia: \"'.$_POST['action'].'\"');
 	}
