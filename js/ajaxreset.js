@@ -41,7 +41,7 @@ function submitFormReset() {
 					// debugger
 					$('#inforeset').fadeIn(1000, function() {
 							$('#inforeset').html('<div class="alert alert-success"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp;'+response.info+' !</div>');
-								$('#reset').html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Zresetowano');
+								$('#reset').html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Hasło zostało zresetowane');
 					});
 			}
 				else{
