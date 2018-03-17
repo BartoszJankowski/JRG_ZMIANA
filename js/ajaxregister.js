@@ -36,7 +36,7 @@ function submitFormReg() {
         },
 
 		}).done(function(response) {
-			debugger
+			// debugger
 			if(response.result){
 					$('#success').fadeIn(1000, function() {
 							$('#success').html('<div class="alert alert-success"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp;'+response.info+' !</div>');
