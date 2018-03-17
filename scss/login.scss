@@ -8,12 +8,86 @@ form{
 }
 
 
+.tabs {
+    clear: both;
+    overflow: hidden;
+            & a {
+
+                height: 4.4em;
+                padding: 15px 0 10px 0;
+                font-size: 1em;
+                font-weight: 300;
+                text-decoration: none;
+                color: #cccccc;
+                text-align: center;
+                transition: ease .4s;
+
+                &:hover{
+                    color: #ffffff;
+                    transition: ease .4s;
+                    text-decoration: none;
+
+                }
+                &.active{
+                    color: #ffffff;
+                }
+                &.active:hover::after {
+                    width: 0%;
+                }
+            &::after {
+                content: '';
+                display: block;
+                width: 0;
+                height: 2px;
+                background: #dc3545;
+                transition: width .3s;
+                
+            }
+                &:hover::after {
+                    width: 100%;
+                    
+                }
+}
+}
+.register__box{
+a{
+&:hover::after {
+width: 0;
+}}}
+
+.bar{
+    &:hover{
+        padding-top: 10px;
+    }
+}
+
+.remember_pass{
+    color: #000000 !important;
+}
+
+.active {
+  border-bottom: 3px solid white;
+} 
+
+.register__item:active{
+            border-bottom: none;
+}
+
+.tabs-container.js .tab-content {
+    display: none;
+}
+.tabs-container.js .tab-content.active {
+    display: block;
+}
+
+
 .navbar-toggler{
 	margin-top: 15px;
 	margin-bottom: 15px;
 }
 .login,
-.register{
+.register,
+.intro__section{
 	margin-top: 15vh;
 	margin-bottom: 25vh;
 	margin-left: auto;
@@ -52,5 +126,4 @@ form{
 footer{
 	width: 100%;
 	margin: 0;
-	position: sticky;
 }

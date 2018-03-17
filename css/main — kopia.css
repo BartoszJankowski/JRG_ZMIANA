@@ -29,57 +29,12 @@ nav {
 main {
   min-height: 100vh !important; }
 
-.nav-item {
-  text-align: center;
-  border-radius: 0 !important;
-  -webkit-transition: ease .4s;
-  -o-transition: ease .4s;
-  transition: ease .4s; }
-  .nav-item:hover {
-    padding-top: 2px !important;
-    color: #efefef !important;
-    -webkit-transition: ease .4s;
-    -o-transition: ease .4s;
-    transition: ease .4s; }
-    @media only screen and (max-width: 320px) {
-      .nav-item:hover {
-        padding-top: .5rem !important; } }
-    @media only screen and (min-width: 321px) and (max-width: 480px) {
-      .nav-item:hover {
-        padding-top: .5rem !important; } }
-    @media only screen and (min-width: 480px) and (max-width: 767px) {
-      .nav-item:hover {
-        padding-top: .5rem !important; } }
-    @media only screen and (min-width: 768px) and (max-width: 1023px) {
-      .nav-item:hover {
-        padding-top: .5rem !important; } }
-  .nav-item.active:hover {
-    margin-top: 5.5px; }
-    @media only screen and (max-width: 320px) {
-      .nav-item.active:hover {
-        padding: .5rem;
-        margin-top: 0; } }
-    @media only screen and (min-width: 321px) and (max-width: 480px) {
-      .nav-item.active:hover {
-        padding: .5rem;
-        margin-top: 0; } }
-    @media only screen and (min-width: 480px) and (max-width: 767px) {
-      .nav-item.active:hover {
-        padding-top: 0; } }
-    @media only screen and (min-width: 768px) and (max-width: 1023px) {
-      .nav-item.active:hover {
-        padding-top: 0; } }
-  .nav-item.active p {
-    border-bottom: 3px solid white; }
-  .nav-item p {
-    margin-bottom: 0 !important; }
-
 .nav__ico {
   font-size: 1.6rem; }
 
 .logout__icon,
 .login__icon {
-  margin-left: auto; }
+  margin-left: auto !important; }
   @media only screen and (max-width: 320px) {
     .logout__icon,
     .login__icon {
@@ -139,9 +94,6 @@ main {
     .register__box {
       visibility: hidden; } }
 
-.btn__register {
-  margin-left: 1rem; }
-
 .no-button {
   border: none;
   background: #dc3545;
@@ -158,10 +110,10 @@ main {
     .register__icon__mobile {
       display: block; } }
 
-.nav-link.active:hover::after {
+.nav-item.active:hover::after {
   width: 0%; }
 
-.nav-link::after {
+.nav-item::after {
   content: '';
   display: block;
   width: 0;
@@ -171,7 +123,7 @@ main {
   -o-transition: width .3s;
   transition: width .3s; }
 
-.nav-link:hover::after {
+.nav-item:hover::after {
   width: 100%; }
 
 .navbar-nav {
@@ -245,6 +197,16 @@ main {
 
 .text-secondary {
   font-weight: 300; }
+
+.modal-dialog {
+  max-width: 1000px !important; }
+
+#myModal3 {
+  margin: 20vh auto auto auto; }
+  #myModal3 .reset_box {
+    margin: auto; }
+  #myModal3 .modal-footer {
+    margin-top: 50px; }
 
 footer {
   bottom: 0;

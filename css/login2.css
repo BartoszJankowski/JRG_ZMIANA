@@ -1,9 +1,3 @@
-h2 {
-  margin-bottom: 50px; }
-
-form {
-  margin-top: 50px; }
-
 .tabs {
   clear: both;
   overflow: hidden; }
@@ -60,41 +54,3 @@ form {
 
 .tabs-container.js .tab-content.active {
   display: block; }
-
-.navbar-toggler {
-  margin-top: 15px;
-  margin-bottom: 15px; }
-
-.login,
-.register,
-.intro__section {
-  margin-top: 15vh;
-  margin-bottom: 25vh;
-  margin-left: auto;
-  margin-right: auto; }
-
-.btn__login__submit,
-.btn_register_submit {
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  padding: .5rem 4rem !important; }
-
-.form-group label {
-  color: #737373; }
-
-.form-group input {
-  border: none;
-  border-bottom: 1px solid #B2B2B2;
-  border-radius: 0; }
-
-.register__select__jrg {
-  margin-top: 10px; }
-
-.info__required {
-  margin-top: 10px; }
-
-footer {
-  width: 100%;
-  margin: 0; }

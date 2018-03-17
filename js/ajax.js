@@ -11,7 +11,7 @@ $(function(){
 
 	$("#addUserInfo").on("submit", function(){
         logD('->event onsubmit start');
-		submitFormLogin();
+		submitForm();
         logD('->event onsubmit end');
 		
 		return false;
@@ -22,7 +22,7 @@ function OnError(xhr){
     logD(xhr.statusText);
 }
 
-function submitFormLogin() {
+function submitForm() {
 
 	var postData = getPostData('addUserInfo');
 	
