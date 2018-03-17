@@ -29,7 +29,7 @@ h1{
 
 nav{
 	background: #343a40;
-	padding: 0 10px 0 10px !important;
+	padding: 0 15px 15px 15px !important;
 	min-height: 60px;
 }
 
@@ -126,7 +126,7 @@ main{
 
 
 .register__box{
-	position: absolute;
+	position: fixed;
 	display: none;
 	padding: 15px;
 	width: 250px;
@@ -136,7 +136,7 @@ main{
 	color: #000000;
 	font-size: 1.1rem;
 	z-index: 99;
-	margin-top: 13px;
+	margin-top: 75px;
 	-webkit-box-shadow: -10px 10px 23px -10px rgba(0,0,0,0.75);
 	-moz-box-shadow: -10px 10px 23px -10px rgba(0,0,0,0.75);
 	box-shadow: -10px 10px 23px -10px rgba(0,0,0,0.75);
@@ -155,8 +155,8 @@ main{
 }
 
 .btn__register{
-	margin-top: 25px;
-	margin-left: 5%;
+
+	margin-left: 1rem;
 }
 
 .no-button{
@@ -274,20 +274,6 @@ main{
 }
 .text-secondary{
 	font-weight: 300;
-}
-
-.modal-dialog{
-	max-width: 1000px !important;
-}
-
-#myModal3{
-		margin: 20vh auto auto auto;
-	.reset_box{
-		margin: auto;
-}
-	.modal-footer{
-		margin-top: 50px;
-	}
 }
 
 footer{

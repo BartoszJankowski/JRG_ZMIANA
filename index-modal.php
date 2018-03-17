@@ -18,7 +18,7 @@ if($dbUsers->checkSession($user)){
 }
 
 if(isset($_POST['log_in'])){
-     if(!$dbUsers->login($_POST['login'],$_POST['pass']))
+     if(!$dbUsers->login($_POST['login'],$_POST['password']))
      {
          echo $dbUsers->error;
      } else {
@@ -84,9 +84,7 @@ if(isset($_POST['addJrg'])){
       $infoAdd = $db->error;
     }
 }
-
 ?>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
 <head>
@@ -168,14 +166,13 @@ if(isset($_POST['addJrg'])){
           ))
          {
              echo $dbUsers->error;
-
          } else {
              header('Location: '.$base_url.'/main.php');
              exit;
          }
       }
      ?> 
-    <form id="login_form" name="" method="post" action="" class="form">
+    <form id="addUserInfo" name="" method="post" action="" class="form">
       <input type="hidden" name="action" value="log_in" />
         <div id="errorlog">
             
@@ -194,7 +191,7 @@ if(isset($_POST['addJrg'])){
       </div>
         <div class="form-group">
           <label for="exampleInputPassword1">Hasło</label>
-            <input id="password" type="password" name="password" value="" class="form-control" required />
+            <input id="pass" type="password" name="password" value="" class="form-control" required />
         </div>
         <button id="log_in" type="submit" name="log_in" action="" class="btn btn-danger btn-lg btn-block btn__login__submit">Zaloguj</button>
   </form>

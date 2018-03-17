@@ -9,12 +9,16 @@ $(function () {
         window.print();
     });
 
-    $(".login__icon").mouseenter(function () {
+    $(".add_Jrg").mouseover(function () {
         $(".register__box").fadeIn(400);
-    }).mouseleave(function () {
-        $(".register__box").fadeOut(400);
-
     });
+
+    $(".register__box").mouseover(function() {
+        $(".register__box").attr('display', 'block');
+    }).mouseleave(function () {
+         $(".register__box").fadeOut(400);
+    });
+
 
     $(".nextMsc").click(function () {
         var tabs = $('.kalendar-div').toArray();
@@ -52,13 +56,17 @@ $(function () {
         }
     });
 
-    $('.thumbnail').click(function(){
-         $('.modal-body').empty();
-            var title = $(this).parent('a').attr("title");
-                $('.modal-title').html(title);
-                    $($(this).parents('div').html()).appendTo('.modal-body');
-                        $('#myModal').modal({show:true});
-    });
+    // $('.thumbnail').click(function(){
+    //      $('.modal-body').empty();
+    //         var title = $(this).parent('a').attr("title");
+    //             $('.modal-title').html(title);
+    //                 $($(this).parents('div').html()).appendTo('.modal-body');
+    //                     $('#myModal').modal({show:true});
+    // });
+
+
+
+
 
 
 
@@ -351,6 +359,28 @@ function zliczKolumneGrafiku(select) {
 
 }
 
+ $(function() {
+    $('.tabs-container').addClass('js');
 
+    $('.tabs').each(function() {
+        const $a = $(this).find('a');
 
+        $a.on('click', function(e) {
+
+            const $this = $(this);
+                const href = $this.attr('href');
+                    const $target = $(href);
+
+            if ($target.length) {
+                e.preventDefault();
+                    $this.siblings('a').removeClass('active');
+                        $this.siblings('a').addClass('bar');
+                            $this.addClass('active');
+                                $this.removeClass('bar'); 
+                                    $target.siblings('.tab-content').removeClass('active');
+                                        $target.addClass('active');
+            }
+        });
+    });
+});
 

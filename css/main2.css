@@ -79,7 +79,7 @@ main {
 
 .logout__icon,
 .login__icon {
-  margin-left: auto; }
+  margin-left: auto !important; }
   @media only screen and (max-width: 320px) {
     .logout__icon,
     .login__icon {
@@ -140,7 +140,8 @@ main {
       visibility: hidden; } }
 
 .btn__register {
-  margin-left: 1rem; }
+  margin-top: 25px;
+  margin-left: 5%; }
 
 .no-button {
   border: none;
@@ -158,10 +159,10 @@ main {
     .register__icon__mobile {
       display: block; } }
 
-.nav-link.active:hover::after {
+.nav-item.active:hover::after {
   width: 0%; }
 
-.nav-link::after {
+.nav-item::after {
   content: '';
   display: block;
   width: 0;
@@ -171,7 +172,7 @@ main {
   -o-transition: width .3s;
   transition: width .3s; }
 
-.nav-link:hover::after {
+.nav-item:hover::after {
   width: 100%; }
 
 .navbar-nav {
