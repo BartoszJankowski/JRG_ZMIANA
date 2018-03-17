@@ -19,7 +19,7 @@ function setPopoverFunctions(jQrElement){
         event.stopPropagation();
         htmlObj.closePopover();
         $(this).addClass("highlight-element").popover('show');
-    }).popover({content:function(){return htmlObj.popoverAddObj(this)},trigger:'manual'}).on('shown.bs.popover',function (event) {
+    }).popover({content:function(){return htmlObj.popoverAddObj(this)},trigger:'manual',title:function(){return convertNodeName(this.nodeName)}}).on('shown.bs.popover',function (event) {
         event.stopPropagation();
        $('label[data-toggle="tooltip"]').tooltip({trigger:'hover',placement:'top'});
     });
@@ -49,7 +49,7 @@ var htmlObj = {
                 inner = '<p>Wprowadź zawartość: </p><textarea class="w3-input w3-border" oninput="htmlObj.updateContent(this)">'+this.element.text()+'</textarea>'+this.getButtonsVars();
                 break;
             case 'INPUT':
-                inner = '';
+                inner = '<p>Wybierz listę</p>'+htmlObj.getCheckBoxLists();
                 break;
             case 'SELECT':
                 inner = this.getCheckBoxLists();
@@ -120,6 +120,8 @@ var htmlObj = {
         } else if(select.val() === 'table'){
             nowyElement.addClass('szablonTable');
             nowyElement.addClass('w3-border');
+        } else if(select.val() === 'input'){
+            nowyElement.attr('list','');
         }
         setPopoverFunctions(nowyElement);
         this.element.append(nowyElement);
@@ -244,13 +246,29 @@ var htmlObj = {
      * @returns {string}
      */
     getCheckBoxLists : function(){
-        var checkboxes = '<div>Listy: ';
-        for(x in this.listy){
-            var check = '';
-            if(this.checkListAttr(this.listy[x]['id'])){
-                check = 'checked';
+        var checkboxes = '<div>Listy: <label>';
+        if(this.element.get(0).nodeName === 'INPUT'){
+            var inn = '';
+
+
+            for(x in this.listy){
+                var check = '';
+                if(this.checkListAttr(this.listy[x]['id'])){
+                    check = 'checked';
+                }
+                inn += '<label style="padding: 0 3px;"><input '+check+' onchange="htmlObj.changeElementListAttr(this)" class="w3-radio" type="radio" name="listy" value="'+this.listy[x]['id']+'" /><span class="no-wrap">'+this.listy[x]['name']+' </span></label>';
             }
-            checkboxes += '<label class="listy-btn" ><input '+check+' onchange="htmlObj.changeElementListAttr(this)" class="w3-check" type="checkbox" name="listy" value="'+this.listy[x]['id']+'" /><span class="no-wrap">'+this.listy[x]['name']+' </span></label>';
+            checkboxes  += '<input  class="w3-radio" type="radio" name="listy" value="" onchange="htmlObj.changeElementListAttr(this)" /><span class="no-wrap">brak </span></label>';
+            checkboxes += inn;
+        } else {
+            for(x in this.listy){
+                var check = '';
+                if(this.checkListAttr(this.listy[x]['id'])){
+                    check = 'checked';
+                }
+                checkboxes += '<label class="listy-btn" ><input '+check+' onchange="htmlObj.changeElementListAttr(this)" class="w3-check" type="checkbox" name="listy" value="'+this.listy[x]['id']+'" /><span class="no-wrap">'+this.listy[x]['name']+' </span></label>';
+            }
+
         }
         return checkboxes+'</div>';
     },
@@ -368,6 +386,11 @@ var htmlObj = {
      */
     changeElementListAttr : function(box){
         var value = box.value;
+        if(this.element.get(0).nodeName === 'INPUT'){
+            this.element.attr('list', value);
+            return;
+        }
+
         var attrL = this.element.attr("data-jrg", function(id, val){
             if(val === undefined || val.length<=0){
                 return value;
@@ -397,6 +420,9 @@ var htmlObj = {
      * @returns {boolean}
      */
     checkListAttr : function(listName){
+        if(this.element.get(0).nodeName === 'INPUT'){
+            return (this.element.attr('list') === listName);
+        }
         var attrL = this.element.attr("data-jrg");
         if(attrL === undefined || attrL.length<=0){
             return false;
@@ -537,6 +563,7 @@ function getCol(th, tds){
     return div;
 }
 
+
 /**
  * Funkcja pobiera nazwę nodeName htmlDom i zwraca wartośc dla uzytkownika
  * @param nodeName
@@ -560,8 +587,10 @@ function convertNodeName(nodeName){
             return 'Tabela';
         case 'TD':
             return 'Komórka';
+        case 'TH':
+            return 'Kolumna';
         default:
-            return nodeName;
+            return "Brak";
     }
 }
 
@@ -637,6 +666,10 @@ var szablon = {
         } else {
             node = node.trim().split(" ");
         }
+        if(jQNode.get(0).nodeName === 'INPUT'){
+            node = {list:jQNode.attr('list')};
+        }
+
         return node;
     },
     save : function (btn){

@@ -50,6 +50,10 @@ class User {
 			$this->login = $_SESSION['login'];
 			$this->session = $_SESSION['session'];
 			$this->sessionSet = true;
+		} else if(isset($_COOKIE['login'], $_COOKIE['session'])){
+			$this->login = $_COOKIE['login'];
+			$this->session = $_COOKIE['session'];
+			$this->sessionSet = true;
 		}
 	}
 

@@ -83,6 +83,8 @@ class DBJrgSettings extends DbConn {
 				$stmt->bindParam(':grafikValues', serialize(self::$grafikValues));
 				$stmt->bindParam(':harmoValues', serialize(self::$harmoValues));
 				$stmt->execute();
+				$dbSTr = new DBStrazacy();
+				$dbSTr->clearFiremansUpr($jrg_id);
 			}
 			self::$loaded = true;
 		}
@@ -296,10 +298,10 @@ class DBJrgSettings extends DbConn {
 		$upr->setId(0);
 		self::$uprawnieniaList[] = $upr;
 		$upr =new Uprawnienie('Kierowca ','fa-car','orange');
-		$upr->setId(0);
+		$upr->setId(1);
 		self::$uprawnieniaList[] = $upr;
 		$upr = new Uprawnienie('Operator','fa-truck','yellow');
-		$upr->setId(0);
+		$upr->setId(2);
 		self::$uprawnieniaList[] = $upr;
 
 		self::$grafikValues[] = new GrafikValue('Ws','Wolna służba','Wolne');

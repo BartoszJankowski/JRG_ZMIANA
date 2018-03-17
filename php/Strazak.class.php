@@ -144,6 +144,7 @@ class Strazak {
 	 * @return int[]
 	 */
 	public function getUprawnienia() {
+
 		return $this->uprawnienia;
 	}
 
@@ -293,6 +294,8 @@ class Strazak {
 		}
 		return $user;
 	}
+
+
 
 
 }

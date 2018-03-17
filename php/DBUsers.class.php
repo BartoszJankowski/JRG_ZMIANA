@@ -141,11 +141,22 @@ class DBUsers extends DbConn {
 			$stmt->execute();
 			$_SESSION['login'] = $email;
 			$_SESSION['session'] = $hash;
+			$this->setCookies($email, $hash);
 			return true;
 		} catch (PDOException $e){
 			$this->error = "Error: " . $e->getMessage();
 		}
 		return false;
+	}
+
+	private function setCookies($login, $hash){
+		setcookie("login", $login, time() + (86400 * 7), "/");
+		setcookie("session", $hash, time() + (86400 * 7), "/");
+	}
+
+	private function destroyCookies(){
+		setcookie("login", "", time() - 3600);
+		setcookie("session", "", time() - 3600);
 	}
 
 	/**
@@ -202,6 +213,7 @@ class DBUsers extends DbConn {
 				if($result && isset($result['session']) && $result['session'] === $user->getSession()){
 					$this->setSession($user->login, null, true);
 				}
+				$this->destroyCookies();
 			} catch (\PDOException $ignored){}
 		}
 		session_destroy();

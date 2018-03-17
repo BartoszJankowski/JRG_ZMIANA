@@ -293,4 +293,44 @@ class DBStrazacy extends DbConn {
 			return false;
 		}
 	}
+
+	/**
+	 * Czysci uprawnienia pracowników- zostawic na przyszłośc na wszelki wypadek
+	 * @param $jrgId
+	 */
+
+	public function clearFiremansUpr($jrgId){
+		try{
+			$stmt = $this->conn->prepare("UPDATE ".$this->tbl_strazacy." SET uprawnienia = :uprawnienia WHERE jrg_id = :jrg_id");
+			$stmt->bindParam(':jrg_id',$jrgId );
+			$stmt->bindParam(':uprawnienia',serialize(array()) );
+			$stmt->execute();
+		} catch (PDOException $e){
+			echo $this->error;
+		}
+	}
+
+	public function afterPrevilageDelete($jrgId, $upr_id){
+		$tab = array();
+		try{
+			$stmt = $this->conn->prepare("SELECT id,uprawnienia FROM ".$this->tbl_strazacy." WHERE jrg_id = :jrg_id");
+			$stmt->bindParam(':jrg_id',$jrgId );
+			$stmt->execute();
+			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			foreach ($result as $wynik){
+				$tab[$wynik['id']] = removeFromArray($upr_id,unserialize($wynik['uprawnienia']));
+			}
+			$this->conn->beginTransaction();
+			foreach ($tab as $idStr=>$uprs){
+				$this->conn->exec( "UPDATE ".$this->tbl_strazacy." SET uprawnienia='".serialize($uprs)."' WHERE id=".$idStr.';');
+			}
+			$this->conn->commit();
+
+
+		} catch (PDOException $e){
+			$this->conn->rollback();
+			echo $this->error;
+		}
+	}
+
 }

@@ -65,6 +65,7 @@ if(   $user->isAdmin() ) {
 	            switch($_POST['type']){
                     case "uprawnienie":
 	                    if($_SETTINGS->deleteUpr($_POST['id'])){
+	                        $dbStrazacy->afterPrevilageDelete($user->getAdminJrgId(),$_POST['id'] );
 		                    $result['result'] = true;
                         } else {
 		                    $result['error'] = true;
