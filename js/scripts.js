@@ -115,7 +115,6 @@ function sortTable(jQtable, n) {
     var  rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
     table = jQtable.get(0);
     switching = true;
-    logD(table);
     // Set the sorting direction to ascending:
     dir = "asc";
     /* Make a loop that will continue until
@@ -394,3 +393,46 @@ function zliczKolumneGrafiku(select) {
     });
 });
 
+
+function strazakGoUpDown(btn, idStr, plusMInus) {
+
+    logD(idStr+" "+plusMInus);
+    var tempHtml = $(btn).html();
+
+    $.ajax({
+        type:'POST',
+        data:{
+            nr_change:plusMInus,
+            idStr:idStr
+        },
+        url:'shiftmanage.php',
+        beforeSend : function(xhr){
+            btn.disabled = true;
+            $(btn).html('<i class="w3-spin fas fa-spinner"></i>');
+            $(btn).tooltip('hide');
+        },
+        success : function (response) {
+
+
+            if(response.result){
+                var tr = $(btn).parents('tr');
+                if(plusMInus>0){
+                    tr.insertAfter(tr.next());
+
+                } else {
+                    tr.insertBefore(tr.prev());
+                }
+            } else if(response.error) {
+                logD(response.errorMsg);
+            }
+        },
+        error : function () {
+            logD("odebrano wiadomosc blad");
+        },
+        complete : function (xhr, status) {
+            logD("ukonczono zadanie");
+            $(btn).html(tempHtml);
+            btn.disabled = false;
+        }
+    });
+}

@@ -115,7 +115,7 @@ require 'header.php';
 	                        $val2ico = '';
                         }
                         //$val = $dayVal;
-						$inn .= '<td data-toggle="popover" data-html="true" data-val2="'.$dayVal2.'" data-jrg="'.$dataDzis->getYear().'-'.$msc.'-'.$monthIterator->current()['nr'].'"title="Dodaj notatkę dla szefa zmiany chuj" data-placement="bottom" class="zmiana-'.$monthIterator->current()['z'].' '.$tdDzis.' w3-display-container">
+						$inn .= '<td data-toggle="popover" data-html="true" data-val2="'.$dayVal2.'" data-jrg="'.$dataDzis->getYear().'-'.$msc.'-'.$monthIterator->current()['nr'].'" title="Dodaj notatkę dla szefa zmiany" data-placement="bottom" class="zmiana-'.$monthIterator->current()['z'].' '.$tdDzis.mojaZmianaClass($user->getStrazak()->getZmiana(),$monthIterator->current()['z']).' w3-display-container ">
 								<span class="w3-tiny w3-display-topleft">'.$monthIterator->current()['nr'].'</span>'.$val2ico.'
 									<span class="w3-medium w3-display-bottomright">'.$val.'</span>
 								</td>';

@@ -14,7 +14,8 @@ class Strazak {
 	 * Dane bazy danych
 	 * @var
 	 */
-	private $id,$jrg_id, $zmiana, $nazwa_funkcji, $previlages, $user_id, $nr_porz, $imie, $nazwisko, $stopien, $kolor, $badania;
+	private $nr_porz = 0;
+	private $id,$jrg_id, $zmiana, $nazwa_funkcji, $previlages, $user_id, $imie, $nazwisko, $stopien, $kolor, $badania;
 	private $uprawnienia = array();
 
 	/**
@@ -228,7 +229,11 @@ class Strazak {
 				$wiersze .= '<td>'.get_nazwa_funkcji($strazak->getNazwafunkcji()).'</td>';
 				$wiersze .= '<td>'.$strazak->getUprawnieniaHtml().'</td>';
 				$wiersze .= '<td style="background-color: '.UserSettings::getAlertType($strazak->getBadaniaDayTillNow()).'"><span data-toggle="tooltip" data-placement="top" title="Pozostało: '.$strazak->getBadaniaDayTillNow().' dni">'.$strazak->getBadaniaData().'</span></td>';
-				$wiersze .= '<td><form class="form_str_actions no-margin" action="" method="get" ><input type="hidden" value="'.$strazak->getStrazakId().'" name="strazakId"><button class="w3-small" type="submit" name="deleteFireman" value="1" data-toggle="tooltip" data-placement="top" title="Usuń strażaka" ><i class="fa fa-trash"></i></button></form></td>';
+				$wiersze .= '<td>
+									<div class="w3-row">
+										<div class="w3-col s3"><form class="form_str_actions" action="" method="get" ><input type="hidden" value="'.$strazak->getStrazakId().'" name="strazakId"><button class="btn btn-outline-dark btn-sm" type="submit" name="deleteFireman" value="1" data-toggle="tooltip" data-placement="top" title="Usuń strażaka" ><i class="fa fa-trash"></i></button></form></div>
+										<div class="w3-col s6"><button type="button" class="btn btn-outline-dark btn-sm" onclick="strazakGoUpDown(this, '.$strazak->getStrazakId().',-1)" data-toggle="tooltip" data-placement="top" title="przesuń wyżej"><i class="fas fa-angle-up"></i></button><button class="btn btn-outline-dark btn-sm" type="button" onclick="strazakGoUpDown(this, '.$strazak->getStrazakId().',1)" data-toggle="tooltip" data-placement="top" title="przesuń niżej"><i class="fas fa-angle-down"></i></button></div>	
+									</div></td>';
 				$wiersze .= '</tr>';
 			}
 		}

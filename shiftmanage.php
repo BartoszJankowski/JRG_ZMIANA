@@ -40,6 +40,21 @@ if(isset($_POST['editFireman']) && $user->isChef()){
 	$dbStrazacy->edytujStrazaka( (new Strazak())->create($_POST));
 }
 
+if(isset($_POST['nr_change']) && $user->isChef()){
+
+	$result = array('result'=>false,'error'=>false);
+
+	if($dbStrazacy->changeStrazakNrPorz($_POST['idStr'],$_POST['nr_change'])){
+		$result['result'] = true;
+    } else {
+	    $result['error'] = $dbStrazacy->getError();
+    }
+
+	header("Content-Type: application/json; charset=UTF-8");
+	echo json_encode($result);
+	die;
+}
+
 if(isset($_GET['deleteFireman'] )){
 	if($dbStrazacy->deleteFireman($user, $_GET['strazakId'])){
 		$info = '<div class="alert alert-success" role="alert">
@@ -51,6 +66,7 @@ if(isset($_GET['deleteFireman'] )){
 	}
 }
 
+
 $title = "Stan zmiany";
 require 'header.php';
 ?>
@@ -59,6 +75,7 @@ require 'header.php';
 	<?php if($user->isChef()) :
         echo $info;
         $strazak = $user->getStrazak();
+		$strazacy = $dbStrazacy->getZmianaListStrazacy($strazak->getJrgId(),$strazak->getZmiana());
 	    if(isset($_GET['editFireman'])) :
             $edytowanyStrazak = $dbStrazacy->getStrazak($_GET['editFireman']);
 
@@ -70,6 +87,7 @@ require 'header.php';
 
                     <form action="?" method="post" id="editFireman" class="w3-margin">
                         <input type="hidden" name="id" value="<? echo $edytowanyStrazak->getStrazakId() ?>" />
+                        <input type="hidden" name="nr_porz" value="<? echo $edytowanyStrazak->getNrPorz() ?>" />
 
                         <div>
                             <label class="w3-text-gray">Funkcja PSP:</label>
@@ -184,6 +202,7 @@ require 'header.php';
                     <form action="" method="post" id="addFireman" class="w3-margin">
                         <input type="hidden" name="jrg_id" value="<? echo $strazak->getJrgId() ?>" />
                         <input type="hidden" name="zmiana" value="<? echo $strazak->getZmiana() ?>" />
+                        <input type="hidden" name="nr_porz" value="<? echo count($strazacy) ?>" />
 
                         <div>
                             <label class="w3-text-gray">Funkcja PSP:</label>
@@ -256,7 +275,7 @@ require 'header.php';
                 <div class="w3-container w3-threequarter">
                     <?php
                     $uzytkownicy = $dbUsers->getUsersList($user,$strazak->getJrgId() );
-                    $strazacy = $dbStrazacy->getZmianaListStrazacy($strazak->getJrgId(),$strazak->getZmiana());
+
                     echo '<div class="w3-container"><h4>zmiana '.$strazak->getZmiana().' <span class="w3-small">('.count($strazacy).' strażaków)</span></h4><ul class="w3-ul">';
                     Strazak::printTableHtml($strazacy, $uzytkownicy);
 

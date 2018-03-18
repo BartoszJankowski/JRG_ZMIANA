@@ -191,5 +191,11 @@ function removeFromArray($igla, $tablica){
 		}
 	}
 	return $newTab;
+}
 
+function mojaZmianaClass($mojaZmiana, $sprawdzanaZm){
+	if($mojaZmiana == $sprawdzanaZm || $mojaZmiana === $sprawdzanaZm){
+		return ' mojaZmiana';
+	}
+	return  '';
 }

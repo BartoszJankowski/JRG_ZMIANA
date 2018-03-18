@@ -329,8 +329,36 @@ class DBStrazacy extends DbConn {
 
 		} catch (PDOException $e){
 			$this->conn->rollback();
-			echo $this->error;
+			 $this->error;
 		}
 	}
+
+
+	public function changeStrazakNrPorz($strId, int $nrPlusMinus){
+
+
+		try {
+			$stmt = $this->conn->prepare("SELECT nr_porz FROM ".$this->tbl_strazacy." WHERE id = :strId");
+			$stmt->bindParam(':strId',$strId );
+			$stmt->execute();
+			$result = $stmt->fetch(PDO::FETCH_ASSOC);
+			if($result){
+				if($result['nr_porz'] === null){
+					$Nr_porz = max(0,$nrPlusMinus);
+				} else {
+					$Nr_porz = max(0, $result['nr_porz']+$nrPlusMinus);
+				}
+				$stmt = $this->conn->prepare("UPDATE  ".$this->tbl_strazacy." SET nr_porz = ".$Nr_porz." WHERE id = :strId");
+				$stmt->bindParam(':strId',$strId );
+				$stmt->execute();
+				return true;
+			}
+		} catch (PDOException $e){
+			$this->error = "DB error:".$e->getMessage();
+		}
+		return false;
+	}
+
+
 
 }
