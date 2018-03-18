@@ -40,7 +40,7 @@ class DbDyzuDomowy extends DbConn {
 			if($e->getCode()==="42S01")
 				return;
 			else
-				echo $sql . "<br>" . $e->getMessage();
+				$this->logError($e);
 		}
 	}
 
@@ -70,7 +70,8 @@ class DbDyzuDomowy extends DbConn {
 				$this->error = "Podano błedny login lub hasło.";
 			}
 		} catch (PDOException $e){
-			echo $this->error = "Error: " . $e->getMessage();
+			 $this->error = "Error: " . $e->getMessage();
+			$this->logError($e);
 		}
 		return null;
 	}
@@ -94,7 +95,8 @@ class DbDyzuDomowy extends DbConn {
 				$this->error = "Podano błedny login lub hasło.";
 			}
 		} catch (PDOException $e){
-			echo $this->error = "Error: " . $e->getMessage();
+			 $this->error = "Error: " . $e->getMessage();
+			$this->logError($e);
 		}
 		return $res;
 	}
@@ -113,6 +115,7 @@ class DbDyzuDomowy extends DbConn {
 			return true;
 		} catch (PDOException $e){
 			echo $this->error = "Error: " . $e->getMessage();
+			$this->logError($e);
 		}
 		return false;
 	}
@@ -131,6 +134,7 @@ class DbDyzuDomowy extends DbConn {
 				return true;
 			} catch (PDOException $e){
 				$this->error = "Error: " . $e->getMessage();
+				$this->logError($e);
 			}
 			return false;
 		} else {
@@ -159,6 +163,7 @@ class DbDyzuDomowy extends DbConn {
 			}
 		} catch (PDOException $e){
 			 $this->error = "Error: " . $e->getMessage();
+			$this->logError($e);
 		}
 	}
 

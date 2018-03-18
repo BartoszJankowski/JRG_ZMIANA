@@ -23,7 +23,7 @@ if(isset($_POST['addJrg'])){
       $infoAdd .= '<p class="info info__sendMail text-success">Na podany adres email zostały wysłane dane dostępowe do konta.</p>';
         };
     } else {
-      $infoAdd = $db->error;
+      $infoAdd = $db->getError();
     }
 }
 

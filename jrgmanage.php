@@ -116,7 +116,7 @@ if(isset($_GET['deleteFireman'] )){
 	if($dbStrazacy->deleteFireman($user, $_GET['strazakId'])){
 		echo "Strazak usunięty";
 	} else {
-		echo $dbStrazacy->error;
+		echo $dbStrazacy->getError();
 	}
 }
 $title = "Zarządzaj JRG";

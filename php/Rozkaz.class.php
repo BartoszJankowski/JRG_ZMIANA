@@ -6,6 +6,8 @@
  * Time: 20:10
  */
 
+
+
 class Rozkaz {
 
 	private $dane = array(

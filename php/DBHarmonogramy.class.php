@@ -31,8 +31,8 @@ class DBHarmonogramy extends DbConn {
 			$this->error = "Error: " . $e->getMessage();
 			if($e->getCode()==="42S01")
 				return;
-			else
-				echo $sql . "<br>" . $e->getCode();
+
+			$this->logError($e);
 		}
 	}
 
@@ -52,6 +52,7 @@ class DBHarmonogramy extends DbConn {
 			}
 		} catch (PDOException $e){
 			$this->error = "DB error:".$e->getMessage();
+			$this->logError($e);
 		}
 		return $tab;
 	}
@@ -74,6 +75,7 @@ class DBHarmonogramy extends DbConn {
 			}
 		} catch (PDOException $e){
 			$this->error = "DB error:".$e->getMessage();
+			$this->logError($e);
 		}
 		$harmo =  new Harmonogram($rok);
 		return $harmo;
@@ -108,7 +110,7 @@ class DBHarmonogramy extends DbConn {
 		}
 		catch (PDOException $e){
 			$this->error = "DB error:".$e->getMessage();
-			echo $this->error;
+			$this->logError($e);
 		}
 	}
 
@@ -125,7 +127,7 @@ class DBHarmonogramy extends DbConn {
 			}
 			 catch (PDOException $e){
 				$this->error = "DB error:".$e->getMessage();
-
+				 $this->logError($e);
 			}
 			return false;
 	}
@@ -140,6 +142,7 @@ class DBHarmonogramy extends DbConn {
 		}
 		catch (PDOException $e){
 			$this->error = "DB error:".$e->getMessage();
+			$this->logError($e);
 		}
 		return false;
 	}
@@ -154,6 +157,7 @@ class DBHarmonogramy extends DbConn {
 			}
 		} catch (PDOException $e){
 			$this->error = "DB error:".$e->getMessage();
+			$this->logError($e);
 		}
 		return array();
 	}
@@ -168,6 +172,7 @@ class DBHarmonogramy extends DbConn {
 		}
 		catch (PDOException $e){
 			$this->error = "DB error:".$e->getMessage();
+			$this->logError($e);
 		}
 		return false;
 	}
@@ -205,6 +210,7 @@ class DBHarmonogramy extends DbConn {
 		} catch (PDOException $e){
 			$this->conn->rollBack();
 			$this->error = "DB error:".$e->getMessage();
+			$this->logError($e);
 		}
 	}
 

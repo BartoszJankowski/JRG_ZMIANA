@@ -56,7 +56,7 @@ class DBJrgSettings extends DbConn {
 			if($e->getCode()==="42S01")
 				return;
 			else
-				echo $sql . "<br>" . $e->getMessage();
+				$this->logError($e);
 		}
 	}
 
@@ -90,7 +90,7 @@ class DBJrgSettings extends DbConn {
 		catch(PDOException $e)
 		{
 			$this->error = "Error: " . $e->getMessage();
-
+			$this->logError($e);
 		}
 	}
 
@@ -217,6 +217,7 @@ class DBJrgSettings extends DbConn {
 		catch(PDOException $e)
 		{
 			$this->error = "Error: " . $e->getMessage();
+			$this->logError($e);
 		}
 		return false;
 	}

@@ -20,7 +20,7 @@ if($dbUsers->checkSession($user)){
 if(isset($_POST['log_in'])){
      if(!$dbUsers->login($_POST['login'],$_POST['password']))
      {
-         echo $dbUsers->error;
+         echo $dbUsers->getError();
      } else {
          header('Location: '.$base_url.'/main.php');
          exit;
@@ -41,7 +41,7 @@ if(isset($_POST['reset'])){
     // header('Location: '.$base_url.'/jrg_zmiana/reset.php?succes=1');
     exit;
   } else {
-    $infoAdd = "<h3>" . $dbUsers->error . "</h3>";
+    $infoAdd = "<h3>" . $dbUsers->getError() . "</h3>";
   }
 }
 
@@ -59,7 +59,7 @@ if(isset($_POST['register'])){
     exit;
   } 
     else {
-    echo $dbusers->error;
+    echo $dbusers->getError();
   }
 }
 
@@ -81,7 +81,7 @@ if(isset($_POST['addJrg'])){
       $infoAdd .= '<p class="info info__sendMail text-success">Na podany adres email zostały wysłane dane dostępowe do konta.</p>';
         };
     } else {
-      $infoAdd = $db->error;
+      $infoAdd = $db->getError();
     }
 }
 ?>
@@ -171,7 +171,7 @@ if(isset($_POST['addJrg'])){
                             $_POST['password']
                             ))
                            {
-                               echo $dbUsers->error;
+                               echo $dbUsers->getError();
                            } else {
                                header('Location: '.$base_url.'/main.php');
                                exit;

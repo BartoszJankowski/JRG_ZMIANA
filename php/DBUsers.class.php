@@ -44,7 +44,7 @@ class DBUsers extends DbConn {
 			if($e->getCode()==="42S01")
 				return;
 			else
-				echo $sql . "<br>" . $e->getCode();
+				$this->logError($e);
 		}
 	}
 
@@ -67,7 +67,7 @@ class DBUsers extends DbConn {
 			return true;
 		} catch (PDOException $e){
 
-			echo $this->error = "Error: " . $e->getMessage();
+			echo $this->error = "Error: " . $e->getMessage();$this->logError($e);
 			return false;
 		}
 	}
@@ -103,7 +103,7 @@ class DBUsers extends DbConn {
 				$this->error = "Podano błedny login lub hasło.";
 			}
 		} catch (PDOException $e){
-			echo $this->error = "Error: " . $e->getMessage();
+			echo $this->error = "Error: " . $e->getMessage();$this->logError($e);
 		}
 		return false;
 	}
@@ -144,7 +144,7 @@ class DBUsers extends DbConn {
 			$this->setCookies($email, $hash);
 			return true;
 		} catch (PDOException $e){
-			$this->error = "Error: " . $e->getMessage();
+			$this->error = "Error: " . $e->getMessage();$this->logError($e);
 		}
 		return false;
 	}
@@ -190,7 +190,7 @@ class DBUsers extends DbConn {
 				}
 				$this->error = "Błedna sesja lub brak sesji.";
 			} catch (PDOException $e){
-				$this->error = "Error: " . $e->getMessage();
+				$this->error = "Error: " . $e->getMessage();$this->logError($e);
 			}
 		} else {
 			$this->error = "Błedna sesja.";
@@ -254,7 +254,7 @@ class DBUsers extends DbConn {
 				return false;
 			}
 		} catch (PDOException $e){
-			$this->error = "Błąd bazy danych: " . $e->getMessage();
+			$this->error = "Błąd bazy danych: " . $e->getMessage();$this->logError($e);
 			return false;
 		}
 	}
@@ -292,7 +292,7 @@ class DBUsers extends DbConn {
 				return false;
 			}
 		} catch (PDOException $e){
-			echo $this->error = "Error: " . $e->getMessage();
+			echo $this->error = "Error: " . $e->getMessage();$this->logError($e);
 		}
 		return false;
 	}
@@ -348,7 +348,7 @@ class DBUsers extends DbConn {
 			$Emails->sendConfirmationEmail($email, $pass);
 			return true;
 		} catch (PDOException $e){
-			$this->error = "DB error:".$e->getMessage();
+			$this->error = "DB error:".$e->getMessage();$this->logError($e);
 			return false;
 		}
 
@@ -365,7 +365,7 @@ class DBUsers extends DbConn {
 				$this->dane['surname'] = $nazwisko;
 				return true;
 		} catch (PDOException $e){
-			$this->error = "Błąd bazy danych: " . $e->getMessage();
+			$this->error = "Błąd bazy danych: " . $e->getMessage();$this->logError($e);
 			return false;
 		}
 	}
@@ -391,7 +391,7 @@ class DBUsers extends DbConn {
 				}
 			}
 		} catch (PDOException $e){
-			$this->error = $e->getMessage();
+			$this->error = $e->getMessage();$this->logError($e);
 		}
 		return $arr;
 	}
@@ -430,7 +430,7 @@ class DBUsers extends DbConn {
 				return new User($result);
 			}
 		} catch (PDOException $e){
-			$this->error = $e->getMessage();
+			$this->error = $e->getMessage();$this->logError($e);
 		}
 		return null;
 	}
@@ -452,7 +452,7 @@ class DBUsers extends DbConn {
 					$stmt->execute();
 					return $user;
 				} catch (PDOException $e){
-					$this->error = $e->getMessage();
+					$this->error = $e->getMessage();$this->logError($e);
 				}
 			} elseif($user->getJrgId() === $idJrg) {
 				return $user;
@@ -487,6 +487,7 @@ class DBUsers extends DbConn {
 				return true;
 			} catch (PDOException $e){
 				$this->error = 'Error#1: '.$e->getMessage();
+				$this->logError($e);
 				return false;
 			}
 		} else {
@@ -509,7 +510,7 @@ class DBUsers extends DbConn {
 					$user->setTempJrgId($temp_jrg);
 					return $user;
 				} catch (PDOException $e){
-					$this->error = $e->getMessage();
+					$this->error = $e->getMessage();$this->logError($e);
 				}
 				break;
 			}

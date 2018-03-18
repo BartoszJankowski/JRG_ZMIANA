@@ -33,7 +33,7 @@ class DBJednostki extends DbConn {
 			if($e->getCode()==="42S01")
 				return;
 			else
-				echo $sql . "<br>" . $e->getCode();
+				$this->logError($e);
 		}
 	}
 
@@ -60,6 +60,7 @@ class DBJednostki extends DbConn {
 		} catch (PDOException $e){
 
 			 $this->error = "Error: " . $e->getMessage();
+			$this->logError($e);
 			return false;
 		}
 	}

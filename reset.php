@@ -20,7 +20,7 @@ if(isset($_POST['reset'])){
 		header('Location: '.$base_url);
 		exit;
 	} else {
-		$infoAdd = "<h3>" . $dbUsers->error . "</h3>";
+		$infoAdd = "<h3>" . $dbUsers->getError() . "</h3>";
 	}
 }
 ?>

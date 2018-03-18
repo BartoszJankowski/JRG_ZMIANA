@@ -45,7 +45,7 @@ class DBStrazacy extends DbConn {
 			if($e->getCode()==="42S01")
 				return;
 			else
-				echo $sql . "<br>" . $e->getMessage();
+				$this->logError($e);
 		}
 	}
 
@@ -97,7 +97,7 @@ class DBStrazacy extends DbConn {
 			return true;
 		} catch (PDOException $e){
 			$this->error = "DB error:".$e->getMessage();
-			echo $this->error;
+			$this->logError($e);
 			return false;
 		}
 	}
@@ -162,7 +162,7 @@ class DBStrazacy extends DbConn {
 			$stmt->execute();
 			return true;
 		} catch (PDOException $e){
-			$this->error = "DB error:".$e->getMessage();
+			$this->error = "DB error:".$e->getMessage();$this->logError($e);
 		}
 		return false;
 	}
@@ -182,7 +182,7 @@ class DBStrazacy extends DbConn {
 
 			}
 		} catch (PDOException $e){
-			$this->error = "DB error:".$e->getMessage();
+			$this->error = "DB error:".$e->getMessage();$this->logError($e);
 		}
 		return $tab;
 	}
@@ -197,7 +197,7 @@ class DBStrazacy extends DbConn {
 				return $result;
 			}
 		}catch (PDOException $e){
-			$this->error = "DB error:".$e->getMessage();
+			$this->error = "DB error:".$e->getMessage();$this->logError($e);
 		}
 		return $res;
 	}
@@ -220,7 +220,7 @@ class DBStrazacy extends DbConn {
 				$this->strazacyZaladowani = $tab;
 			}
 		} catch (PDOException $e){
-			$this->error = "DB error:".$e->getMessage();
+			$this->error = "DB error:".$e->getMessage();$this->logError($e);
 		}
 
 		return $tab;
@@ -249,7 +249,7 @@ class DBStrazacy extends DbConn {
 				return (new Strazak())->create($result);
 			}
 		} catch (PDOException $e){
-			$this->error = "DB error:".$e->getMessage();
+			$this->error = "DB error:".$e->getMessage();$this->logError($e);
 		}
 		return false;
 	}
@@ -264,7 +264,7 @@ class DBStrazacy extends DbConn {
 				return (new Strazak())->create($result);
 			}
 		} catch (PDOException $e){
-			$this->error = "DB error:".$e->getMessage();
+			$this->error = "DB error:".$e->getMessage();$this->logError($e);
 		}
 		return false;
 	}
@@ -301,7 +301,7 @@ class DBStrazacy extends DbConn {
 					$dbHarm->deleteHarmonogramyStr($strazak->getJrgId(), $strazak->getStrazakId());
 					return true;
 				}catch (PDOException $e){
-					$this->error = "DB error:".$e->getMessage();
+					$this->error = "DB error:".$e->getMessage();$this->logError($e);
 					return false;
 				}
 			} else {
@@ -326,7 +326,7 @@ class DBStrazacy extends DbConn {
 			$stmt->bindParam(':uprawnienia',serialize(array()) );
 			$stmt->execute();
 		} catch (PDOException $e){
-			echo $this->error;
+			$this->logError($e);
 		}
 	}
 
@@ -349,7 +349,7 @@ class DBStrazacy extends DbConn {
 
 		} catch (PDOException $e){
 			$this->conn->rollback();
-			 $this->error;
+			 $this->logError($e);
 		}
 	}
 
@@ -374,7 +374,7 @@ class DBStrazacy extends DbConn {
 				return true;
 			}
 		} catch (PDOException $e){
-			$this->error = "DB error:".$e->getMessage();
+			$this->error = "DB error:".$e->getMessage();$this->logError($e);
 		}
 		return false;
 	}

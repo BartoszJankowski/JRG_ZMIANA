@@ -62,7 +62,7 @@ if(isset($_GET['deleteFireman'] )){
                   <p>Strażak ('.$dbStrazacy->deletedStrazak->toString().') został poprawnie usunięty z bazy danych.</p>
                 </div>';
 	} else {
-		echo $dbStrazacy->error;
+		echo $dbStrazacy->getError();
 	}
 }
 

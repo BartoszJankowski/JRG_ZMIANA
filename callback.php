@@ -40,7 +40,7 @@ try {
 				)) {
 				$output['result'] = true;
 			} else {
-				throw new UserErrors($dbUsers->error);
+				throw new UserErrors($dbUsers->getError());
 			}
 			break;
 			/*
@@ -65,7 +65,7 @@ try {
 						$output['info'] = 'Na podany adres email zostały wysłane dane dostępowe do konta.';
 						};
 			} else {
-				throw new UserErrors($db->error);
+				throw new UserErrors($db->getError());
 			}
 			break;
 			/*
@@ -78,7 +78,7 @@ try {
 				$output['result'] = true;
 					$output['info'] = 'Twoje hasło zostało zresetowane. Sprawdź skrzynkę email.';
 			}  else {
-				throw new UserErrors($dbUsers->error);
+				throw new UserErrors($dbUsers->getError());
 			}
 			break;
 			/*
@@ -97,7 +97,7 @@ try {
 					$output['info'] = 'Twoje konto zostało utworzone. Możesz się zalogować <a href="http://zmiana.bjit.pl/login.php">Tutaj</a>. Na Twoją pocztę zostało wysłane potwierdzenie rejestracji.';
 			
 			} else {
-				throw new UserErrors($dbUsers->error);
+				throw new UserErrors($dbUsers->getError());
 			}
 			break;
 		default:

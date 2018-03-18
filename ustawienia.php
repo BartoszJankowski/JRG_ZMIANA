@@ -26,7 +26,7 @@ if(isset($_POST['changePass'])) {
 	if($dbUsers->changePass($user, test_input($_POST['oldpass']),test_input($_POST['newpass']),test_input($_POST['newpass2'])) ){
 		echo 'Poprawnie zmieniono hasło.';
 	} else {
-		echo $dbUsers->error;
+		echo $dbUsers->getError();
 	}
 }
 
@@ -34,7 +34,7 @@ if(isset($_POST['changeuserData'])){
 	if($dbUsers->changeUserData($user,test_input($_POST['name']),test_input($_POST['surname'])) ){
 		echo 'Poprawnie zmieniono dane.';
 	} else {
-		echo $dbUsers->error;
+		echo $dbUsers->getError();
 	}
 }
 
@@ -44,7 +44,7 @@ if(isset($_POST['deleteAccount'])){
 			header('Location: '.$base_url);
 			exit;
 		} else {
-			$resDelete = $dbUsers->error;
+			$resDelete = $dbUsers->getError();
 		}
 	} else {
 		$resDelete =  'Nie można usunąc konta administratora jednostki. Należy przekazac administrację innemu użytkownikowi.';

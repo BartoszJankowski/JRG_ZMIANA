@@ -22,7 +22,7 @@ if(isset($_POST['register'])){
 		exit;
 	} 
     else {
-		echo $dbusers->error;
+		echo $dbusers->getError();
 	}
 }
 

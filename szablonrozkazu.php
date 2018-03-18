@@ -45,7 +45,7 @@ if(isset($_GET['start'])){
 		header('Location: '.$base_url.$_SERVER['PHP_SELF'].'?edit='.$szablon->getId());
 		exit;
 	} else {
-		$info = '<h2>Nie udało sie utworzyć szablonu</h2><p>'.$dbRozkazy->error.'</p>';
+		$info = '<h2>Nie udało sie utworzyć szablonu</h2><p>'.$dbRozkazy->getError().'</p>';
 	}
 } elseif(isset($_GET['edit'])){
 	$szablon = new Szablon($user->getAdminJrgId());
@@ -67,7 +67,7 @@ if(isset($_GET['start'])){
 			        $szablony[$i] = null;
 			        break;
                 } else {
-			        $info = '<h2>Nie udało sie usunąć szablonu </h2><p>'.$dbRozkazy->error.'</p>';
+			        $info = '<h2>Nie udało sie usunąć szablonu </h2><p>'.$dbRozkazy->getError().'</p>';
                 }
             }
         }

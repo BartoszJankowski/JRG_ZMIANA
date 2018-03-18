@@ -5,7 +5,8 @@
 
 class DbConn
 {
-    public $conn;
+    protected $conn;
+    protected $tbl_error_log = 'errors';
     public $error = '';
 
 	public $tbl_jednostki;
@@ -14,6 +15,9 @@ class DbConn
 	public $tbl_harmonogramy;
 	public $tbl_grafiki;
 	public $tbl_rozkazy;
+
+
+
 
     public function __construct()
     {
@@ -33,11 +37,38 @@ class DbConn
 			// Connect to server and select database.
 			$this->conn = new PDO('mysql:host=' . $host . ';dbname=' . $db_name . ';charset=utf8', $username, $password);
 			$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	        $this->createErrorTable();
 		} catch (Exception $e) {
 	        $this->error = $e->getMessage();
 			die('Database connection error');
 		}
     }
+
+	public function createErrorTable(){
+		try {
+			$sql = "CREATE TABLE ".$this->tbl_error_log." (
+				id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+	            czas TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	            msg TEXT NOT NULL,
+	            trace TEXT NOT NULL,
+	            code CHAR(255)
+	            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+
+			$this->conn->exec($sql);
+		} catch(PDOException $e) {}
+	}
+
+	protected function logError(PDOException $exception): void{
+		try{
+			$stmt = $this->conn->prepare("INSERT INTO ".$this->tbl_error_log." (msg, trace, code)
+    		 VALUES (:msg, :trace, :code)");
+			$stmt->bindParam(':msg', $exception->getMessage());
+			$stmt->bindParam(':trace', $exception->getTraceAsString());
+			$stmt->bindParam(':code',$exception->getCode());
+			$stmt->execute();
+		} catch (PDOException $ignored){}
+	}
+
 
     public function getError(){
     	return $this->error;

@@ -40,7 +40,7 @@ class DBRozkazy extends DbConn {
 			if($e->getCode()==="42S01")
 				return;
 			else
-				echo $sql . "<br>" . $e->getMessage();
+				$this->logError($e);
 		}
 	}
 
@@ -63,7 +63,7 @@ class DBRozkazy extends DbConn {
 			if($e->getCode()==="42S01")
 				return;
 			else
-				echo $sql . "<br>" . $e->getMessage();
+				$this->logError($e);
 		}
 	}
 
@@ -78,7 +78,7 @@ class DBRozkazy extends DbConn {
 					return $result;
 				}
 			} catch (PDOException $e){
-				$this->error = "DB error:".$e->getMessage();
+				$this->error = "DB error:".$e->getMessage();$this->logError($e);
 			}
 			return false;
 	}
@@ -95,7 +95,7 @@ class DBRozkazy extends DbConn {
 			$szablon->setId( $this->conn->lastInsertId() );
 			return true;
 		} catch (PDOException $e){
-			$this->error = "DB error:".$e->getMessage();
+			$this->error = "DB error:".$e->getMessage();$this->logError($e);
 		}
 		return false;
 	}
@@ -117,7 +117,7 @@ class DBRozkazy extends DbConn {
 				$this->error = "Brak wybranego szablonu w bazie danych.";
 			}
 		}catch (PDOException $e){
-			$this->error = "DB error:".$e->getMessage();
+			$this->error = "DB error:".$e->getMessage();$this->logError($e);
 		}
 		return false;
 	}
@@ -170,7 +170,7 @@ class DBRozkazy extends DbConn {
 				$this->error = "Brak wybranego szablonu w bazie danych.";
 			}
 		}catch (PDOException $e){
-			$this->error = "DB error:".$e->getMessage();
+			$this->error = "DB error:".$e->getMessage();$this->logError($e);
 		}
 		return $res;
 	}
@@ -188,7 +188,7 @@ class DBRozkazy extends DbConn {
 			$stmt->execute();
 			return true;
 		} catch (PDOException $e){
-			$this->error = "DB error:".$e->getMessage();
+			$this->error = "DB error:".$e->getMessage();$this->logError($e);
 		}
 		return false;
 	}
@@ -199,7 +199,7 @@ class DBRozkazy extends DbConn {
 			$stmt->bindParam(':jrg_id',$jrg_id);
 			$stmt->execute();
 		} catch (PDOException $e){
-			$this->error = "DB error:".$e->getMessage();
+			$this->error = "DB error:".$e->getMessage();$this->logError($e);
 		}
 	}
 
@@ -218,7 +218,7 @@ class DBRozkazy extends DbConn {
 				return $rozkaz;
 			}
 		} catch (PDOException $e){
-			$this->error = $e;
+			$this->error = $e;$this->logError($e);
 		}
 		// $2y$10$EgYooM/mGOnjhuLc0uS64O/X8wtctjbS1SwW2D73YVOJElQETjxSu bart
 		// misc $2y$10$Jj4IP35tH9bgo.qxSlgDc.Ws9D6YP0RtmCk5RUZID3SIolhlPjlba
@@ -243,7 +243,7 @@ class DBRozkazy extends DbConn {
 			$stmt->execute();
 			return true;
 		} catch (PDOException $e){
-			$this->error = $e;
+			$this->error = $e;$this->logError($e);
 		}
 		return false;
 	}
@@ -264,7 +264,7 @@ class DBRozkazy extends DbConn {
 				return true;
 			}
 		} catch (PDOException $e){
-			$this->error = "DB error:".$e->getMessage();
+			$this->error = "DB error:".$e->getMessage();$this->logError($e);
 		}
 		return false;
 	}
@@ -279,7 +279,7 @@ class DBRozkazy extends DbConn {
 			$stmt->execute();
 			return true;
 		} catch (PDOException $e){
-			$this->error = "DB error:".$e->getMessage();
+			$this->error = "DB error:".$e->getMessage();$this->logError($e);
 		}
 		return false;
 	}

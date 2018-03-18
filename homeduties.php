@@ -63,7 +63,7 @@ if(isset($_POST['saveDD'])){
 		header('Location: '.$base_url.$_SERVER['PHP_SELF'].'?month='.$ldt->getMonth().'&year='.$ldt->getYear());
 	exit;
 	} else {
-	    $info = '<h2>Błąd podczas zapisu dyżurów domowych. '.$dbDyzury->error.'</h2>';
+	    $info = '<h2>Błąd podczas zapisu dyżurów domowych. '.$dbDyzury->getError().'</h2>';
     }
 
 } else if(isset($_POST['fill'])){
