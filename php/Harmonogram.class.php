@@ -117,7 +117,7 @@ class Harmonogram {
 				$inner .= '<td title="Zmień godziny pracy" data-placement="top"  class="w3-center  tdHarmCell" style="background-color: '.$color.'">
 							
 							<input class="w3-hide harmoCheck" type="checkbox" name="'.$strazak->getStrazakId().'['.$nrDnia.'][v]" value="'.$nrDnia.'" />
-							<div class="harmoCell "><input type="text" name="'.$strazak->getStrazakId().'['.$nrDnia.'][h]" min="0" max="24" value="'.$dzien['h'].'" /></div>
+							<div class="harmoCell "><input type="text" name="'.$strazak->getStrazakId().'['.$nrDnia.'][h]" min="0" max="24" value="'.$dzien['h'].'" disabled /></div>
 							
 							</td>';
 			}

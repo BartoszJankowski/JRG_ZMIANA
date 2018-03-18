@@ -1,7 +1,9 @@
 
 var startSelect = false;
 var lastSelected = {tr:null,input:null};
-
+/*
+Bartosz config
+ */
 $(function () {
 
 
@@ -29,7 +31,9 @@ $(function () {
     });
 
 
-
+    /*
+    Moj kalendarz msc add
+     */
     $(".nextMsc").click(function () {
         var tabs = $('.kalendar-div').toArray();
         var parentDiv = $(this).parent().parent().get(0);
@@ -47,7 +51,9 @@ $(function () {
             }
         }
     });
-
+    /*
+        Moj kalendarz msc minus
+         */
     $(".prevMsc").click(function () {
         var tabs = $('.kalendar-div').toArray();
         var parentDiv = $(this).parent().parent().get(0);
@@ -65,19 +71,6 @@ $(function () {
             }
         }
     });
-
-    // $('.thumbnail').click(function(){
-    //      $('.modal-body').empty();
-    //         var title = $(this).parent('a').attr("title");
-    //             $('.modal-title').html(title);
-    //                 $($(this).parents('div').html()).appendTo('.modal-body');
-    //                     $('#myModal').modal({show:true});
-    // });
-
-
-
-
-
 
 
     $("[name='deleteFireman']").on('click',function (event) {
@@ -98,17 +91,48 @@ $(function () {
             var inp = $(this).find('input.harmoCheck').get(0);
             inp.checked = !inp.checked;
         }
+   }).dblclick(function () {
+       var inpCell = $(this).find('.harmoCell input').get(0);
+       inpCell.disabled = false;
+       inpCell.focus();
    });
    $('.harmoCell input').mousedown(function (event) {
-       logD('siema');
        event.stopPropagation();
    });
+
    window.addEventListener("mouseup",function (ev) {
        startSelect = false;
    })
 
 });
 
+/*
+Bebok config
+ */
+$(function() {
+    $('.tabs-container').addClass('js');
+
+    $('.tabs').each(function() {
+        const $a = $(this).find('a');
+
+        $a.on('click', function(e) {
+
+            const $this = $(this);
+            const href = $this.attr('href');
+            const $target = $(href);
+
+            if ($target.length) {
+                e.preventDefault();
+                $this.siblings('a').removeClass('active');
+                $this.siblings('a').addClass('bar');
+                $this.addClass('active');
+                $this.removeClass('bar');
+                $target.siblings('.tab-content').removeClass('active');
+                $target.addClass('active');
+            }
+        });
+    });
+});
 
 function sortTable(jQtable, n) {
 
@@ -367,32 +391,6 @@ function zliczKolumneGrafiku(select) {
 
 
 }
-
- $(function() {
-    $('.tabs-container').addClass('js');
-
-    $('.tabs').each(function() {
-        const $a = $(this).find('a');
-
-        $a.on('click', function(e) {
-
-            const $this = $(this);
-                const href = $this.attr('href');
-                    const $target = $(href);
-
-            if ($target.length) {
-                e.preventDefault();
-                    $this.siblings('a').removeClass('active');
-                        $this.siblings('a').addClass('bar');
-                            $this.addClass('active');
-                                $this.removeClass('bar'); 
-                                    $target.siblings('.tab-content').removeClass('active');
-                                        $target.addClass('active');
-            }
-        });
-    });
-});
-
 
 function strazakGoUpDown(btn, idStr, plusMInus) {
 

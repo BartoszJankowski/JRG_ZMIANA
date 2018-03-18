@@ -1,7 +1,6 @@
 <?php
 // Extend this class to re-use db connection
 
-//TODO:  ZROBIC LOGOWANIE BLEDÓW SQL Z KAZDEGO CATCHA
 
 class DbConn
 {

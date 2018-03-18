@@ -43,6 +43,7 @@ class Emails {
 			$this->mail->CharSet = $this->charset;
 		} catch (Exception $e) {
 			// TODO:  logo into error logs
+
 			// use adres recipt to log error
 			throw new Exception("Błąd podczas konfiguracji poczty email." );
 		}
