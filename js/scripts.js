@@ -396,7 +396,6 @@ function zliczKolumneGrafiku(select) {
 
 function strazakGoUpDown(btn, idStr, plusMInus) {
 
-    logD(idStr+" "+plusMInus);
     var tempHtml = $(btn).html();
 
     $.ajax({
