@@ -144,4 +144,68 @@ class DBHarmonogramy extends DbConn {
 		return false;
 	}
 
+	public function getHarmoStrIds() : array {
+		try {
+			$stmt = $this->conn->prepare("SELECT strazak_id FROM ".$this->tbl_harmonogramy);
+			$stmt->execute();
+			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			if($result){
+				return $result;
+			}
+		} catch (PDOException $e){
+			$this->error = "DB error:".$e->getMessage();
+		}
+		return array();
+	}
+
+	public function deleteHarmonogramyStr($jrg_id, $str_id){
+		try{
+			$stmt = $this->conn->prepare("DELETE FROM ".$this->tbl_harmonogramy." WHERE strazak_id = :str_id AND jrg_id = :jrg_id");
+			$stmt->bindParam(':str_id',$str_id);
+			$stmt->bindParam(':jrg_id',$jrg_id);
+			$stmt->execute();
+			return true;
+		}
+		catch (PDOException $e){
+			$this->error = "DB error:".$e->getMessage();
+		}
+		return false;
+	}
+
+	/*
+ * Mozna czasem uzyc do wyczyszczenia harmonogramów
+ */
+	private function clearUnusedHarmos(){
+		$toDelete = array();
+		$ids = (new DBStrazacy())->getStrIds();
+		$harmoIds = $this->getHarmoStrIds();
+
+		foreach ($harmoIds as $v){
+			$set = false;
+			foreach ($ids as $str){
+				if($v['strazak_id'] == $str['id'] || $v['strazak_id'] === $str['id']){
+					$set = true;
+				}
+			}
+			if(!$set){
+				if(!in_array($v['strazak_id'], $toDelete)){
+					$toDelete[] =$v['strazak_id'];
+				}
+			}
+		}
+		if(count($toDelete)>0)
+		try{
+			$this->conn->beginTransaction();
+
+			foreach ($toDelete as $id){
+				$this->conn->exec("DELETE FROM ".$this->tbl_harmonogramy." WHERE strazak_id =".$id);
+			}
+
+			$this->conn->commit();
+		} catch (PDOException $e){
+			$this->conn->rollBack();
+			$this->error = "DB error:".$e->getMessage();
+		}
+	}
+
 }

@@ -497,17 +497,25 @@ class DBUsers extends DbConn {
 
 
 	public function setTempJrgId(User $user,$temp_jrg){
-		//TODO: sprawdzic czy user admin moze miec ten nr jrg jako TEMP (musi byc adminem jrg)
-		try{
-			$stmt =  $this->conn->prepare("UPDATE ".$this->tbl_users." SET temp_jrg = :temp_jrg WHERE id = :id");
-			$stmt->bindParam(':temp_jrg', $temp_jrg);
-			$stmt->bindParam(':id', $user->getId());
-			$stmt->execute();
-			$user->setTempJrgId($temp_jrg);
-			return $user;
-		} catch (PDOException $e){
-			$this->error = $e->getMessage();
+
+		$dbJedn = (new DBJednostki())->getJrgListForAdmin($user);
+		foreach ($dbJedn as $result){
+			if($result['id'] == $temp_jrg){
+				try{
+					$stmt =  $this->conn->prepare("UPDATE ".$this->tbl_users." SET temp_jrg = :temp_jrg WHERE id = :id");
+					$stmt->bindParam(':temp_jrg', $temp_jrg);
+					$stmt->bindParam(':id', $user->getId());
+					$stmt->execute();
+					$user->setTempJrgId($temp_jrg);
+					return $user;
+				} catch (PDOException $e){
+					$this->error = $e->getMessage();
+				}
+				break;
+			}
 		}
+
+
 	}
 
 

@@ -187,6 +187,21 @@ class DBStrazacy extends DbConn {
 		return $tab;
 	}
 
+	public function getStrIds() : array {
+		$res = array();
+		try {
+			$stmt = $this->conn->prepare("SELECT id FROM ".$this->tbl_strazacy);
+			$stmt->execute();
+			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			if($result){
+				return $result;
+			}
+		}catch (PDOException $e){
+			$this->error = "DB error:".$e->getMessage();
+		}
+		return $res;
+	}
+
 	public function getZmianaListStrazacy($nrJrg, $zmiana){
 		$tab = array();
 		try {
@@ -256,7 +271,7 @@ class DBStrazacy extends DbConn {
 
 	public function deleteFireman(User $user, $firemanId){
 
-		//TODO: usunac harmonogramy strazaka
+
 		$this->deletedStrazak = $strazak = $this->getStrazak($firemanId);
 		if($strazak){
 			$allowedToDelete = false;
@@ -269,16 +284,21 @@ class DBStrazacy extends DbConn {
 					}
 				}
 			} else if($user->isChef()){
-				//TODO: dokonczyc usuwanie strazaków przez szefa zmiany
+				if($user->getJrgId() === $strazak->getJrgId()){
+					$allowedToDelete = true;
+				}
 			}
 			if($allowedToDelete){
 				try {
-					if(!empty($strazak->getUserId())){
-						// TODO: jesli dodamy rekord w koncie uzytkownika to tu bedzie trzeba go usunąć
-					}
+
 					$stmt = $this->conn->prepare("DELETE FROM ".$this->tbl_strazacy." WHERE id = :id");
 					$stmt->bindParam(':id',$strazak->getStrazakId());
 					$stmt->execute();
+					//if(!empty($strazak->getUserId())){
+					 //zmienna strazaka USERA jego id jest tylko w tabeli strazaka wiec przy usunieciu user jest wolny
+					//}
+					$dbHarm = new DBHarmonogramy();
+					$dbHarm->deleteHarmonogramyStr($strazak->getJrgId(), $strazak->getStrazakId());
 					return true;
 				}catch (PDOException $e){
 					$this->error = "DB error:".$e->getMessage();

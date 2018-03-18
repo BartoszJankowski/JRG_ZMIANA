@@ -7,7 +7,6 @@
  */
 
 class DBJrgSettings extends DbConn {
-//TODO: przy usuwaniu uprawnienia przejrzez wszystkich pracowników z tego jrg msc tez im wyjebac uprawnienia, elo
 	private $tbl_settings;
 	private static $jrg_id;
 

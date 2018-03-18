@@ -21,6 +21,8 @@ if(!$dbUsers->checkSession($user)){
 $_SETTINGS->load($user->getJrgId());
 
 
+
+
 if(isset($_POST)){
 	$_POST = test_input($_POST);
 }
