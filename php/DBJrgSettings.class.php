@@ -270,7 +270,9 @@ class DBJrgSettings extends DbConn {
 
 	public static function getListValues(){
 		$wartosci = array(
-			array('id'=>'@Dd','name'=>'Dyżur domowy'),
+			array('id'=>'@Dd','name'=>'Dyżur domowy na dzień rozkazu'),
+			array('id'=>'@Dd+1','name'=>'Dyżur domowy (następny dzień)'),
+			array('id'=>'@Dd+2','name'=>'Dyżur domowy (dwa dni później)'),
 			array('id'=>'@zmiana_str','name'=>'Lista strażaków'),
 			array('id'=>'@zmiana_free_str','name'=>'Wolni/dostępni strażacy')
 		);

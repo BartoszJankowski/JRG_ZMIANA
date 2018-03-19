@@ -394,7 +394,16 @@ function zliczKolumneGrafiku(select) {
 
 function strazakGoUpDown(btn, idStr, plusMInus) {
 
+    $(btn).tooltip('hide');
     var tempHtml = $(btn).html();
+    var tr = $(btn).parents('tr');
+    if(plusMInus>0){
+        if(tr.nextAll().length <= 0)
+            return;
+    } else {
+        if(tr.prevAll().length <= 1)
+            return;
+    }
 
     $.ajax({
         type:'POST',
@@ -406,13 +415,12 @@ function strazakGoUpDown(btn, idStr, plusMInus) {
         beforeSend : function(xhr){
             btn.disabled = true;
             $(btn).html('<i class="w3-spin fas fa-spinner"></i>');
-            $(btn).tooltip('hide');
         },
         success : function (response) {
 
 
             if(response.result){
-                var tr = $(btn).parents('tr');
+
                 if(plusMInus>0){
                     tr.insertAfter(tr.next());
 

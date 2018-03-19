@@ -35,6 +35,9 @@ class Rozkaz {
 		$this->dane['variable']['[$nr_rozkazu]'] = $ltd->getDayOfYearNum().'';
 		$this->dane['variable']['[$nr_zmiany]'] = $kalendar->getCurrentZmiana().'';
 
+		$this->JRG_ID = $jrg_id;
+		$this->date = $ltd;
+
 		if($dbDyzury!=null){
 			try{
 
@@ -49,12 +52,20 @@ class Rozkaz {
 				foreach ($dyzuryDomowe->listaStrZDyzuru($ltd->getDayOfMsc()-1) as $name){
 					$this->dane['list']['@Dd'][] = array('value'=>'','key'=>$name);
 				}
+				$ltd->addDays(1);
+				foreach ($dyzuryDomowe->listaStrZDyzuru($ltd->getDayOfMsc()-1) as $name){
+					$this->dane['list']['@Dd+1'][] = array('value'=>'','key'=>$name);
+				}
+				$ltd->addDays(1);
+				foreach ($dyzuryDomowe->listaStrZDyzuru($ltd->getDayOfMsc()-1) as $name){
+					$this->dane['list']['@Dd+'][] = array('value'=>'','key'=>$name);
+				}
+				$ltd->addDays(-2);
 			}
 		}
 
 
-		$this->JRG_ID = $jrg_id;
-		$this->date = $ltd;
+
 	}
 
 	public function setDane(int $rozkazID, int $jrg_id,LocalDateTime $ltd,string $dane){
