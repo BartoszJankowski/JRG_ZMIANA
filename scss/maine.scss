@@ -160,7 +160,7 @@ table.table-calendar tr:first-child td {
 
 
 .rwd-table{
-    font-size: .8rem;
+    
 }
 
 .table_crew{
@@ -168,7 +168,8 @@ table.table-calendar tr:first-child td {
 }
 @include screen('mobile'){
     .rwd-table{
-     overflow-x:scroll;
+        font-size: .8rem;
+        overflow-x:scroll;
 }
     .table_crew{
         width: 100%;
@@ -177,7 +178,8 @@ table.table-calendar tr:first-child td {
 }
 @include screen('smartphone'){
     .rwd-table{
-     overflow-x:scroll;
+        font-size: .8rem;
+        overflow-x:scroll;
 }
     .table_crew{
         width: 100%;
@@ -186,10 +188,24 @@ table.table-calendar tr:first-child td {
 }
 @include screen('smartphone-landscape'){
     .rwd-table{
-     overflow-x:scroll;
+        font-size: .8rem;
+        overflow-x:scroll;
 }
     .table_crew{
         width: 100%;
         table-layout: auto;
     }
+}
+
+
+.shiftmanage_option_fireman{
+    min-width: 70px;
+}
+
+.up_down_click{
+    padding-left: 15px;
+}
+
+.jrg_manage_button{
+    margin: 15px 0 15px 0;
 }

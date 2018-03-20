@@ -229,10 +229,10 @@ class Strazak {
 				$wiersze .= '<td>'.get_nazwa_funkcji($strazak->getNazwafunkcji()).'</td>';
 				$wiersze .= '<td>'.$strazak->getUprawnieniaHtml().'</td>';
 				$wiersze .= '<td style="background-color: '.UserSettings::getAlertType($strazak->getBadaniaDayTillNow()).'"><span data-toggle="tooltip" data-placement="top" title="Pozostało: '.$strazak->getBadaniaDayTillNow().' dni">'.$strazak->getBadaniaData().'</span></td>';
-				$wiersze .= '<td>
+				$wiersze .= '<td class="shiftmanage_option_fireman">
 									<div class="w3-row">
 										<div class="w3-col s3"><form class="form_str_actions" action="" method="get" ><input type="hidden" value="'.$strazak->getStrazakId().'" name="strazakId"><button class="btn btn-outline-dark btn-sm" type="submit" name="deleteFireman" value="1" data-toggle="tooltip" data-placement="top" title="Usuń strażaka" ><i class="fa fa-trash"></i></button></form></div>
-										<div class="w3-col s6"><button type="button" class="btn btn-outline-dark btn-sm" onclick="strazakGoUpDown(this, '.$strazak->getStrazakId().',-1)" data-toggle="tooltip" data-placement="top" title="przesuń wyżej"><i class="fas fa-angle-up"></i></button><button class="btn btn-outline-dark btn-sm" type="button" onclick="strazakGoUpDown(this, '.$strazak->getStrazakId().',1)" data-toggle="tooltip" data-placement="top" title="przesuń niżej"><i class="fas fa-angle-down"></i></button></div>	
+										<div class="w3-col s6 up_down_click"><button type="button" class="btn btn-outline-dark btn-sm" onclick="strazakGoUpDown(this, '.$strazak->getStrazakId().',-1)" data-toggle="tooltip" data-placement="top" title="przesuń wyżej"><i class="fas fa-angle-up"></i></button><button class="btn btn-outline-dark btn-sm" type="button" onclick="strazakGoUpDown(this, '.$strazak->getStrazakId().',1)" data-toggle="tooltip" data-placement="top" title="przesuń niżej"><i class="fas fa-angle-down"></i></button></div>	
 									</div></td>';
 				$wiersze .= '</tr>';
 			}

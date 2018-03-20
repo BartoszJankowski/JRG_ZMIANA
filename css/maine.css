@@ -144,11 +144,9 @@ table.table-calendar tr:first-child td {
     margin: 0;
     margin-right: auto; } }
 
-.rwd-table {
-  font-size: .8rem; }
-
 @media only screen and (max-width: 320px) {
   .rwd-table {
+    font-size: .8rem;
     overflow-x: scroll; }
   .table_crew {
     width: 100%;
@@ -156,6 +154,7 @@ table.table-calendar tr:first-child td {
 
 @media only screen and (min-width: 321px) and (max-width: 480px) {
   .rwd-table {
+    font-size: .8rem;
     overflow-x: scroll; }
   .table_crew {
     width: 100%;
@@ -163,7 +162,17 @@ table.table-calendar tr:first-child td {
 
 @media only screen and (min-width: 480px) and (max-width: 767px) {
   .rwd-table {
+    font-size: .8rem;
     overflow-x: scroll; }
   .table_crew {
     width: 100%;
     table-layout: auto; } }
+
+.shiftmanage_option_fireman {
+  min-width: 70px; }
+
+.up_down_click {
+  padding-left: 15px; }
+
+.jrg_manage_button {
+  margin: 15px 0 15px 0; }
