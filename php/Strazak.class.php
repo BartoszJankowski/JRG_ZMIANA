@@ -238,7 +238,7 @@ class Strazak {
 			}
 		}
 
-		echo '<table class="w3-table w3-border">'.$naglowek.$wiersze.'</table>';
+		echo '<table class="w3-table w3-border table_crew">'.$naglowek.$wiersze.'</table>';
 	}
 
 	public static function printJrgTableStrazacy(array $zmiany, array $listUsers){

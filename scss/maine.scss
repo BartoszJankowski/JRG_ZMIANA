@@ -153,3 +153,43 @@ table.table-calendar tr:first-child td {
         margin-right: auto;
     }
 }
+
+// .ordinal_number{
+//     width: 50px;
+// }
+
+
+.rwd-table{
+    font-size: .8rem;
+}
+
+.table_crew{
+
+}
+@include screen('mobile'){
+    .rwd-table{
+     overflow-x:scroll;
+}
+    .table_crew{
+        width: 100%;
+        table-layout: auto;
+    }
+}
+@include screen('smartphone'){
+    .rwd-table{
+     overflow-x:scroll;
+}
+    .table_crew{
+        width: 100%;
+        table-layout: auto;
+    }
+}
+@include screen('smartphone-landscape'){
+    .rwd-table{
+     overflow-x:scroll;
+}
+    .table_crew{
+        width: 100%;
+        table-layout: auto;
+    }
+}

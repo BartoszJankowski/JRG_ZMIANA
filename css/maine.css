@@ -143,3 +143,27 @@ table.table-calendar tr:first-child td {
         flex-wrap: wrap;
     margin: 0;
     margin-right: auto; } }
+
+.rwd-table {
+  font-size: .8rem; }
+
+@media only screen and (max-width: 320px) {
+  .rwd-table {
+    overflow-x: scroll; }
+  .table_crew {
+    width: 100%;
+    table-layout: auto; } }
+
+@media only screen and (min-width: 321px) and (max-width: 480px) {
+  .rwd-table {
+    overflow-x: scroll; }
+  .table_crew {
+    width: 100%;
+    table-layout: auto; } }
+
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+  .rwd-table {
+    overflow-x: scroll; }
+  .table_crew {
+    width: 100%;
+    table-layout: auto; } }

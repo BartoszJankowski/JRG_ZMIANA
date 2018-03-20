@@ -30,6 +30,9 @@ $(function () {
         $('.log_ico').removeClass('active');
     });
 
+ 
+    $('table').wrap("<div class='rwd-table'></div>"); // dodaje klase do tabelek robi RWD 
+
 
     /*
     Moj kalendarz msc add
