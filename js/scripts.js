@@ -123,12 +123,12 @@ $(function() {
 
             if ($target.length) {
                 e.preventDefault();
-                $this.siblings('a').removeClass('active');
-                $this.siblings('a').addClass('bar');
-                $this.addClass('active');
-                $this.removeClass('bar');
-                $target.siblings('.tab-content').removeClass('active');
-                $target.addClass('active');
+                    $this.siblings('a').removeClass('active');
+                        $this.siblings('a').addClass('bar');
+                            $this.addClass('active');
+                                $this.removeClass('bar');
+                                    $target.siblings('.tab-content').removeClass('active');
+                                        $target.addClass('active');
             }
         });
     });

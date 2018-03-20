@@ -204,6 +204,7 @@ if(isset($_POST['addJrg'])){
                               <div class="w3-container">
                                   <div class="tabs">
                                     <a class="w3-right remember_pass bar" href="#tab4">Zapomniałeś hasła?</a>
+                                    <a class="w3-left remember_pass bar" href="#tab2">Nie masz jeszcze konta ?</a>
                                   </div>
                               </div>
             </div>
@@ -320,8 +321,8 @@ if(isset($_POST['addJrg'])){
     </article> 
     <article id="tab4" class="tab-content">
         <div class="tab-text">
-            <section class="col-lg-3 col-sm-6 col-xs-6 login">
-                    <div class="reset_box">
+          <section class="col-12 reset_box">
+            <div class="col-lg-3 col-sm-6 col-xs-6 login">
 
                           <div id="errorreset"></div>
                                     <div id="inforeset" name="info" value="info"></div>
@@ -336,8 +337,8 @@ if(isset($_POST['addJrg'])){
 
                             <button id="resetbt" type="submit" name="reset" class="btn btn-danger btn-lg btn__addJrg">Resetuj</button>
                           </form>
-                    </div>
-            </section>
+            </div>
+          </section>
         </div>
     </article>
 </div>
