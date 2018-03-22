@@ -125,27 +125,23 @@ table.table-calendar tr:first-child td {
     margin:2px;
 }
 
-@include screen('mobile'){
-        .navbar-nav{
-        width: 100%;
-        height: 450px;
-        flex-wrap: wrap;
-        margin: 0;
-        margin-right: auto;
-    }
-}
+.navbar-nav{
 
-@include screen('smartphone'){
-    .navbar-nav{
+@include screen('mobile'){
         width: 100%;
         height: 450px;
         flex-wrap: wrap;
         margin: 0;
         margin-right: auto;
     }
-}
+@include screen('smartphone'){
+        width: 100%;
+        height: 450px;
+        flex-wrap: wrap;
+        margin: 0;
+        margin-right: auto;
+    }
 @include screen('smartphone-landscape'){
-    .navbar-nav{
         width: 100%;
         height: 250px;
         flex-wrap: wrap;
@@ -154,44 +150,36 @@ table.table-calendar tr:first-child td {
     }
 }
 
-// .ordinal_number{
-//     width: 50px;
-// }
-
 
 .rwd-table{
-    
+        @include screen('mobile'){
+                font-size: .8rem;
+                overflow-x:scroll;
+        }
+
+        @include screen('smartphone'){
+                font-size: .8rem;
+                overflow-x:scroll;
+        }
+        @include screen('smartphone-landscape'){
+                font-size: .8rem;
+                overflow-x:scroll;
+}
 }
 
-.table_crew{
-
-}
-@include screen('mobile'){
-    .rwd-table{
-        font-size: .8rem;
-        overflow-x:scroll;
-}
     .table_crew{
+        // width: 100%;
+        // table-layout: auto;
+
+    @include screen('mobile'){
         width: 100%;
         table-layout: auto;
     }
-}
-@include screen('smartphone'){
-    .rwd-table{
-        font-size: .8rem;
-        overflow-x:scroll;
-}
-    .table_crew{
-        width: 100%;
+    @include screen('smartphone'){
+         width: 100%;
         table-layout: auto;
     }
-}
-@include screen('smartphone-landscape'){
-    .rwd-table{
-        font-size: .8rem;
-        overflow-x:scroll;
-}
-    .table_crew{
+    @include screen('smartphone-landscape'){
         width: 100%;
         table-layout: auto;
     }
@@ -208,4 +196,79 @@ table.table-calendar tr:first-child td {
 
 .jrg_manage_button{
     margin: 15px 0 15px 0;
+}
+
+.grfik_table{
+    margin-top: 5vh;
+
+    @include screen('mobile'){
+
+    }
+    @include screen('smartphone'){
+
+            }
+    @include screen('smartphone-landscape'){
+
+            }
+
+    }
+
+.container_permiss{
+            margin-top: 50px;
+
+    @include screen('mobile'){
+            position: unset !important;
+            margin-top: 50px;
+            width: 100% !important;
+            height: 175px !important;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+    }
+
+    @include screen('smartphone'){
+            position: unset !important;
+            margin-top: 50px;
+            width: 100% !important;
+            height: 150px !important;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+    }
+    @include screen('smartphone-landscape'){
+             position: unset !important;
+            margin-top: 50px;
+            width: 100% !important;
+            height: 150px !important;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+                
+    }
+
+}
+
+.check_permiss{
+        top: 6;
+        margin-right: 25px;
+        width: 20px;
+        height: 20px;
+        @include screen('mobile'){
+            top: 0;
+            margin-right: 10px;
+            width: 20px;
+            height: 20px;
+        }
+        @include screen('smartphone'){
+            top: 0;
+            margin-right: 10px;
+            width: 20px;
+            height: 20px;
+        }
+        @include screen('smartphone-landscape'){
+            top: 0;
+            margin-right: 10px;
+            width: 20px;
+            height: 20px;
+        }
 }
