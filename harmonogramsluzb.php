@@ -164,19 +164,19 @@ require 'header.php';
     echo $info;
     ?>
 
-    <div class="w3-conteiner w3-row w3-row-padding w3-margin">
+    <div class="w3-conteiner w3-row w3-row-padding symbol-container">
         <?php
         foreach (get_harmo_values() as $v=>$tab){
-            echo '<div class="w3-col l2 w3-small "><span class=" w3-padding-small" style="width: 20px;height: 20px;background-color: '.$tab['col'].'" >'.$v.'</span> - '.$tab['n'].'</div>';
+            echo '<div class="harmo-symbols"><div class=" w3-padding-small color-symbols" style="background-color: '.$tab['col'].'" >'.$v.'</div> '.$tab['n'].'</div>';
         }
         ?>
     </div>
 	<?php if($user->isChef()) : ?>
 	<form action="" method="post">
 
-            <div class="w3-row">
+            <div class="w3-row harmo_container">
 
-                <select class="w3-select w3-border w3-col l3 w3-margin harmoValSelect" name="harmoVal">
+                <select class="w3-select harmoValSelect" name="harmoVal">
                     <?php
 
                     foreach (get_harmo_values() as $val=>$tab){
@@ -198,8 +198,8 @@ require 'header.php';
 		 }
 		?>
 		</table>
-        <div class="w3-row w3-container w3-padding">
-            <input class="w3-input " type="submit" value="Zapisz" />
+        <div class="center">
+            <button class="btn btn-danger btn_save" type="submit">Zapisz</button>
         </div>
 
 

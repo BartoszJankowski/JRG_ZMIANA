@@ -185,6 +185,17 @@ table.table-calendar tr:first-child td {
     }
 }
 
+.center{
+        text-align: center;
+        margin-top: 40px;
+
+    & .btn_save{
+    width: 20rem;
+    font-size: 1.2rem;
+    }
+}
+
+
 
 .shiftmanage_option_fireman{
     min-width: 70px;
@@ -197,6 +208,65 @@ table.table-calendar tr:first-child td {
 .jrg_manage_button{
     margin: 15px 0 15px 0;
 }
+
+.symbol-container{
+    width: 200px;
+    margin-left: 20vw;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    @include screen('mobile'){
+        margin-right: auto;
+        margin-left: auto;
+    }
+    @include screen('smartphone'){
+        margin-right: auto;
+        margin-left: auto;
+    }
+    @include screen('smartphone-landscape'){
+        margin-right: auto;
+        margin-left: auto;
+    }
+}
+
+.harmo-symbols{
+    width: 100%;
+    margin-bottom: 5px;
+    font-size: .85rem;
+}
+
+.color-symbols{
+    max-width: 35px;
+    margin: 0 0 -20px 150px;
+    text-align: center;
+}
+
+.harmo_container{
+     text-align: center;
+
+    & .harmoValSelect{
+        width: 30vw;
+        margin-bottom: 30px;
+        border: 1px solid #c8c8c8;
+        border-radius: 5px;
+        @include screen('mobile'){
+            margin: 30px;
+            width: 80vw;
+        }
+        @include screen('smartphone'){
+            margin: 30px;
+            width: 80vw;
+        }
+        @include screen('smartphone-landscape'){
+            margin: 30px;
+            width: 80vw;
+        }
+    & :hover{
+        background: #c8c8c8;
+    }
+    }
+}
+
+
 
 .grfik_table{
     margin-top: 5vh;
@@ -245,7 +315,6 @@ table.table-calendar tr:first-child td {
             flex-wrap: wrap;
                 
     }
-
 }
 
 .check_permiss{

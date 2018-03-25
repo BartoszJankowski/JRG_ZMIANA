@@ -174,6 +174,13 @@ table.table-calendar tr:first-child td {
     width: 100%;
     table-layout: auto; } }
 
+.center {
+  text-align: center;
+  margin-top: 40px; }
+  .center .btn_save {
+    width: 20rem;
+    font-size: 1.2rem; }
+
 .shiftmanage_option_fireman {
   min-width: 70px; }
 
@@ -182,6 +189,56 @@ table.table-calendar tr:first-child td {
 
 .jrg_manage_button {
   margin: 15px 0 15px 0; }
+
+.symbol-container {
+  width: 200px;
+  margin-left: 20vw;
+  margin-top: 30px;
+  margin-bottom: 20px; }
+  @media only screen and (max-width: 320px) {
+    .symbol-container {
+      margin-right: auto;
+      margin-left: auto; } }
+  @media only screen and (min-width: 321px) and (max-width: 480px) {
+    .symbol-container {
+      margin-right: auto;
+      margin-left: auto; } }
+  @media only screen and (min-width: 480px) and (max-width: 767px) {
+    .symbol-container {
+      margin-right: auto;
+      margin-left: auto; } }
+
+.harmo-symbols {
+  width: 100%;
+  margin-bottom: 5px;
+  font-size: .85rem; }
+
+.color-symbols {
+  max-width: 35px;
+  margin: 0 0 -20px 150px;
+  text-align: center; }
+
+.harmo_container {
+  text-align: center; }
+  .harmo_container .harmoValSelect {
+    width: 30vw;
+    margin-bottom: 30px;
+    border: 1px solid #c8c8c8;
+    border-radius: 5px; }
+    @media only screen and (max-width: 320px) {
+      .harmo_container .harmoValSelect {
+        margin: 30px;
+        width: 80vw; } }
+    @media only screen and (min-width: 321px) and (max-width: 480px) {
+      .harmo_container .harmoValSelect {
+        margin: 30px;
+        width: 80vw; } }
+    @media only screen and (min-width: 480px) and (max-width: 767px) {
+      .harmo_container .harmoValSelect {
+        margin: 30px;
+        width: 80vw; } }
+    .harmo_container .harmoValSelect :hover {
+      background: #c8c8c8; }
 
 .grfik_table {
   margin-top: 5vh; }
