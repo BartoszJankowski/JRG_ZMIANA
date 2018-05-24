@@ -33,6 +33,15 @@ nav{
 	min-height: 60px;
 }
 
+header{
+	@include screen('mobile'){
+			position: unset;
+		}
+	@include screen('smartphone'){
+			position: unset !important;
+		}
+}
+
 main{
 	min-height: 100vh !important;
 }

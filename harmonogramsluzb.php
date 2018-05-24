@@ -121,16 +121,16 @@ try{
 
 
 
-$style ='
-.table-harmo-admin td:nth-of-type(2) {
-    min-width:200px;
-}
-.harmoCell input {
-  border:none;
-  background-color:transparent;
-  width:100%;
-}
-';
+// $style ='
+// .table-harmo-admin td:nth-of-type(2) {
+//     min-width:200px;
+// }
+// .harmoCell input {
+//   border:none;
+//   background-color:transparent;
+//   width:100%;
+// }
+// ';
 
 $title = "Harmonogram służb";
 require 'header.php';
@@ -164,7 +164,7 @@ require 'header.php';
     echo $info;
     ?>
 
-    <div class="w3-conteiner w3-row w3-row-padding symbol-container">
+    <div class="w3-conteiner w3-row w3-row-padding symbol-container fixed-top">
         <?php
         foreach (get_harmo_values() as $v=>$tab){
             echo '<div class="harmo-symbols"><div class=" w3-padding-small color-symbols" style="background-color: '.$tab['col'].'" >'.$v.'</div> '.$tab['n'].'</div>';
@@ -176,7 +176,7 @@ require 'header.php';
 
             <div class="w3-row harmo_container">
 
-                <select class="w3-select harmoValSelect" name="harmoVal">
+                <select class="w3-select harmoValSelect fixed-top" name="harmoVal">
                     <?php
 
                     foreach (get_harmo_values() as $val=>$tab){

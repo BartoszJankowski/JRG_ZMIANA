@@ -311,7 +311,7 @@ class DBJrgSettings extends DbConn {
 
 		self::$harmoValues[] = new HarmoValue('Uw','Urlop wypoczynkowy','Urlop wypoczynkowy', 'orange');
 		self::$harmoValues[] = new HarmoValue('Ud','Urlop dodatkowy','Urlop dodatkowy', 'green');
-		self::$harmoValues[] = new HarmoValue('O','Urlop okolicznościowy','Urlop okolicznościowy', 'blue');
+		self::$harmoValues[] = new HarmoValue('O','Urlop okolicznościowy','Urlop okolicznościowy', '#d000e9');
 		self::$harmoValues[] = new HarmoValue('D','Delegacja','Delegacja', '#80ffff');
 		self::$harmoValues[] = new HarmoValue('Ch','Chorobowe','Chorobowe', '#996600');
 
