@@ -2,7 +2,7 @@
 
 main{
     min-height: 125vh !important;
-    margin-top: 95px;
+    margin-top: 80px;
     background-image: url(../img/psp_logo_35.png);
     background-repeat: no-repeat;
     background-position: center;
@@ -752,7 +752,7 @@ td.sumaH {
         }
 
         & .head-harmo{
-            top: 12%;
+            top: 9.5%;
             z-index: 0;
 
         @include screen('mobile'){
