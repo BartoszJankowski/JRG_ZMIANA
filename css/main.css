@@ -23,8 +23,16 @@ h1 {
 
 nav {
   background: #343a40;
-  padding: 0 15px 15px 15px !important;
+  padding: 0 15px 0 15px !important;
   min-height: 60px; }
+
+@media only screen and (max-width: 320px) {
+  header {
+    position: unset; } }
+
+@media only screen and (min-width: 321px) and (max-width: 480px) {
+  header {
+    position: unset !important; } }
 
 main {
   min-height: 100vh !important; }

@@ -33,6 +33,8 @@ $(function () {
  
     $('table').wrap("<div class='rwd-table'></div>"); // dodaje klase do tabelek robi RWD 
 
+    $('.table-harmo-admin tr:first').addClass('sticky-top')
+    $('.table-harmo-admin tr:first').addClass('head-harmo')
 
     /*
     Moj kalendarz msc add

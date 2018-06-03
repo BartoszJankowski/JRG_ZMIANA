@@ -24,7 +24,7 @@ function isActivePage($nazwa){global $t, $$t; echo $$nazwa;}
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
             <link rel="stylesheet" type="text/css" href="css/main.css" />
-            <link rel="stylesheet" type="text/css" href="css/style.css?ver=<?php echo time(); ?>" />
+            <!-- <link rel="stylesheet" type="text/css" href="css/style.css?ver=<?php echo time(); ?>" /> -->
             <link rel="stylesheet" type="text/css" href="css/maine.css?ver=1.2" />
                 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" /> 
                     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&amp;subset=latin-ext" rel="stylesheet">
