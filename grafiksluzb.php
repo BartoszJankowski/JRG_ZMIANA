@@ -98,7 +98,7 @@ require 'header.php';
 ?>
 
 	<main class="" xmlns="http://www.w3.org/1999/html" style="position:relative;">
-		<form action="" method="get">
+		<form action="" method="get" >
 			<input type="hidden" name="month" value="<?php echo $localDateTime->getMonth(); ?>"> <input type="hidden" name="year" value="<?php echo $localDateTime->getYear(); ?>">
 			<h1 class="w3-center">
                 <button name="mscAction" value="-1" type="submit" class="w3-button w3-xlarge"><i class="fa fa-fw fa-chevron-left"></i></button>
@@ -118,7 +118,7 @@ require 'header.php';
                 $grafik->printMiesiacForUser($user, $strazacy);
 		?>
 
-		<div class="w3-conteiner w3-row w3-row-padding w3-margin">
+		<div class="w3-conteiner w3-row w3-row-padding w3-margin noprint">
             <h3>Legenda: </h3>
 			<?php
 			foreach (get_grafik_values() as $v=>$tab){

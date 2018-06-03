@@ -117,7 +117,7 @@ require 'header.php';
                         //$val = $dayVal;
 						$inn .= '<td data-toggle="popover" data-html="true" data-val2="'.$dayVal2.'" data-jrg="'.$dataDzis->getYear().'-'.$msc.'-'.$monthIterator->current()['nr'].'" title="Dodaj notatkę dla szefa zmiany" data-placement="bottom" class="zmiana-'.$monthIterator->current()['z'].' '.$tdDzis.mojaZmianaClass($user->getStrazak()->getZmiana(),$monthIterator->current()['z']).' w3-display-container ">
 								<span class="w3-tiny w3-display-topleft">'.$monthIterator->current()['nr'].'</span>'.$val2ico.'
-									<span class="w3-medium w3-display-bottomright">'.$val.'</span>
+									<span class="w3-medium w3-display-bottomright" style="width:100%;text-align:right;background-color: '.getHarmoColor($val).'">'.$val.'</span>
 								</td>';
 						$monthIterator->next();
 					} else {
@@ -136,7 +136,7 @@ require 'header.php';
 		}
 	?>
 	</div>
-	<div class="w3-padding w3-center w3-row" style="width: 300px;"><div class="w3-third w3-padding-small"><div class="zmiana-1">I</div></div><div class="w3-third w3-padding-small"><div class="zmiana-2">II</div></div><div class="w3-third w3-padding-small"><div class="zmiana-3">III</div></div></div>
+	<div class="w3-padding w3-center w3-row" style="width: 300px;"><div class="w3-third w3-padding-small"><div class="zmiana-1 mojaZmiana">I</div></div><div class="w3-third w3-padding-small"><div class="zmiana-2 mojaZmiana">II</div></div><div class="w3-third w3-padding-small"><div class="zmiana-3 mojaZmiana">III</div></div></div>
 	<?php else: echo $info; endif; ?>   <!-- dodałem na początku przed ? php ; nie odpalało kalendarza na serwerze lokalnym  -->
 </main>
 <?php

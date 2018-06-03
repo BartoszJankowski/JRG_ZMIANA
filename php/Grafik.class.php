@@ -56,7 +56,7 @@ class Grafik {
 
 	public function printMiesiac( array $strazacy ){
 
-		echo '<form action="" method="post" class="w3-center grfik_table"><table  class="w3-table-all w3-hoverable w3-xsmall table-grafik" >';
+		echo '<form action="" method="post" class="w3-center"><table  class="w3-table-all w3-hoverable w3-xsmall table-grafik" >';
 		echo $this->printHeader();
 		foreach ($this->dni as $nr=>$v){
 			$this->suma['Stan'][$nr]['s'] = count($strazacy);
@@ -67,7 +67,7 @@ class Grafik {
 
 		$this->printFooter();
 
-		echo '</table><div class="w3-margin-top"><button class="w3-button w3-border w3-light-grey " type="submit" name="saveGraf"  ><msc class="fa fa-fw fa-save"></msc> Zapisz grafik</button></div></form>';
+		echo '</table><div class="w3-margin-top noprint"><button class="w3-button w3-border w3-light-grey " type="submit" name="saveGraf"  ><msc class="fa fa-fw fa-save"></msc> Zapisz grafik</button></div></form>';
 	}
 
 	public function printMiesiacForUser(User $user, array $strazacy){
@@ -101,9 +101,9 @@ class Grafik {
 	}
 
 	public function printSumaCheckbox(){
-		$check = '<div class="w3-container container_permiss" style="width: 200px;position: absolute;top:80px;left:10px;">';
+		$check = '<div class="w3-container noprint" style="width: 200px;position: absolute;top:80px;left:10px;">';
 		foreach ($this->suma as $name=>$val){
-			$check .= '<label><input class="w3-check check_permiss" onchange="showHideGrafikRow(this)" checked type="checkbox" name="rows" value="'.$name.'" />'.$name.'</label><br>';
+			$check .= '<label><input class="w3-check" onchange="showHideGrafikRow(this)" checked type="checkbox" name="rows" value="'.$name.'" />'.$name.'</label><br>';
 		}
 		echo $check.'</div>';
 	}

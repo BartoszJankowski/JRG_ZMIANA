@@ -148,6 +148,17 @@ function get_harmo_values(){
 	);
 	*/
 }
+
+function getHarmoColor($harmo){
+	$vals = get_harmo_values();
+	foreach ($vals as $id=> $v){
+		if($id===$harmo){
+			return $v['col'];
+		}
+	}
+	return '';
+}
+
 function get_grafik_values(){
 	$res = array();
 	foreach (DBJrgSettings::getGrafValues() as $grafik_value){
