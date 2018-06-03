@@ -160,6 +160,10 @@ class Harmonogram {
 	}
 
 
+	public function getMsc($month){
+		return $this->miesiace[$month];
+	}
+
 
 
 	public function putChanges(int $month, array $changes, string $value){

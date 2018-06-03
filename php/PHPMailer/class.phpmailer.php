@@ -90,7 +90,7 @@ class PHPMailer
      * If empty, it will be set to either From or Sender.
      * @var string
      * @deprecated Email senders should never set a return-path header;
-     * it's the receiver's job (RFC5321 section 4.4), so this no longer does anything.
+     * it's the receiver's job (RFC5321 miejscowoscIdata 4.4), so this no longer does anything.
      * @link https://tools.ietf.org/html/rfc5321#section-4.4 RFC5321 reference
      */
     public $ReturnPath = '';
@@ -150,7 +150,7 @@ class PHPMailer
 
     /**
      * Word-wrap the message body to this number of chars.
-     * Set to 0 to not wrap. A useful value here is 78, for RFC2822 section 2.1.1 compliance.
+     * Set to 0 to not wrap. A useful value here is 78, for RFC2822 miejscowoscIdata 2.1.1 compliance.
      * @var integer
      */
     public $WordWrap = 0;
@@ -202,7 +202,7 @@ class PHPMailer
      * An ID to be used in the Message-ID header.
      * If empty, a unique id will be generated.
      * You can set your own, but it must be in the format "<id@domain>",
-     * as defined in RFC5322 section 3.6.4 or it will be ignored.
+     * as defined in RFC5322 miejscowoscIdata 3.6.4 or it will be ignored.
      * @see https://tools.ietf.org/html/rfc5322#section-3.6.4
      * @var string
      */
@@ -309,7 +309,7 @@ class PHPMailer
 
     /**
      * The SMTP server timeout in seconds.
-     * Default of 5 minutes (300sec) is from RFC2821 section 4.5.3.2
+     * Default of 5 minutes (300sec) is from RFC2821 miejscowoscIdata 4.5.3.2
      * @var integer
      */
     public $Timeout = 300;
@@ -645,7 +645,7 @@ class PHPMailer
     const CRLF = "\r\n";
 
     /**
-     * The maximum line length allowed by RFC 2822 section 2.1.1
+     * The maximum line length allowed by RFC 2822 miejscowoscIdata 2.1.1
      * @var integer
      */
     const MAX_LINE_LENGTH = 998;
@@ -2029,7 +2029,7 @@ class PHPMailer
             $result .= $this->headerLine('Subject', $this->encodeHeader($this->secureHeader($this->Subject)));
         }
 
-        // Only allow a custom message ID if it conforms to RFC 5322 section 3.6.4
+        // Only allow a custom message ID if it conforms to RFC 5322 miejscowoscIdata 3.6.4
         // https://tools.ietf.org/html/rfc5322#section-3.6.4
         if ('' != $this->MessageID and preg_match('/^<.*@.*>$/', $this->MessageID)) {
             $this->lastMessageID = $this->MessageID;
@@ -2105,7 +2105,7 @@ class PHPMailer
         }
         // RFC1341 part 5 says 7bit is assumed if not specified
         if ($this->Encoding != '7bit') {
-            // RFC 2045 section 6.4 says multipart MIME parts may only use 7bit, 8bit or binary CTE
+            // RFC 2045 miejscowoscIdata 6.4 says multipart MIME parts may only use 7bit, 8bit or binary CTE
             if ($ismultipart) {
                 if ($this->Encoding == '8bit') {
                     $result .= $this->headerLine('Content-Transfer-Encoding', '8bit');
@@ -2845,7 +2845,7 @@ class PHPMailer
 
     /**
      * Encode a string in quoted-printable format.
-     * According to RFC2045 section 6.7.
+     * According to RFC2045 miejscowoscIdata 6.7.
      * @access public
      * @param string $string The text to encode
      * @param integer $line_max Number of chars allowed on a line before wrapping
@@ -2900,18 +2900,18 @@ class PHPMailer
         $encoded = str_replace(array("\r", "\n"), '', $str);
         switch (strtolower($position)) {
             case 'phrase':
-                // RFC 2047 section 5.3
+                // RFC 2047 miejscowoscIdata 5.3
                 $pattern = '^A-Za-z0-9!*+\/ -';
                 break;
             /** @noinspection PhpMissingBreakStatementInspection */
             case 'comment':
-                // RFC 2047 section 5.2
+                // RFC 2047 miejscowoscIdata 5.2
                 $pattern = '\(\)"';
                 // intentional fall-through
                 // for this reason we build the $pattern without including delimiters and []
             case 'text':
             default:
-                // RFC 2047 section 5.1
+                // RFC 2047 miejscowoscIdata 5.1
                 // Replace every high ascii, control, =, ? and _ characters
                 $pattern = '\000-\011\013\014\016-\037\075\077\137\177-\377' . $pattern;
                 break;

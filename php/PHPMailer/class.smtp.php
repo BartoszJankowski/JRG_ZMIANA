@@ -45,7 +45,7 @@ class SMTP
     const DEFAULT_SMTP_PORT = 25;
 
     /**
-     * The maximum line length allowed by RFC 2822 section 2.1.1
+     * The maximum line length allowed by RFC 2822 miejscowoscIdata 2.1.1
      * @var integer
      */
     const MAX_LINE_LENGTH = 998;
@@ -136,7 +136,7 @@ class SMTP
 
     /**
      * The timeout value for connection, in seconds.
-     * Default of 5 minutes (300sec) is from RFC2821 section 4.5.3.2
+     * Default of 5 minutes (300sec) is from RFC2821 miejscowoscIdata 4.5.3.2
      * This needs to be quite high to function correctly with hosts using greetdelay as an anti-spam measure.
      * @link http://tools.ietf.org/html/rfc2821#section-4.5.3.2
      * @var integer
@@ -145,7 +145,7 @@ class SMTP
 
     /**
      * How long to wait for commands to complete, in seconds.
-     * Default of 5 minutes (300sec) is from RFC2821 section 4.5.3.2
+     * Default of 5 minutes (300sec) is from RFC2821 miejscowoscIdata 4.5.3.2
      * @var integer
      */
     public $Timelimit = 300;
@@ -688,7 +688,7 @@ class SMTP
                     //Move along by the amount we dealt with
                     $line = substr($line, $pos + 1);
                 }
-                //If processing headers add a LWSP-char to the front of new line RFC822 section 3.1.1
+                //If processing headers add a LWSP-char to the front of new line RFC822 miejscowoscIdata 3.1.1
                 if ($in_headers) {
                     $line = "\t" . $line;
                 }
@@ -697,7 +697,7 @@ class SMTP
 
             //Send the lines to the server
             foreach ($lines_out as $line_out) {
-                //RFC2821 section 4.5.2
+                //RFC2821 miejscowoscIdata 4.5.2
                 if (!empty($line_out) and $line_out[0] == '.') {
                     $line_out = '.' . $line_out;
                 }
