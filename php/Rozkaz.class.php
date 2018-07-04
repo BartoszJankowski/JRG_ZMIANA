@@ -6,7 +6,7 @@
  * Time: 20:10
  */
 
-
+//zmiany
 
 class Rozkaz {
 
